@@ -1,0 +1,46 @@
+<!--pages/bookManage/bookManage.wxml-->
+<filterDate bindfilterChange="changeFilter"></filterDate>
+<scroll-view scroll-y style='height:calc(100vh - 106rpx)' bindscrolltoupper="refresh" bindscrolltolower="loadMore">
+  <view class='list flexC'>
+    <view class='item flexC' wx:for="{{list}}" wx:for-item="item" wx:for-index="i" data-i="{{i}}" wx:key="{{i}}">
+      <view class='top'>
+        <view>
+          <text class='username'>{{item.name}}</text>
+          <text class='phone' catchtap='callPhone' data-phone="{{item.phone}}">{{item.phone}}</text>
+          <text class='allocateTime' wx:if="{{item.allocatedTime}}">{{item.allocatedTime}}</text>
+        </view>
+        <view>
+          <text class='source'>来源：{{item.source}}</text>
+          <!-- <text class='time'>时间：{{item.time}}</text> -->
+        </view>
+        <image class='corner_icon' src="{{item.type==1?'/images/corner_icon_try.png':'/images/corner_icon_order.png'}}"></image>
+      </view>
+      <view class='middle flexR'>
+        <view class='leftCourse flexC'>
+          <text>课程：{{item.course.courseName}}</text>
+          <text>门店：{{item.course.store}}</text>
+          <text wx:if="{{item.course.counsoler}}">顾问：{{item.course.counsoler}}</text>
+        </view>
+        <view class='orderTime flexC' wx:if="{{item.orderTime}}">
+          <text>预约到店时间</text>
+          <text style="color:{{item.isOut?'#ff9c0f':'#3399ff'}}">{{item.orderTime}}</text>
+        </view>
+      </view>
+      <view class='bottom flexR'>
+        <block>
+          <view class='handleButton flexR' catchtap='book' data-i='{{i}}'>
+            <text class='buttonText'>重新预约</text>
+          </view>
+          <view class='handleButton flexR' catchtap='signIn' data-i='{{i}}'>
+            <text class='buttonText' style='color:#ff9c0f' >签到</text>
+          </view>
+          <view class='handleButton flexR' catchtap='addRecord' data-i='{{i}}'>
+            <text class='buttonText borderNone' >添加记录</text>
+          </view>
+        </block>
+      </view>
+    </view>
+    <emptyView class="emptyView" height="60%" text="还没有相关内容" wx:if="{{list.length==0}}"></emptyView>
+  </view>
+</scroll-view>
+<bookModal showBookModal="{{showBookModal}}" bindbookDateConfirm="confirmDate" courseName="ss"></bookModal>

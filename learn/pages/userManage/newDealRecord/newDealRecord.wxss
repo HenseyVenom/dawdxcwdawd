@@ -1,0 +1,41 @@
+.bg-white{
+  background: #fff;
+}
+.addDealForm .formItem{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx;
+  border-bottom: 1px solid #ededed;
+}
+.phcolor{
+  color: #ccc;
+}
+.addDealForm .formItem .left{
+  font-size: 32rpx;
+  flex-shrink: 0
+}
+.addDealForm .formItem .right{
+  font-size: 30rpx;
+  text-align: right;
+}
+.addDealForm .formItem .right image{
+  width: 15rpx;
+  height: 25rpx;
+}
+.addDealForm  .formItem .right .gray{
+  color: #cccccc;
+}
+
+.submitBtn{
+   width: 625rpx;
+	height: 88rpx;
+  line-height: 88rpx;
+	background-color: #f23535;
+	border-radius: 10rpx;
+  display: block;
+  margin: 200rpx auto;
+  text-align: center;
+  color: #fff;
+  font-size: 36rpx;
+}

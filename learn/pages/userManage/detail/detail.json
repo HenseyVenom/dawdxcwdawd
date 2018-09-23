@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "用户详情",
+  "usingComponents": {
+    "clientInfo": "../list/list",
+    "tradingRecord": "../dealRecord/dealRecord",
+    "reservedRecord": "../bookRecord/bookRecord",
+    "followRecord" : "../followRecord/followRecord"
+  }
+}

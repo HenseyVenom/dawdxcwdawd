@@ -1,0 +1,65 @@
+<view class='userPage'>
+  <view class='mask' wx:if='{{activeItem==0||activeItem==1}}' catchtap='closeFilter'></view>
+  <view class="top_search bg-white">
+    <view class='search'>
+      <image class='search_icon' src='../../images/search.png'></image>
+      <text style='color:#999999;font-size:24rpx;width:auto' wx:if="{{!showSearchInput}}" catchtap='showSearchInput'>通过姓名手机号码搜索</text>
+      <input placeholder='通过姓名手机号码搜索' class='search_input' wx:else bindinput='bindSearchName' bindblur='searchBlur' value='{{searchKeyword}}' confirm-type='search' bindconfirm="confirmKeyword"></input>
+    </view>
+  </view>
+  <view class='filter-area bg-white'>
+    <view class='filter-top bg-white'>
+      <form-button class='left filter-item' wx:for='{{items}}' wx:key="idx" wx:for-index="idx" data-num='{{idx}}' catchtap='clickItem'>
+        <text class='{{activeItem==idx?"active":""}}'>{{item}}</text>
+        <image wx:if='{{activeItem==idx}}' src='/images/arrow-top.png'></image> <image wx:else src='/images/arrow-bottom.png'></image> 
+      </form-button>
+    </view>
+    <view class='filter-content' wx:if='{{activeItem==0}}'>
+      <form-button catchtap='checkItem' wx:for='{{categoryArr}}' wx:for-item="item" wx:key="i" wx:for-index="i"  data-num='{{i}}' wx:if="{{item.name}}">
+        <view class='filter-term'>
+          <text>{{item.name}}</text>
+          <image wx:if='{{clientType==i}}' src='/images/checked.png'></image>
+        </view>       
+      </form-button>
+    </view>
+    <view class='filter-content' wx:if='{{activeItem==1}}'>
+      <form-button catchtap='checkItem' wx:for='{{levelArr}}' wx:for-item="item" wx:key="i" wx:for-index="i"  data-num='{{i}}'>
+        <view class='filter-term'>
+          <text>{{item.name}}</text>
+          <image wx:if='{{gradeId==item.id}}' src='/images/checked.png'></image>
+        </view>       
+      </form-button>
+    </view>
+  </view>
+  <scroll-view scroll-y class='clientList'>
+    <form-button  catchtap='linktoDetail' class='infoList' wx:for='{{clientList}}' wx:key="list_{{idx}}" wx:for-index="idx" data-i='{{idx}}'>
+      <view class='clientItem bg-white'>
+        <view class='left'>
+          <image src='/images/img_mhead.png'></image>
+          <view class='client-info'>
+            <view style='height:50rpx;'><view class='name'>{{item.clientName}}</view> <text style='font-size:28rpx;color:#666;margin-left:15rpx;'>{{item.tel}} </text> <text style='font-size:28rpx;color:#666;margin-left:15rpx;'>{{item.level}}</text></view>
+            <view class='tel' catchtap='callPhone' data-phone="{{item.tel}}">门店 : {{item.shopName}}</view>
+          </view>
+        </view>
+        <view class='right'>
+          <text wx:if="{{item.clientType}}" class='{{item.clientType==1?"text-red":(item.clientType==2?"text-blue":"text-orange")}}'>{{categoryArr[item.clientType].name}}</text>
+          <image src='../../images/arrow_right.png'></image>
+        </view>
+      </view>
+      <view class='infocontent'>
+        <view class='infoeditor'>
+          <image src='../../images/fang.png' class='fang'></image>
+           {{item.followContent ? item.followContent : '暂无跟进记录'}}
+        </view>
+        <view class='infodate' wx:if="{{item.followContent}}">{{item.nextFollowTime}}</view>
+      </view>
+    </form-button>
+  </scroll-view>
+
+  <form-button catchtap='linktoAdd'>
+    <!-- <image class='addClient' src='../../images/client9.png'></image> -->
+    <view class='addClient'>新增客户</view>
+  </form-button>
+
+</view>
+

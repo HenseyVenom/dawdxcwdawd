@@ -1,0 +1,18 @@
+<view class='followRecord'>
+  <view class='followContentList'>
+    <view class='RecordList' wx:for='{{list}}' wx:for-index="idx" wx:for-item='item' wx:key="unique_{{idx}}" >
+      <image src='../../../images/dian.png' class='dian'></image>
+      <view class='RecordContent'>
+         <view class='Recordate'>{{item.nextFollowTime}}</view>
+         <view class='jilu'>
+        {{item.followContent}}
+         </view>
+      </view>
+    </view>
+    <emptyView class="emptyView" height="500rpx;" text="还没跟进记录" wx:if="{{list.length==0}}"></emptyView>
+  </view>
+  
+  <form-button class='fixedBottom bg-white' bindtap='enterFollow'>
+      <view>添加跟进记录</view>
+  </form-button>
+</view>

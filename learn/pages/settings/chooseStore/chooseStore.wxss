@@ -1,0 +1,24 @@
+.chooseStore{
+  width:100%;
+  box-sizing:border-box;
+}
+.chooseStore .choose{
+  height:90rpx;
+  font-size: 32rpx;
+  color:#333;
+  background:#fff;
+  line-height:90rpx;
+  border-bottom:1px solid #ededed;
+  padding:0px 19rpx 0rpx 28rpx;
+  position:relative;
+}
+.chooseStore .choose .checked{
+  width: 35rpx;
+	height: 25rpx;
+  position:absolute;
+  right:19rpx;
+  top:32rpx;
+}
+.chooseStore .sureChoose{
+  margin:155rpx auto;
+}

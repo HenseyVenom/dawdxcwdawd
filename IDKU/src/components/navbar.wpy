@@ -1,0 +1,82 @@
+<style scoped lang='less'>
+  .swiper-tab {
+    width: 100%;
+    text-align: center;
+    background: #fff;
+    display: flex;
+    flex-direction: row;
+  }
+
+  .swiper-tab-list {
+    font-size: 28rpx;
+    color: #121212;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    text{
+      opacity: 0.5;
+      margin-top: 24rpx;
+    }
+    .on {
+      opacity: 1;
+    }
+    .indicator{
+      margin-top: 10rpx;
+      width: 40rpx;
+      height: 8rpx;
+      border-radius: 4rpx;
+      margin-bottom: 40rpx;
+    }
+
+    .current{
+      background-color: #F23535;
+    }
+    .normal{
+      background-color: transparent;
+    }
+  }
+</style>
+<template>
+  <view class="swiper-tab">
+    <block  wx:for="{{tabs}}" wx:for-index="idx" wx:for-item="tabName" wx:key="navbar{{idx}}">
+      <view class="swiper-tab-list flexC" style="width:{{itemWidth}}" data-current="{{idx}}" @tap="swichNav">
+        <text class="{{currentTab==idx ? 'on' : ''}}">{{tabName}}</text>
+        <view class="indicator {{currentTab==idx ? 'current' : 'normal'}}" ></view>
+      </view>
+    </block>
+  </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+
+    export default class Navbar extends wepy.component {
+      props = {
+        tabs: {
+          type: Object,
+          default: []
+        },
+        currentTab: {
+          type: Number,
+          default: 0,
+          twoWay: true
+        },
+        itemWidth:{
+          type:String,
+          default:'50%'
+        }
+      }
+
+      methods = {
+        swichNav(e) {
+          let switchTab=e.currentTarget.dataset.current
+          if (this.currentTab === switchTab) {
+            return false
+          } else {
+            this.currentTab = switchTab
+          }
+        }
+      }
+    }
+</script>

@@ -1,0 +1,25 @@
+<!--pages/bankCard/bankCardManage/bankCardManage.wxml-->
+<form-button class='item' catchtap='itemClick' data-name='bankCardList' data-path='bankCard'>
+  <view class='flexR item_bottom_border item_wrapper'>
+    <image style='width:44rpx;height:33rpx;' src='/images/binding_card_icon.png' mode='aspectFit'></image>
+    <view class='item_content'>
+      <text class='item_text'>银行卡绑定</text>
+      <view class='flexR'>
+        <view class='item_bubble' wx:if="{{false}}"></view>
+        <image class='item_arrow' src='/images/arrows.png'></image>
+      </view>
+    </view>
+  </view>
+</form-button>
+<form-button class='item' catchtap='itemClick' data-name='withdrawRecord' data-path='bankCard'>
+  <view class='flexR item_wrapper'>
+    <image style='width:44rpx;height:38rpx;' src='/images/withdraw_icon.png'></image>
+    <view class='item_content'>
+      <text class='item_text'>提现记录</text>
+      <view class='flexR'>
+        <view class='item_bubble' wx:if="{{false}}"></view>
+        <image class='item_arrow' src='/images/arrows.png'></image>
+      </view>
+    </view>
+  </view>
+</form-button>

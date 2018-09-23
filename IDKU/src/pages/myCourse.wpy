@@ -1,0 +1,442 @@
+<style scoped lang='less'>
+  .course-page{
+    font-size: 28rpx;
+    color: #121212;
+    height: 100vh;
+    .course-tabs{
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 40rpx 100rpx 0;
+      text-align: center;
+      .course-tab{
+        color: #121212;
+        opacity: 0.5;
+        .line{
+          display: block;
+          width: 40rpx;
+          height: 4rpx;
+          background: #fff;
+          margin: 12rpx auto 0;
+        }
+        &.active{
+          opacity: 1;
+          .line{
+            background: #F23535;
+          }
+        }
+      }
+    }
+    .course-type-tabs{
+      flex-shrink: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20rpx 40rpx;
+      /*position: fixed;*/
+      top: 0;
+      left: 0;
+      right: 0;
+      background-color: white;
+      .course-type-tab{
+        padding: 12rpx 20rpx;
+        border: 1px solid #B9B9B9;
+        border-radius: 3px;
+        color: #353535;
+        font-size: 26rpx;
+        &.active{
+          background: #F23535;
+          color: #FFFFFF;
+          border: 1px solid #F23535;
+        }
+      }
+    }
+    .course-list{
+      /*padding-top: 110rpx;*/
+      /*flex-grow: 1;*/
+      width: 100%;
+      margin: 0 auto;
+      height: 90vh;
+      overflow-y: overlay;
+      align-items: center;
+      .noCourse{
+        text-align: center;
+        padding-top: 200rpx;
+        .styleImg{
+          width:480rpx;
+          height:260rpx;
+        }
+      }
+      .course-item{
+        width: 670rpx;
+        border-radius: 10rpx;
+        box-shadow: 0 0 6px 0 rgba(213,213,213,0.50);
+        margin-bottom: 40rpx;
+        .course-top{
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 20rpx 40rpx;
+          height: 104rpx;
+          .flex-left{
+            font-size: 40rpx;
+            &.green{
+              color: #4EA184;
+            }
+          }
+          .flex-right{
+            border-radius: 15px;
+            padding: 12rpx 28rpx;
+            font-size: 26rpx;
+            &.default{
+              border: 1px solid #888888;
+            }
+            &.red-bg{
+              color: #fff;
+              background: #F23535;
+              border: 1px solid #F23535;
+            }
+          }
+        }
+        .course-img{
+          image{
+            width: 100%;
+            height: 260rpx;
+            background: #eee;
+            border-radius: 6rpx;
+          }
+        }
+        .course-info{
+          padding: 30rpx 30rpx 26rpx;
+          .course-name{
+            font-size: 30rpx;
+          }
+          .course-teacher{
+            font-size: 24rpx;
+            color: #888888;
+            margin: 8rpx 0;
+            .line{
+              color: #CDCDCD;
+            }
+          }
+          .course-time{
+            color: #888888;
+            .text-red{
+              color: #F23535;
+            }
+          }
+        }
+        .course-students{
+          margin: 0 30rpx;
+          border-top: 1px solid #E9E9E9;
+          padding: 16rpx 0;
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-end;
+          .left{
+            flex: 10;
+            display: flex;
+            justify-content: flex-start;
+            .course-student{
+              margin: 0 10rpx;
+              text-align: center;
+              color: #888888;
+              font-size: 20rpx;
+              image{
+                width: 60rpx;
+                height: 60rpx;
+                /*border-radius: 50%;*/
+                /*background: #eee;*/
+              }
+              view{
+                width: 60rpx;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+              }
+            }
+          }
+          .right{
+            flex:1;
+            color: #999;
+            font-size: 22rpx;
+            text-align: right;
+          }
+        }
+      }
+      .empty{
+        height: 80vh;
+      }
+    }
+  }
+</style>
+<template>
+  <view class="course-page flexC">
+    <!-- <view class="course-tabs">
+      <view class="course-tab {{activeTab===idx?'active':''}}" wx:for="{{tabs}}" wx:key="idx" wx:for-index="idx" @tap.stop="switchTab" data-i="{{idx}}">{{item}}
+        <text class="line"></text>
+      </view>
+    </view> -->
+    <view class="course-type-tabs">
+      <view class="course-type-tab {{activeTypeTab===i?'active':''}}" wx:for="{{typeTabs}}" wx:key="i" wx:for-index="i" @tap.stop="changeTypeTab" data-i="{{i}}">{{item}}</view>
+    </view>
+
+    <view class="course-list flexC">
+    <!--<view class="course-list">-->
+        <view class="course-item" wx:for="{{courseList}}" wx:key="idx" wx:for-index="idx">
+          <view class="course-top" wx:if="{{item.signIn}}">
+            <text  class="flex-left " >已完成</text>
+            <!--<view class="flex-right red-bg" >评价</view>-->
+          </view>
+          <view class="course-top" wx:else>
+            <text  class="flex-left green" >待上课</text>
+            <!--<view class="flex-right " >取消</view>-->
+          </view>
+          <view class="course-img">
+            <image src="{{item.bannerUrl}}" mode="aspectFill"></image>
+          </view>
+          <view class="course-info">
+            <view class="course-name">{{item.name}}</view>
+            <view class="course-teacher">
+              <!--<text>老师：{{item.staffList[0].staffName}}</text> <text space="ensp" class="line"> | </text>-->
+              <text>课外辅导</text> <text space="ensp" class="line"> | </text>
+              <text>{{item.ageStart}} - {{item.ageEnd}}周岁</text> <text space="ensp" class="line"> | </text>
+              <text wx:if="{{item.isOpenRegistration}}"> 免费试听</text>
+            </view>
+            <view class="course-time">
+              上课时间 <text space="emsp" class="text-red">{{item.applyTime}}</text>
+            </view>
+          </view>
+        </view>
+      <emptyView class="empty" wx:if="{{courseList.length==0}}"></emptyView>
+      <!--</view>-->
+    <!--</view>-->
+    </view>
+  </view>
+
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import {pRequest,pGetRequest} from "../utils/requestUtils";
+  import emptyView from '../components/emptyView'
+  const app = wepy.$instance
+  export default class MyCourse extends wepy.page {
+    config = {
+      enablePullDownRefresh:true,
+      navigationBarTitleText:'我的课程'
+    }
+    components={
+      emptyView
+    }
+    data = {
+      activeTab: 0,
+      typeTabs: ['全部', '待上课', '已完成'],
+      activeTypeTab: 0,
+      courseList: [],
+      page:{
+        page:0,
+        size:10,
+        addPage(){
+          this.page++
+        },
+        refreshPage(){
+          this.page==1
+        }
+      },
+      isloading:false,
+      cousrseInfoList: [
+        {
+          type: 0, // 全部
+          title: '全部',
+          list: []
+        },
+        {
+          type: 1, // 待上课
+          title: '待上课',
+          list: []
+        },
+        {
+          type: 2, // 已完成
+          title: '已完成',
+          list: []
+        }
+      ],
+      listid: '',
+      studentId: '',
+      courIndex: '',
+      dataIndex: '',
+      isleave: 0,
+      parentId: '',
+      isDuct: 0,
+      AppointmentList:[],
+    }
+    methods = {
+      switchTab (e) {
+        this.activeTab = e.currentTarget.dataset.i
+      },
+      changeTypeTab (e) {
+        this.activeTypeTab = e.currentTarget.dataset.i
+        wx.startPullDownRefresh({})
+      },
+      cancelAppoint (e1, e2, e3) {
+        this.listid = e1.id
+        this.studentId = e1.studentId
+        this.courIndex = e2
+        this.dataIndex = e3
+        var that = this
+        wx.showModal({
+          title: '温馨提示',
+          content: '确定取消预约吗？',
+          success: function (res) {
+            if (res.confirm) {
+              that.cancelConfirm()
+            }
+          }
+        })
+        // debugger
+      },
+      cancelFun (e1, e2, e3) {
+        this.listid = e1.id
+        this.studentId = e1.studentId
+        this.courIndex = e2
+        this.dataIndex = e3
+        this.isleave = e1.recordType === 1 ? 1 : 2
+        var self = this
+        wx.showModal({
+          title: '温馨提示',
+          content: '确定取消吗？',
+          success: function (res) {
+            if (res.confirm) {
+              self.cancelLeave()
+            }
+          }
+        })
+      }
+    }
+    cancelLeave(){
+      var _self= this
+      pRequest('ews/courseTerm/cancelStudentLeave', {
+        courseTermDetailId: this.listid,
+        recordType: this.isleave,
+        studentId: this.studentId
+      }).then(res=>{
+        wx.showToast({
+          title: '取消成功',
+          icon: 'success',
+          duration: 1000
+        })
+        _self.cousrseInfoList[_self.dataIndex].list.splice(_self.courIndex, 1)
+        _self.$apply()
+      })
+    }
+    cancelConfirm(){
+      var _this = this
+      pRequest('stu/course/studentCancelReservationsClass', {
+        id: this.listid,
+        isLoop: 0,
+        studentIdsList: [this.studentId]
+      }).then(res=>{
+          wx.showToast({
+            title: '取消预约成功',
+            icon: 'success',
+            duration: 1000
+          })
+        _this.cousrseInfoList[_this.dataIndex].list.splice(_this.courIndex, 1)
+        _this.$apply()
+      })
+    }
+    onLoad(){
+      this.parentId = app.globalData.parentId
+      this.refresh()
+    }
+    onPullDownRefresh() {
+      this.refresh()
+    }
+    onReachBottom(event) {
+      this.loadmore()
+    }
+
+    refresh(){
+      if(this.isLoading){
+        return
+      }
+      this.page.refreshPage()
+      this.getPageList()
+    }
+    loadmore(){
+      console.log('loadmore')
+      if(this.isLoading){
+        return
+      }
+      if(this.isNoMore()){
+        return
+      }
+      this.page.addPage()
+      this.getPageList()
+    }
+    isNoMore(){
+      var isNoMore=false
+      var needShowLoadMore=true
+      if (app.isUseSaas()) {
+        if(this.page.pageCount == this.page.pageNo){
+          isNoMore=true
+          needShowLoadMore=this.page.pageCount>0
+        }
+      }else{
+        if(this.page.page >= (this.page.pageTotal-1)){
+          isNoMore = true
+          needShowLoadMore=this.page.pageTotal>0
+        }
+      }
+      if(isNoMore&&needShowLoadMore){
+        if (this.page.pageTotal != 0 || this.page.pageCount != 0) {
+          wx.showToast({
+            title: '没有更多了',
+            icon: 'none'
+          })
+        }
+      }
+      return isNoMore
+    }
+    getPageList(){
+      this.isLoading=true
+      var url='xb/front/auth/ucAuditions/list?page='+this.page.page+'&size='+this.page.size
+      if(this.activeTypeTab>0){
+        url+=('&signIn='+(this.activeTypeTab==2))
+      }else{
+        // url+=('&signIn=null')
+      }
+      pGetRequest(url).then(res=>{
+        wx.stopPullDownRefresh()
+        this.isLoading=false
+        this.page.pageTotal=res.totalPages
+        this.page.page=res.number
+        if(res.number==0){
+          this.courseList=convertList(res.content)
+        }else{
+          this.courseList=this.courseList.concat(convertList(res.content))
+        }
+        this.$apply()
+      }).catch((err)=>{
+        console.log('err:',err)
+        wx.stopPullDownRefresh()
+        this.isLoading=false
+      })
+    }
+  }
+  function convertList(list) {
+    if(!list)
+      return []
+    list.forEach((item)=>{
+      var bannerList=JSON.parse(item.classBanner)
+      var firstImage=bannerList.find((item)=>{
+        return item.image&&item.image!=null
+      })
+      item.bannerUrl=firstImage.image
+      console.log('firstImage:',firstImage)
+    })
+    // list=list.concat([{},{},{},{},{},{},{},{},{},{},{},])
+    return list
+  }
+</script>

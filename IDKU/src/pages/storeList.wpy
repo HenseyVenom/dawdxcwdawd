@@ -1,0 +1,203 @@
+<style scoped lang='less'>
+  .list{
+    width: 100%;
+    background-color: white;
+    .item{
+      margin: 0 44rpx;
+      border-bottom: 1px solid #E9E9E9;
+      padding: 24rpx 0;
+      .storeImage{
+        width: 100rpx;
+        height: 100rpx;
+        flex-shrink: 0;
+        /*background-color: aquamarine;*/
+      }
+      .right{
+        flex-grow: 1;
+        justify-content: space-between;
+        margin-left: 32rpx;
+        .name{
+          flex-grow: 1;
+          font-size: 30rpx;
+          color: #222222;
+        }
+        .distance{
+          flex-shrink: 0;
+          font-size: 24rpx;
+          color: #909090
+        }
+        .address{
+          align-items: center;
+          image{
+            width: 18rpx;
+            height: 22rpx;
+          }
+          text{
+            font-size: 24rpx;
+            color: #909090;
+            margin-left: 16rpx;
+            overflow: hidden;
+            text-overflow:ellipsis;
+            white-space: nowrap;
+          }
+        }
+      }
+    }
+    :last-of-type{
+      border-bottom: 0px;
+    }
+
+  }
+
+</style>
+<template>
+    <view class="list flexC">
+      <view class="item flexR" wx:for="{{shopList}}" @tap="storeItemClick({{item}})" wx:for-index="i" wx:for-item="item" wx:key="shop_{{i}}">
+        <image class="storeImage" src="{{item.imageUrl?item.imageUrl:''}}"></image>
+        <view class="flexC right">
+          <view class="flexR">
+            <text class="name">{{item.shopName}}</text>
+            <text class="distance" wx:if="{{false}}">900m</text>
+          </view>
+          <view class="address flexR">
+            <image src="/images/location_icon.png"></image>
+            <text>{{item.cityName}}{{item.address}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+</template>
+<!--门店列表-->
+<script>
+  import wepy from 'wepy'
+  import {pRequest,pGetRequest} from "../utils/requestUtils";
+  import { connect } from 'wepy-redux'
+  import {changeShopId} from "../store/actions";
+  import {organId} from "../appConfig";
+
+  const app=wepy.$instance
+  @connect({}, {
+    changeShopId
+  })
+  export default class StoreList extends wepy.page {
+    config = {
+      navigationBarTitleText: '门店列表'
+    }
+    data = {
+      shopList:[]
+    }
+    methods = {
+      storeItemClick(shop) {
+        if (app.isUseSaas()) {
+          app.saveShopInfo(shop)
+          this.methods.changeShopId(shop.id)
+          // var pages = getCurrentPages()
+          // pages.forEach((item) => {
+          //   if (item.route == 'pages/index') {
+          //     item.setData({
+          //       storeName: shop.shopName,
+          //       shopId: shop.id,
+          //       shopContent: shop.content,
+          //       shopLogo:shop.imageUrl
+          //     })
+          //     item.onShopChange()
+          //   }
+          // })
+          wx.navigateBack({})
+        } else {
+          this.getShopContent(shop)
+        }
+      }
+    }
+    onLoad(){
+      this.getShopList()
+      // this.getLocation()
+    }
+    getLocation() {
+      wx.showLoading({
+        title: '加载中',
+      })
+      var that = this
+      wx.getLocation({
+        type: 'gcj02',
+        success: function(res) {
+          app.globalData.latitude = res.latitude;
+          app.globalData.longitude = res.longitude;
+          that.getShopList()
+        },
+        fail(){
+          that.getShopList()
+        }
+      })
+    }
+    getShopList() {
+      if(app.isUseSaas()){
+        this.getShopListFormZX()
+      }else{
+        this.getShopListFormXB()
+      }
+    }
+    getShopListFormZX(){
+      pRequest('stu/home/shopList', {
+        lat: app.globalData.latitude,
+        lon: app.globalData.longitude,
+        businessId: app.globalData.organizationId,
+        page: {
+          pageNum:1,
+          pageSize:100,
+        }
+      }).then((res)=>{
+        wx.hideLoading()
+        if(res.list&&res.list.length>0){
+          this.shopList=res.list
+          this.$apply()
+        }
+      }).catch((err)=>{
+        console.log('err:',err)
+      })
+    }
+    getShopListFormXB(){
+      pRequest('xb/front/unAuth/organShop/list/v1?organ_id='+organId).then((res)=>{
+        wx.hideLoading()
+        this.shopList=convertXBShopList(res.content)
+        this.$apply()
+      }).catch((err)=>{
+        console.log('err:',err)
+        if(err){
+          wx.hideLoading()
+        }
+      })
+    }
+    getShopContent(shop){
+      pGetRequest('xb/front/unAuth/organShop/viewOrganShop/' + shop.id).then((res)=>{
+        shop.content = res.ucOrganShopPojo.intro
+        this.methods.changeShopId(shop.id)
+        app.saveShopInfo(shop)
+        var pages=getCurrentPages()
+        pages.forEach((item)=>{
+          if (item.route =='pages/index'){
+            item.setData({
+              storeName:shop.shopName,
+              shopId:shop.id,
+              shopContent:shop.content,
+              shopLogo:shop.imageUrl
+            })
+          }
+        })
+        wx.navigateBack({})
+      })
+    }
+  }
+  function convertXBShopList(list) {
+    return list.map((item)=>{
+      return {
+        imageUrl:item.logoUrl,
+        shopName:item.name,
+        cityName:'',
+        address:item.address,
+        id:item.id
+      }
+    })
+  }
+</script>

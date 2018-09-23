@@ -1,0 +1,200 @@
+<style scoped lang='less'>
+  .compact-page{
+    height: 100%;
+    background: #f5f5f5;
+    .bg-white{
+      background: #fff;
+    }
+    .text-orange{
+      color: #ffa10a;
+    }
+    .text-blue{
+      color: #5484fd;
+    }
+    .text-red{
+      color: #f23535;
+    }
+    .flex-between{
+      display: flex;
+      justify-content: space-between;
+    }
+    .compactList.noCont {
+      text-align: center;
+      padding-top: 400rpx;
+      font-size: 30rpx;
+      color: #999;
+    }
+    .compactList{
+      font-size: 30rpx;
+      margin: 0rpx auto ;
+      width: 710rpx;
+      padding-top: 10rpx;
+      .compactItem {
+        margin-bottom: 20rpx;
+        box-shadow: 3px 5px 8px 0px 	rgba(84, 132, 253, 0.12);
+        border-radius: 6px;
+        .compactNum {
+          padding: 20rpx 30rpx;
+          border-bottom: 1px solid #ededed;
+          color: #888;
+          font-size: 22rpx;
+        }
+        .contractCont {
+          .contTop {
+            align-items: center;
+            padding: 20rpx 30rpx 0rpx 0;
+            .left{
+              display: flex;
+              justify-content: flex-start;
+              align-items: center;
+            }
+            .border{
+              width: 6rpx;
+              height: 26rpx;
+              background-color: #f23535;
+              border-radius: 3rpx;
+              margin-right: 23rpx;
+            }
+            .packName {
+              font-size: 26rpx;
+            }
+            .text-blue,.text-orange{
+              font-size: 26rpx;
+            }
+          }
+          .contText{
+            padding: 0rpx 30rpx 20rpx;
+          }
+          .cont-item {
+            &.flex-between {
+              align-items: center;
+              height: 50rpx;
+            }
+            text {
+              margin-right: 20rpx;
+              font-size: 24rpx;
+            }
+            .undeline {
+              text-decoration: underline;
+            }
+          }
+        }
+      }
+    }
+  }
+</style>
+<template>
+  <view class="compact-page">
+    <view class='compactList noCont' wx:if='{{!compactList||compactList.length<1}}'>暂无合同</view>
+    <view class='compactList' wx:else>
+      <view class='compactItem bg-white' wx:for='{{compactList}}' wx:for-index='i' wx:key='i'>
+        <!-- <view class='compactNum'></view> -->
+        <view class='contractCont'>
+          <view class='contTop flex-between'>
+            <view class='left '>
+              <view class='border'></view>
+              <view class='packName'>合同编号：{{item.contractNo}}</view>
+            </view>
+          </view>
+          <view class='contText'>
+            <view class='cont-item'>
+              <text class="">家长姓名：{{item.familyMember.patriarchName}}</text>
+            </view>
+            <view class='cont-item'>
+              <text>联系方式：{{item.familyMember.phoneNum}}</text>
+            </view>
+            <view class='cont-item' wx:for='{{item.studentList}}' wx:for-item='stu' wx:for-key='i' wx:key='i'>
+              <text >{{stu.studentName}}</text>
+              <text wx:if='{{stu.gender==1}}'>男</text> <text wx:else>女</text>
+              <text>{{stu.birthdate}}</text>
+            </view>
+            <view wx:for='{{item.contractDetail}}' wx:for-item='_item'  wx:for-key='i' wx:key='i'>
+              <view class='cont-item'>
+                <text>套餐名称： {{_item.packageName}}</text>
+              </view>
+              <view class='cont-item'>
+                <text>基本课时： {{_item.packageHour}}</text>
+                <text>赠送课时： {{_item.giveHour}}</text>
+              </view>
+            </view>
+            <view class='cont-item'>
+              <text>合同金额： {{item.totalMoney}} </text>
+            </view>
+            <view class='cont-item'>
+              <text>优惠金额： {{item.derateMoney}}</text>
+            </view>
+            <view class='cont-item'>
+              <text class='text-red'>支付金额： {{item.payMoney}}</text>
+            </view>
+            <view class='cont-item'>
+              <text class=''>签约日期： {{item.signTime}}</text>
+            </view>
+            <view class='cont-item flex-between'>
+              <text class=''>有效期 ： {{item.startTime}} 至 {{item.endTime}}</text>
+              <!-- <text class='text-orange'>实收金额： ￥{{item.discountsMoney}}</text> -->
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  import {pRequest} from "../utils/requestUtils";
+  const app=wepy.$instance
+  export default class Compact extends wepy.page {
+    config = {
+      navigationBarTitleText: '合同',
+      enablePullDownRefresh:true
+    }
+    data = {
+      state: {
+        1: '待支付',
+        2: '预付款',
+        3: '待审核',
+        4: '已完成',
+        5: '已退款'
+      },
+      compactList: [],
+      page: {
+        pageSize:1,
+        pageNum: 1
+      },
+      compactpage: {},
+      packageId:'',
+    }
+
+    methods = {
+
+    }
+    getcompact(packageId){
+      pRequest('stu/myHome/contractList',{
+        page:this.page,
+        packageId:packageId,
+        shopId:app.globalData.shopId
+      }).then(res=>{
+        this.compactList = this.compactList.concat(res.list)
+        this.compactpage = res.page
+        this.$apply()
+      })
+    }
+    onLoad(option){
+      this.packageId = option.packageId
+      this.getcompact(this.packageId)
+    }
+    // onPullDownRefresh() {
+    //   this.compactList=[]
+    //   this.page.pageNum = 1
+    //   this.getcompact()
+    // }
+    // onReachBottom(event) {
+    //   if(this.compactpage.totalPage < this.page.pageNum){
+    //     return
+    //   }
+    //   this.page.pageNum++
+    //   this.getcompact()
+    // }
+
+  }
+</script>

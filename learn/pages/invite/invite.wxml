@@ -1,0 +1,43 @@
+<!--pages/invite/invite.wxml-->
+<image class='image_top' src='/images/top_image.jpg'></image>
+<view class='ticket'>
+  <image class='image4' src='/images/img4.png'></image>
+  <image class='image5' src='/images/ticket_bg.png'></image>
+  <view class='ticket_content flexC'>
+    <text class='favourable_name'>课程价格优惠5%-30%</text>
+    <text class='favourable_hint'>1亿报班补贴大放送</text>
+    <image class='image6' src='/images/ticket_content_bg.png'></image>
+  </view>
+</view>
+<view class='phone_input flexR' style='margin-top:78rpx;'>
+  <image src='/images/phone_icon.png'></image>
+  <input placeholder='请输入手机号' placeholder-style='color: #ffffff;' bindinput='bindInputPhone'></input>
+</view>
+<view class='phone_input flexR' style='margin-top:30rpx;'>
+  <image src='/images/sms_icon.png' style='width:48rpx;height:25rpx' mode='aspectFit'></image>
+  <input placeholder='短信验证码' placeholder-style='color: #ffffff;' bindinput='bindInputPassword'></input>
+  <form-button class="verify_button {{timeCount>0?'verify_button_disabled':''}}" catchtap="sendVerifyCode">{{timeCount>0?(timeCount+'s重发验证码'):'发送验证码'}}</form-button>
+</view>
+<view class='agree'>点击立即注册，表示您已同意
+  <text catchtap='userProtocol' catchtap='showProtocol'>《学贝用户协议》</text>
+</view>
+<form-button class='submit_buttom' catchtap='login'>立即领取</form-button>
+<view class='advantage_title flexC'>
+  <view class='title_line flexC'>
+    <image src='/images/title_line.png'></image>
+  </view>
+  <text>平台优势</text>
+</view>
+<view class='advantage_item flexC' style='margin-top:38rpx;'>
+  <text class='first'>课程最低价，省钱！</text>
+  <text class='senond'>享受机构优惠价的同时学贝再补贴5%到50%</text>
+</view>
+<view class='advantage_item flexC'>
+  <text class='first'>培训机构任你选，比价！</text>
+  <text class='senond'>到店礼、打折、满减等优惠一键查询为您提供最具性价比的选择</text>
+</view>
+
+<view class='advantage_item flexC' style='margin-bottom:135rpx;'>
+  <text class='first'>课试听课一键预约，方便！</text>
+  <text class='senond'>到店试听即可享受学贝和机构赠送的双重好礼</text>
+</view>

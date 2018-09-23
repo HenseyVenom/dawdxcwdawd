@@ -1,0 +1,108 @@
+.awardRecord{
+  width:100%;
+  height: 100vh;
+}
+.awardShell{
+  width:100%;
+  padding:0rpx 40rpx;
+  background:#fff;
+  
+}
+.shellList{
+  height:90rpx;
+  line-height:90rpx;
+  display:flex;
+  border-bottom:2rpx solid #E5E5E5;
+}
+.awardShell .shell-title{
+  font-size:32rpx;
+  color: #121212;
+  flex-grow: 1;
+}
+.awardShell  .shell-num{
+  color: #F23535;
+}
+.thisMonth{
+  padding:0px 20px;
+}
+.thisMonth .selectdate{
+  font-size:40rpx;
+  margin-top:52rpx;
+}
+.thisMonth .selectdate .selecticon{
+ display: inline-block;
+}
+.thisMonth .selectdate .date{
+  width:44rpx;
+  height: 44rpx;
+  position:relative;
+  top:9rpx;
+}
+.thisMonth  .inviter{
+ color: #888888;
+ font-size:24rpx;
+}
+.thisMonth .viewtab{
+  font-size:26rpx;
+  color: #353535;
+  display: flex 
+}
+.thisMonth .viewtab text{
+  padding:12rpx 22rpx;
+  display: block;
+  margin-right:20rpx;
+  margin-top:20rpx;
+}
+.thisMonth .viewtab .checked{
+  border: 1px solid #F23535;
+  border-radius: 6rpx;
+  color:#F23535;
+}
+.thisMonth .viewtab .default{
+  border: 1px solid #B9B9B9;
+  border-radius: 6rpx;
+}
+.awardPerson{
+  padding:0px 40rpx;
+  margin-top:20rpx;
+  background:#fff;
+}
+.awardPersonLsit{
+  display: flex;
+  padding:28rpx 0rpx;
+  border-bottom:2rpx solid #E5E5E5;
+}
+.awardPersonLsit:last-of-type{
+  border-bottom:0;
+}
+.awardPersonLsit .personLeft{
+  width:80rpx;
+  height:80rpx;
+  border-radius: 6rpx;
+  background:#ccc;
+  margin-right:9rpx;
+}
+.awardPersonLsit .personRight{
+  flex:1;
+}
+.awardPersonLsit .personRight .personIntroduce{
+  display: flex;
+  font-size:30rpx;
+  color:#000;
+}
+.awardPersonLsit .personRight .personIntroduce .personName{
+  flex:1;
+}
+.awardPersonLsit .personRight .personIntroduce .listbottm{
+  color:#888;
+  font-size:28rpx;
+}
+.awardPersonLsit .personRight .personIntroduce .persondate{
+  color: #B2B2B2;
+  font-size:24rpx;
+  
+}
+.emptyView{
+  width: 100%;
+  height: 500rpx;
+}

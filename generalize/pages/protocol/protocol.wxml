@@ -1,0 +1,31 @@
+<!--pages/protocol/protocol.wxml-->
+<view class="protocol_body flexC">
+  <text >
+    【重要提示】杭州学贝科技有限公司所有并运营的“学贝”平台（以下简称“学贝”或“平台”）依据本协议的规定为注册用户（以下简称“用户”或“您”）提供服务，本协议在注册用户和本平台间具有合同上的法律效力。本平台在此特别提醒您认真阅读、充分理解本协议各条款，特别是其中所涉及的免除及限制本平台责任的条款、对注册用户权利限制的条款等。请您审慎阅读并选择接受或不接受本协议。除非您接受本协议所有条款，否则您无权注册本平台或使用本平台于本协议下所提供的一切服务。您一经注册或使用本平台服务即视为对本协议全部条款已充分理解并完全接受。若您不接受以下条款，请停止注册本平台。
+  </text>
+  <text class='h2'>一、 本协议的签署和修订</text>
+  <rich-text nodes="{{node1}}"></rich-text>
+  <text class='h2'>二、服务内容</text>
+  <rich-text nodes="{{node2}}"></rich-text>
+  <text class='h2'>三、用户的权利与义务</text>
+  <rich-text nodes="{{node3}}"></rich-text>
+  <text class='h2'>四、平台的权利与义务</text>
+  <rich-text nodes="{{node4}}"></rich-text>
+  <text class='h2'>五.服务费用</text>
+  <rich-text nodes="{{node5}}"></rich-text>
+  <text class='h2'>六、除外责任</text>
+  <rich-text nodes="{{node6}}"></rich-text>
+  <text class='h2'>七、隐私条款</text>
+  <rich-text nodes="{{node7}}"></rich-text>
+  <text class='h2'>八、责任范围及限制</text>
+  <rich-text nodes="{{node8}}"></rich-text>
+  <text class='h2'>九、风险提示</text>
+  <rich-text nodes="{{node9}}"></rich-text>
+  <text class='h2'>十、知识产权保护条款</text>
+  <rich-text nodes="{{node10}}"></rich-text>
+  <text class='h2'>十一、法律适用</text>
+  <rich-text nodes="{{node11}}"></rich-text>
+  <text class='h2'>十二、争议解决</text>
+  <rich-text nodes="{{node12}}"></rich-text>
+  <view style="text-align: right; margin-top: 10px;color:#666;margin-bottom:40rpx;">日期：2018年 3 月 30 日</view>
+</view>

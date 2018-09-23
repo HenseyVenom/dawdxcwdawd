@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "特价课",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "form-button": "../../../components/formButton/formButton",
+    "empty-view": "../../../components/empty/emptyView"
+  }
+}

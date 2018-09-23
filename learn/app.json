@@ -1,0 +1,48 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/login/login",   
+    "pages/invite/invite",
+    "pages/logs/logs",
+    "pages/pending/pending",
+    "pages/allocated/allocated",
+    "pages/allocated/chooseCounselor/chooseCounselor",
+    "pages/bookManage/bookManage",
+    "pages/orderManage/orderManage",
+    "pages/userManage/userManage",
+    "pages/userManage/list/list",
+    "pages/userManage/detail/detail",
+    "pages/userManage/newClient/newClient",
+    "pages/userManage/dealRecord/dealRecord",
+    "pages/userManage/bookRecord/bookRecord",
+    "pages/userManage/followRecord/followRecord",
+    "pages/userManage/newDealRecord/newDealRecord",
+    "pages/userManage/newFollowRecord/newFollowRecord",
+    "pages/settings/settings",
+    "pages/settings/clientLevelSettings/clientLevelSettings",
+    "pages/settings/boundStore/boundStore",
+    "pages/settings/chooseStore/chooseStore",
+    "pages/settings/staffInfo/staffInfo",
+    "pages/settings/staffManage/staffManage",
+    "pages/bankCard/withdraw/withdraw",
+    "pages/bankCard/bankCardList/bankCardList",
+    "pages/bankCard/withdrawRecord/withdrawRecord",
+    "pages/bankCard/bankCardManage/bankCardManage",
+    "pages/bankCard/bankCardBinding/bankCardBinding",
+    "pages/bankCard/bankCardUnbinding/bankCardUnbinding",
+    "pages/protocol/protocol",
+    "pages/wallet/wallet",
+    "pages/wallet/incomeAndExpenditure/incomeAndExpenditure",
+    "pages/share/share",
+    "pages/awardRecord/awardRecord",
+    "pages/invite/award/award",
+    "pages/paySuccess/paySuccess"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#f23535",
+    "navigationBarTitleText": "学贝CRM",
+    "navigationBarTextStyle": "light"
+  }
+}
+

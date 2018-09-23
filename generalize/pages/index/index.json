@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "我的主页",
+  "usingComponents": {
+    "form-button": "../../components/formButton/formButton",
+    "pop-up" : "../../components/popUp/popUp",
+    "modal": "../../components/modal/modal"
+  }
+}

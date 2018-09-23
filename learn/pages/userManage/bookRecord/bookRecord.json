@@ -1,0 +1,8 @@
+{
+  "component": true,
+  "usingComponents": {
+    "form-button": "../../../components/formButton/formButton",
+    "bookModal":"../../../components/bookModal/bookDateModal",
+    "emptyView": "../../../components/empty/emptyView"
+  }
+}

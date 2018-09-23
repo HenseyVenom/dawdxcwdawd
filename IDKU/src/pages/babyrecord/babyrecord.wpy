@@ -1,0 +1,149 @@
+<style scoped  lang='less'>
+  .babayrecord{
+    width:100%;
+    padding:0rem 40rpx;
+    padding-top:20rpx;
+    padding-bottom:60rpx;
+    .babaylist{
+      width:100%;
+      position:relative;
+      height:260rpx;
+      background: #F23535;
+      box-shadow: 0 0 4px 0 rgba(193,193,193,0.50);
+      border-radius: 15px;
+      marign-top:20rpx;
+      padding:36rpx 0rpx 0rpx 36rpx;
+      margin-bottom:40rpx;
+      .imgbg{
+        width:100rpx;
+        height:100rpx;
+        background:#fff;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .babyimg{
+          width:68rpx;
+          height:58rpx;
+        }
+        .qingImg{
+           width:100rpx;
+           height:100rpx;
+           border-radius: 50%;
+        }
+      }
+      .babyinfo{
+        flex:1;
+        margin-left:40rpx;
+        color:#fff;
+        .babyName{
+          font-size:32rpx;
+          display: block;
+        }
+        .manage{
+          font-size:28rpx;
+        }
+      }
+      .findbaby{
+       // widht:210rpx;
+        height:40rpx;
+        font-size: 22rpx;
+        text-align:center;
+        background: #fff;
+        border-radius: 20rpx;
+        position: absolute;
+        right:30rpx;
+        bottom:30rpx;
+        line-height:40rpx;
+        padding:0rpx 8rpx;
+      }
+    }
+    .addbabycontent{
+      width:100%;
+      height:260rpx;
+      box-shadow: 0 0 4px 0 rgba(193,193,193,0.50);
+      border-radius: 30rpx;
+      padding-top:70rpx;
+      color:#969696;
+      .settbay{
+        width:100%;
+        text-align:center;
+        font-size:28rpx;
+        display: block;
+      }
+      .jia{
+        font-size:36rpx;
+      }
+    }
+  }
+</style>
+<template>
+   <view class="babayrecord">
+     <view class="flexR babaylist" wx:for="{{familyDetail}}" wx:for-index="index" wx:key="index">
+        <view class="imgbg">  
+            <image src="{{item.headUrl}}" class="qingImg" wx:if="{{item.headUrl}}"></image>
+            <image wx:else src="{{item.gender=='male'?'/images/box.png':'/images/girl.png'}}" class="babyimg"></image>
+           
+        </view>
+       <view class="babyinfo">
+         <text class="babyName">{{item.nickname}}</text>
+         <text class="manage">为您的宝宝管理兴趣</text>
+       </view>
+       <view class="findbaby" @tap="updateAddbaby({{item.id}})">查看宝宝资料</view>
+     </view>
+     <view class="addbabycontent" @tap="enterAddbaby()">
+        <text class="settbay jia">＋</text>
+        <text class="settbay">添加一个宝宝</text>
+     </view>
+   </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  import {pRequest,pGetRequest} from "../../utils/requestUtils";
+  export default class babyrecord extends wepy.page{
+    config={
+      navigationBarTitleText: '宝宝档案'
+    }
+    data={
+      familyDetail:[]
+    }
+    methods={
+      enterAddbaby(childrenArr){
+        if(this.familyDetail.length>=3){
+           wx.showToast({
+            title: '最多添加三个宝宝',
+            icon: 'none',
+            duration: 2000  //持续的时间
+          }) 
+          return
+        }
+        wx.navigateTo({
+          url:'/pages/babyrecord/addbaby/addbaby'   
+        })
+      },
+
+      updateAddbaby(id){
+        wx.navigateTo({
+          url:'/pages/babyrecord/updatebaby/updatebaby?id='+id
+        })
+      }
+    }
+
+  
+    getChildrenList(){
+      pGetRequest('xb/front/auth/ucBaby/indexAjax?page=0&size=10',{
+      }).then(res=>{
+        if(res.content){
+          this.familyDetail = res.content
+        }
+        this.$apply()
+        //console.log(res)
+      })
+    }
+
+    onLoad(){
+     // this.familyMemberDetail()
+      this.getChildrenList()
+    }
+  }
+</script>

@@ -1,0 +1,35 @@
+<style scoped lang='less'>
+  .web-page{
+    height: 100%;
+    background: #f5f5f5;
+
+  }
+</style>
+<template>
+  <view class='web-page'>
+    <web-view src="{{webUrl}}"></web-view>
+  </view>
+
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import {pRequest,pGetRequest} from '../utils/requestUtils'
+  const app = wepy.$instance
+  export default class Web extends wepy.page {
+    config={
+      navigationBarTitleText: ''
+    }
+    data = {
+      webUrl: ''
+    }
+    onLoad(options){
+      this.webUrl = options.url
+    }
+
+    methods={
+
+    }
+
+  }
+</script>

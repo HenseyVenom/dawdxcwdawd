@@ -1,0 +1,55 @@
+/* pages/userManage/dealRecord/dealRecord.wxss */
+.bg-white{
+  background: #fff;
+}
+.text-red{
+  color: #f23535;
+}
+.dealPage{
+  margin-top: 10rpx;
+  color: #333;
+  padding-bottom: 100rpx;
+}
+.dealList .dealItem{
+  margin-bottom: 10rpx;
+  padding: 30rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.dealList .dealItem .left{
+  font-size: 28rpx;
+  line-height: 45rpx;
+}
+.dealList .dealItem .left .gray{
+  color: #999999;
+}
+.dealList .dealItem .right .text-red{
+  font-size: 42rpx;
+  line-height: 35px;
+}
+.dealList .dealItem .right .bg-gray{
+  color: #999999;
+  font-size: 20rpx;
+  background-color: #f5f5f5;
+  border-radius: 18px;
+  text-align: center;
+  padding: 5rpx;
+}
+
+.dealPage .fixedBottom{
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  padding: 25rpx 0;
+  border-top: solid 1px #ededed;
+}
+.dealPage .fixedBottom view{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ff9c0f;
+  font-size: 36rpx;
+}

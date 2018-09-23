@@ -1,0 +1,41 @@
+<!--pages/wallet/incomeAndExpenditure/incomeAndExpenditure.wxml-->
+<view class='top_filter'>
+  <view class='top_filter_date flexR'>
+    <text>{{showMonthText}}</text>
+    <picker class="selecticon" mode="multiSelector" bindchange="bindMultiPickerChange" value="{{multiIndex}}" range="{{multiArrayDate}}">
+      <view class="picker">
+        <image src='/images/calendar_icon.png' class='top_filter_date_image'></image>
+      </view>
+    </picker>
+    <!-- <image class='top_filter_date_image' src='/images/calendar_icon.png'></image> -->
+  </view>
+  <view class='top_filter_info'>
+    <text>收入：{{monthIncome}}</text>
+    <text style='margin-left:30rpx;'>支出：{{monthOutlay}}</text>
+  </view>
+  <view class='top_filter_layout'>
+    <view class="top_filter_button {{item.value==sourceType?'top_filter_button_select':''}}" wx:for="{{tablist}}" wx:for-index="i" wx:key="filter_{{i}}" data-val="{{item.value}}" catchtap='switchTab'>{{item.name}}</view>
+  </view>
+</view>
+<scroll-view class='record_list'>
+  <view>
+    <view class='record_list_item flexR' wx:for="{{personList}}" wx:for-index="i" wx:for-item="item" wx:key="record_{{i}}">
+      <view class='item_left flexC'>
+        <text style="font-size:28rpx;color:{{i<3?'#333333':'#666666'}}"> </text>
+        <view style="font-size:28rpx;color:{{i<3?'#333333':'#666666'}}">
+           <text>{{item.rewardType}}</text>
+           <text wx:if="{{item.nickName}}"> - {{item.nickName}}</text>
+           <text wx:if="{{item.mobile != null && item.mobile}}">({{ item.mobile}})</text>
+        </view>
+        <text style='font-size:24rpx;color:#999999'>{{item.sourceType}}</text>
+      </view>
+      <view class='item_right'>
+        <text class="{{item.amountType=='outlay'?'expenditure_color':'themeColor'}} {{item.amount>1000000000000000?'little_font':'big_font'}}">{{item.amountType=='outlay'?'-':'+'}}{{item.amount}}</text>
+        <text style='font-size:28rpx;color:#999999;display:block' >{{item.createAtStr}}</text>
+      </view>
+      
+
+    </view>
+  </view>
+  <empty-view class='emptyView' text='还没有收支记录！' wx:if="{{personList.length==0}}"></empty-view>
+</scroll-view>

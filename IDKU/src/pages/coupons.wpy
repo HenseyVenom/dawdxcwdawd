@@ -1,0 +1,339 @@
+<style scoped lang='less'>
+  .coupons-page {
+    font-size: 28rpx;
+    color: #222;
+    background-color: #F4F4F4;
+    height: 100vh;
+    .coupon-no {
+      image {
+        width: 500rpx;
+        height: 280rpx;
+        display: block;
+        margin: 300rpx auto;
+      }
+    }
+    .coupon-list {
+      width: 690rpx;
+      margin: 0rpx auto;
+      padding-top: 30rpx;
+      flex-grow: 1;
+      .coupon-item {
+        position: relative;
+        margin-bottom: 30rpx;
+        height: 210rpx;
+        box-shadow: 0 0 6px 0 #EAEAEA;
+        .coupon-bg {
+          position: absolute;
+          width: 100%;
+          height: 210rpx;
+          top: 0;
+          left: 0;
+          background: #fff;
+        }
+        .coupon-cont {
+          position: relative;
+          z-index: 1;
+          &.gray-text {
+            color: #909090;
+            .coupon-bottom {
+              .right {
+                width: 140rpx;
+                height: 40rpx;
+                background: #fff;
+              }
+            }
+          }
+          .coupon-top {
+            display: flex;
+            justify-content: flex-start;
+            padding: 20rpx 30rpx;
+            image {
+              width: 90rpx;
+              height: 90rpx;
+              border-radius: 10rpx;
+             // background: #eee;
+              margin-right: 20rpx;
+            }
+            .right {
+              width: 520rpx;
+              .flex {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                .type {
+                  font-size: 32rpx;
+                }
+                .flex-right {
+                  font-size: 28rpx;
+                  text {
+                    font-size: 50rpx;
+                  }
+                  &.red-text {
+                    color: #F23535;
+                  }
+                }
+              }
+            }
+          }
+          .coupon-bottom {
+            padding: 15rpx 40rpx;
+            font-size: 24rpx;
+            color: #909090;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            .right {
+              color: #fff;
+              opacity: 0.9;
+              background: #F23535;
+              border-radius: 100px;
+              width: 140rpx;
+              height: 40rpx;
+              line-height: 40rpx;
+              text-align: center;
+            }
+          }
+        }
+      }
+    }
+    .not_use_coupon{
+      flex-shrink: 0;
+      height: 90rpx;
+      color: #121212;
+      box-shadow: 0 0 6px 0 #EAEAEA;
+      bottom: 0;
+      width: 90%;
+      font-size: 30rpx;
+      background-color: white;
+      width: 100%;
+      text-align: center;
+      line-height: 90rpx;
+    }
+  }
+</style>
+<template>
+
+  <view class="coupons-page flexC">
+    <view class="coupon-no" wx:if="{{!couponsList||couponsList.length<1}}">
+      <image src="/images/img_coupon_null.png"></image>
+    </view>
+    <view class="coupon-list" wx:else>
+      <view class="coupon-item" wx:for="{{couponsList}}" wx:key="i" @tap.stop="chooseCoupon({{item}})">
+        <image class="coupon-bg" src="/images/coupon_bg.png"></image>
+        <view class="coupon-cont {{(item.status==='overdue' || item.status==='disabled') ?'gray-text':''}}">
+          <view class="coupon-top">
+            <image src="/images/logo1.png" wx:if="{{item.sender=='platform'}}" style="width:110rpx;height:110rpx;"></image>
+            <image src="{{item.shopLogoUrl}}" wx:if="{{item.sender=='shop'}}"></image>
+            <image src="{{item.orangLogoUrl}}" wx:if="{{item.sender=='organization'}}"></image>
+            <view class="right">
+              <!--<view class="company">{{item.shopName?item.shopName:'杭州学贝科技有限公司'}}</view>-->
+              <view class="company">{{item.sender=='platform'?'杭州学贝科技有限公司':item.sender=='shop'?item.shopName:item.sender=='organization'?item.organName:''}}</view>
+              <view class="flex">
+                <!-- <view>{{item.name}}</view> -->
+                <!-- <view class="flex-left type" wx:if="{{item.couponType ==='voucher'}}">满减券</view>
+                <view class="flex-left type" wx:if="{{item.couponType==='free'}}">免息券</view>
+                <view class="flex-left type" wx:if="{{item.couponType==='discount'}}">打折券</view> -->
+                <view class="flex-left type">{{item.couponType ==='voucher'?'满减券':(item.couponType==='free'?'免息券':(item.couponType==='discount'?'打折券':(item.couponType==='payment'?'抵价券':'贴息券')))}}</view>
+                <view class="flex-right {{item.status===1?'red-text':'gray-text'}}">
+                  <view wx:if="{{item.couponType==='voucher'}}">每满
+                    <text>{{item.useConditionAmount}}</text>
+                    减
+                    <text>{{item.amount}}</text>
+                  </view>
+                  <view wx:if="{{item.couponType==='free'}}">免
+                    <text>{{item.freeInstallmentNum}}</text>
+                    期的利息
+                  </view>
+                  <view wx:if="{{item.couponType==='discount'}}">
+                    打
+                    <text>{{item.amount*10}}</text>
+                    折
+                  </view>
+                  <view wx:if="{{item.couponType==='partfree'}}">
+                    利率
+                    <text>{{item.amount*10}}</text>
+                    折
+                  </view>
+                  <view wx:if="{{item.couponType==='payment'}}">
+                    <text>{{item.amount}}元</text>
+                  </view>
+                </view>
+              </view>
+            </view>
+          </view>
+          <view class="coupon-bottom">
+            <view class="left" wx:if="{{item.status==='overdue' || item.status==='disabled' }}">已失效</view>
+            <view class="left"  wx:else>有效期：{{item.startDate}} - {{item.endDate}}</view>
+            <view  wx:if="{{item.status==='overdue' || item.status==='disabled' }}"></view>
+            <view class="right"  wx:if="{{false}}">送给朋友</view>
+          </view>
+        </view>
+
+      </view>
+    </view>
+    <view class="not_use_coupon" wx:if="{{couponsList.length>0&&from!=0}}" @tap.stop="notUseCoupon">不使用优惠券</view>
+  </view>
+
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import {pRequest,pGetRequest} from "../utils/requestUtils";
+  import {connect} from 'wepy-redux'
+  @connect({
+    shopId (state) {
+      return state.counter.shopId
+    }
+  })
+
+  export default class Coupons extends wepy.page {
+    config = {
+      navigationBarTitleText: '优惠券',
+      enablePullDownRefresh:true
+    }
+    data = {
+      couponsList:[],
+      page: {
+        page:0,
+        size:10
+      },
+      isLoading: false,
+      totolpage:0,
+      from:0,
+      courseId:'',
+      useConditionAmount:''
+    }
+    methods = {
+      chooseCoupon(coupon) {
+        let ccc=Object.assign({},coupon)
+        var pages = getCurrentPages()
+        pages.forEach((item) => {
+          if (this.from == 1) {
+            if (item.route == 'pages/buyCourse') {
+              item.couponChanged(ccc)
+              wx.navigateBack({})
+            }
+          }
+          if (this.from == 2) {
+            if (item.route == 'pages/payToShop') {
+              item.couponChanged(ccc)
+              wx.navigateBack({})
+            }
+          }
+        })
+      },
+      notUseCoupon(){
+        var pages = getCurrentPages()
+        for(var i=0;i<pages.length;i++){
+          var item=pages[i]
+          if (this.from == 1) {
+            if (item.route == 'pages/buyCourse') {
+              item.couponChanged({
+                isEmpty:true
+              })
+              wx.navigateBack({})
+              return
+            }
+          }
+          if (this.from == 2) {
+            if (item.route == 'pages/payToShop') {
+              item.couponChanged({
+                isEmpty:true
+              })
+              wx.navigateBack({})
+              return
+            }
+          }
+        }
+      }
+    }
+
+    onPullDownRefresh(){
+      this.couponsList = []
+      this.refreshList()
+    }
+    onReachBottom(){
+      this.loadMoreList()
+    }
+    onLoad(options) {
+      if(options.from){
+        this.from=options.from
+        this.courseId=options.courseId
+        this.useConditionAmount=options.useConditionAmount
+      }
+      this.getcoupon()
+    }
+
+    refreshList() {
+      if (this.isLoading) {
+        return
+      }
+      this.page.page = 0
+      this.getcoupon()
+    }
+
+    loadMoreList() {
+      // if (this.isLoading) {
+      //   return
+      // }
+      this.page.page++
+      if(this.page.page>=this.totolpage){//最后一页
+        return
+      }
+      //this.page.pageNum++
+      this.getcoupon()
+    }
+
+    getcoupon(){
+       wx.showLoading({
+        title: '加载中...'
+      })
+      if(this.from==0){
+        pGetRequest('xb/front/auth/coupon/list?page=' + this.page.page + '&size=' + this.page.size, {}).then(res => {
+          this.couponsList = this.couponsList.concat(this.spell(res.content))
+          this.totolpage = res.totalPages
+          wx.hideLoading()
+          this.$apply()
+          //cosnole.log(res)
+        })
+      }else{
+         var url='xb/front/auth/coupon/payListCoupon?tcOrderOrderType=online&useConditionAmount='+this.useConditionAmount
+        if(this.courseId){
+           url+='&sourceId='+this.courseId
+        }
+         pGetRequest(url).then((res)=>{
+           wx.hideLoading()
+           this.couponsList = this.couponsList.concat(this.spell(res))
+           this.totolpage = 1
+           this.$apply()
+         }).catch((err)=>{
+           console.log('err:',err)
+         })
+      }
+    }
+
+    spell(arr){
+      if(!arr){
+        return []
+      }
+     return arr.map(item=>{
+      // console.log(item)
+       return {
+         status:item.status,
+         amount:item.amount,
+         freeInstallmentNum:item.couponType==='free'?item.freeInstallmentNum:'',
+         endDate:item.endDate.substr(0,10),
+         startDate:item.startDate.substr(0,10),
+         couponType:item.couponType,
+         shopName:item.shopName,
+         shopLogoUrl:item.shopLogoUrl,
+         useConditionAmount:item.useConditionAmount,
+         id:item.id,
+         sender:item.sender,
+         organName:item.organName,
+         orangLogoUrl:item.orangLogoUrl
+       }
+     })
+    }
+  }
+</script>

@@ -1,0 +1,60 @@
+.Page{
+  background: #fff;
+  height: 100%;
+  font-size: 28rpx;
+}
+.organList{
+  margin: 40rpx;
+  height: 100%;
+  padding-bottom: 40rpx;
+}
+.organList .organItem{
+  background: #FFFFFF;
+  border-radius: 30rpx;
+  box-shadow: #ddd 0px 0px 6px;
+  margin-bottom: 40rpx
+}
+.flex-start{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.organItem .left image{
+  width: 200rpx;
+  height: 200rpx;
+  /* margin-right: 30rpx; */
+  border-top-left-radius: 30rpx;
+  border-bottom-left-radius: 30rpx;
+  display: block;
+}
+.organItem .right{
+  padding: 20rpx 30rpx;
+}
+.organItem .right .title{
+  margin-bottom: 30rpx;
+}
+.organItem .right .address{
+  font-size: 24rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #888;
+}
+.organItem .right .address view:first-of-type{
+  width: 300rpx;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  color: #888;
+}
+.organItem .right .address image{
+  width: 16rpx;
+  height: 22rpx;
+  position:relative;
+  top:3rpx;
+
+}
+.emptyView{
+  width: 100%;
+  height: 100vh;
+}

@@ -1,0 +1,50 @@
+<view class='addDealPage'>
+  <form>
+    <view class='addDealForm'>
+      <view class='formItem bg-white'>
+        <text class='left'>金额</text>
+        <input class='right' type='number' placeholder='请输入' placeholder-class="phcolor"  bindinput='keyMoney'></input>
+      </view> 
+      <view class='formItem bg-white'>
+        <text class='left'>支付方式</text>
+        <input class='right' placeholder='请输入' placeholder-class="phcolor"  bindinput='keypay'></input>
+      </view>
+      <view class='formItem bg-white'>
+        <text class='left'>订单编号</text>
+        <input class='right' placeholder='请输入' placeholder-class="phcolor" value='{{dealForm.orderNo}}'   bindinput='keyOrderNumber'></input>
+      </view>
+      <view class='formItem bg-white'>
+        <text class='left'>课程</text>
+        <view class='right'>
+          <!-- <picker value='{{index}}' range="{{courseArr}}"  data-index='{{i}}' >
+            <view class='{{courseArr[index]? "":"gray"}}'>{{courseArr[index]?levelArr[index]:'请选择'}} <image src='../../../images/arrow_right.png'></image></view>
+          </picker> -->
+          <input class='right' placeholder='请输入' placeholder-class="phcolor"  bindinput='keyCouse'></input>
+        </view>
+      </view> 
+
+      <view class='formItem bg-white'>
+        <text class='left'>门店</text>
+        <view class='right'>
+          <!-- <picker value='{{index}}' range="{{courseArr}}"  data-index='{{i}}' >
+            <view class='{{courseArr[index]? "":"gray"}}'>{{courseArr[index]?levelArr[index]:'请选择'}} <image src='../../../images/arrow_right.png'></image></view>
+          </picker> -->
+          {{dealForm.shopName}}
+        </view>
+      </view> 
+      <view class='formItem bg-white'>
+        <text class='left'>时间</text>
+        <view class='right'>
+          <picker mode="date" value="{{date}}" start="1980-01-01" end="2100-12-31" bindchange="bindDateChange">
+            <view class='{{date? "":"gray"}}'>{{date?date:'请选择'}} <image src='../../../images/arrow_right.png'></image></view>
+          </picker>
+          
+        </view>
+      </view> 
+    </view>
+
+    <form-button class='submitBtn' bindtap='adddealFun'>
+      确定
+    </form-button>
+  </form>
+</view>

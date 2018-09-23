@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "已分配",
+  "usingComponents": {
+    "filterDate": "../../components/topDateFilter/topDateFilter",
+    "emptyView": "../../components/empty/emptyView"
+  }
+}

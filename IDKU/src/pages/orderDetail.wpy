@@ -1,0 +1,247 @@
+<style scoped lang='less'>
+  .order-detail-page{
+    height: 100%;
+    background: #f5f5f5;
+    .order-detail{
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 28rpx;
+      .order-img{
+        position: relative;
+        image{
+          width: 128rpx;
+          height: 128rpx;
+          border-radius: 50%;
+          background: #eee;
+        }
+        .type{
+          position: absolute;
+          bottom: 10rpx;
+          left: 40%;
+          font-size: 20rpx;
+          margin-left: 10rpx;
+          display: inline-block;
+          width: 112rpx;
+          height: 32rpx;
+          line-height: 32rpx;
+          color: #fff;
+          text-align: center;
+          background: #F23535;
+          border-radius: 20rpx;
+
+        }
+      }
+      .course-name{
+        font-size: 32rpx;
+        margin: 15rpx 0;
+      }
+      .price{
+        color: #909090;
+        font-size: 64rpx;
+        .num{
+          font-size: 72rpx;
+        }
+      }
+      .status{
+        font-size: 28rpx;
+        color: #F23535;
+      }
+    }
+    .order-info{
+      background: #fff;
+      .order-item{
+        margin-left: 30rpx;
+        padding: 26rpx 26rpx 26rpx 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #D8D8D8;
+        font-size: 28rpx;
+        &:last-of-type{
+          border-bottom: none;
+        }
+        .left{
+          color: #222222;
+        }
+        .right{
+          color: #909090;
+        }
+      }
+    }
+    .order-award{
+      margin-top: 20rpx;
+      background: #fff;
+      padding: 30rpx;
+      font-size: 28rpx;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      .left{
+        color: #222222;
+      }
+      .right{
+        color: #F23535;
+        text-align: right;
+        .award1{
+          margin-bottom: 20rpx;
+        }
+      }
+    }
+    .order-bottom{
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: #fff;
+      .flex-buttons{
+        position: relative;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        font-size: 24rpx;
+        view{
+          flex: 1;
+          text-align: center;
+          padding: 30rpx 0;
+        }
+        .line{
+          position: absolute;
+          top: 0;
+          height: 46rpx;
+          width: 2rpx;
+          background: #F5F5F5;
+          &.line-center.line1{
+            left: 50%;
+          }
+          &.line1{
+            left: 33.3%;
+          }
+          &.line2{
+            left: 67%;
+          }
+        }
+      }
+    }
+  }
+</style>
+<template>
+  <view class='order-detail-page'>
+    <view class="order-detail">
+      <view class="order-img">
+        <image src="{{orderInfo.courseLogo}}"></image>
+        <text class="type">{{orderInfo.orderType==='online'?'线上购买':orderInfo.orderType==='offline'?'线下购买':'' }}</text>
+      </view>
+      <view class="course-name">{{orderInfo.courseName}}</view>
+      <view class="price">￥<text class="num">{{orderInfo.orderAmount}}</text></view>
+      <view class="status">{{status[orderInfo.status]}}</view>
+    </view>
+    <view class="order-info">
+      <view class="order-item">
+        <view class="left">培训机构</view>
+        <view class="right">{{orderInfo.shopName}}</view>
+      </view>
+      <view class="order-item">
+        <view class="left">下单日期</view>
+        <view class="right">{{orderInfo.orderDate}}</view>
+      </view>
+      <view class="order-item">
+        <view class="left">支付方式</view>
+        <view class="right">{{payType[orderInfo.payType]}} <text wx:if="{{orderInfo.payType==='XBCREDIT'}}">（分{{orderInfo.installmentNum}}期）</text></view>
+      </view>
+      <view class="order-item">
+        <view class="left">订单编号</view>
+        <view class="right">{{orderInfo.orderNo}}</view>
+      </view>
+    </view>
+    <!--<view class="order-award">-->
+      <!--<view class="left">本次获得奖励</view>-->
+      <!--<view class="right">-->
+        <!--<view class="award1">500元课程抵价券</view>-->
+        <!--<view>+960个积分</view>-->
+      <!--</view>-->
+    <!--</view>-->
+    <view class="order-bottom">
+      <view class="flex-buttons">
+        <text class="line line1 {{orderInfo.status==='success'?'':'line-center'}}"></text>
+        <text class="line line2" wx:if="{{orderInfo.status==='success'}}"></text>
+        <view @tap.stop="callPhone({{'4001155300'}})" >投诉热线</view>
+        <view @tap.stop="callPhone({{orderInfo.shopPhone}})">联系商家</view>
+         <view wx:if="{{orderInfo.status==='success' && orderInfo.commentsId}}" >已评价</view> <view wx:elif="{{orderInfo.status==='success'}}" @tap="commit({{orderInfo}})">评价</view>
+      </view>
+    </view>
+  </view>
+
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import {pRequest,pGetRequest} from '../utils/requestUtils'
+  const app = wepy.$instance
+  export default class CourseOrder extends wepy.page {
+    config={
+      navigationBarTitleText: '订单详情'
+    }
+    data = {
+      orderInfo: {},
+      id: '',
+      status: {
+        'unpayed': '未支付',
+        'failed': '支付失败',
+        'success': '支付成功',
+        'processing': '支付处理中',
+        'part_repayed': '部分还款',
+        'repayed': '全部还清',
+        'refund': '退款'
+      },
+      payType: {
+        'ALIPAYAPP': '支付宝付款',
+        'YSTQUICKPAY': '银行卡付款',
+        'XBCREDIT': '学贝分期付',
+        'YSTWECHATPAYMIN':'微信支付'
+      }
+    }
+    onLoad(options){
+      let id = options.orderId
+      this.id = id
+      this.getOrderInfo()
+    }
+    getOrderInfo() {
+      pRequest('xb/front/auth/repayment/detail?id=' + this.id, {})
+        .then(res => {
+        console.log(res);
+        this.orderInfo = res.tcOrderPojo
+        this.orderInfo.orderDate = res.tcOrderPojo.orderTime.substr(0, 4) + '年' + res.tcOrderPojo.orderTime.substr(5, 2) + '月' + res.tcOrderPojo.orderTime.substr(8, 2) + '日' + ' ' + res.tcOrderPojo.orderTime.substr(11, 8)
+        this.$apply()
+      })
+    }
+
+    methods={
+      callPhone (e) {
+        console.log(e);
+        wx.makePhoneCall({
+          phoneNumber: e
+        })
+        // debugger
+      },
+      commit(item){
+        console.log(item)
+        let obj = {
+          courseId:item.courseId,
+          memberId:item.memberId,
+          orderId : item.id ,
+          organId : item.organId ,
+           shopId :item.shopId,
+        }
+
+       let commobj =  JSON.stringify(obj)
+        //debugger
+          wx.navigateTo({
+            url:'/pages/courseRecord/comment?commobj='+commobj
+          })
+      }
+    }
+
+  }
+</script>

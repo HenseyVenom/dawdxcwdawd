@@ -1,0 +1,7 @@
+<!--components/modal/modal.wxml-->
+<view class='modal' wx:if="{{showModal}}" catchtap='hideModal'>
+  <view class='content flexC' catchtap=''>
+    <slot></slot>
+    <view class='confirmButton themeBackgroundColor' catchtap='onConfirmClick'>{{buttonText}}</view>
+  </view>
+</view>

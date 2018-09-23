@@ -1,0 +1,18 @@
+<!-- pages/receive/login/login.wxml
+<image class='logo' src='/images/logo.png'></image>
+<view class='input_frame flexR' style='margin-top:104rpx'>
+  <image class='icon' src='/images/input_phone.png' mode='aspectFit' style='margin-left:10rpx'></image>
+  <input class='input_text' placeholder='手机号' type="number" confirm-type="next" bindinput="bindInputPhone" value='{{phoneNumber}}'></input>
+  <image class='delete_icon' wx:if="{{phoneNumber}}" src='/images/delete_icon.png' catchtap='clearInput'></image>
+</view>
+<view class='input_frame' style='margin-top:36rpx'>
+  <image class='icon' src='/images/sms_icon_gray.png' style='width:48rpx;height:25rpx' mode='aspectFit'></image>
+  <input class='input_text' placeholder='验证码' type="number" bindinput="bindInputPassword" value='{{verifyCode}}'></input>
+  <form-button class="verify_button {{timeCount>0?'verify_button_disabled':''}}" catchtap="sendVerifyCode">{{timeCount>0?(timeCount+'s重发验证码'):'发送验证码'}}</form-button>
+</view>
+<form bindsubmit="bindSubmit" report-submit>
+  <button class="login_button {{!phoneNumber||!verifyCode?'login_button_disabled':''}}" disabled='{{!phoneNumber||!verifyCode}}' open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="onGotUserInfo" formType="submit">登录</button>
+</form>
+<view style='font-size:26rpx;color:#BBBBBB;margin:14rpx 61rpx;'>点击登录，表示您已同意
+  <text class='protocal' catchtap='showProtocol'>《学贝用户协议》</text>
+</view> -->

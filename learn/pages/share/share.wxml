@@ -1,0 +1,4 @@
+<!--pages/share/share.wxml-->
+<view class='shareTitle'>复制以下信息分享至微信中</view>
+<view class='content_frame'>{{shareInfo.name}}，点击 {{shareInfo.url}} 领取。</view>
+<view class='copyButton themeBackgroundColor' catchtap='copyShare'>复制</view>

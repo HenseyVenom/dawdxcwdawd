@@ -1,0 +1,295 @@
+<style lang="less" scoped>
+  .updatebaby{
+      width:100%;
+      height:100%;
+      background: #F5F5F5;
+      padding-top:20rpx;
+      .babycontent{
+          padding-left:30rpx;
+          background:#fff;
+      }
+      .updateChildren{
+          width:100%;
+          height:140rpx;
+          border-bottom:2rpx solid #F5F5F5;
+          padding-right:30rpx;
+          .title{
+             line-height:140rpx;
+             font-size:30rpx;
+             color: #222222;
+          }
+          .flexhead{
+              flex:1;
+              padding-top:20rpx;
+              input{
+                  width:100%;
+                  height:60rpx;
+                  line-height:60rpx;
+                  text-align:right;
+                //  color: #909090;
+                  font-size:24rpx;
+                  
+              }
+              .picker{
+                  font-size:24rpx;
+                  text-align:right;
+                  line-height:60rpx;
+              }
+          }
+          .headertou{
+              width:98rpx;
+              height:98rpx;
+              float:right;
+             // background:#ccc;
+              position: relative;
+              top:0rpx;
+              border-radius: 50%;
+             
+          }
+           .defaultImg{
+              width:70rpx;
+              height:63rpx;   
+               border-radius: 2%;  
+               top:18rpx;
+            }
+
+      }
+      .heighttop{
+          height:100rpx;
+          .text{
+             line-height:100rpx;
+          }
+          .rightimg{
+              width:15rpx;
+              height:25rpx;
+              position: relative;
+              top:37rpx;
+          }
+      }
+      .bordertop{
+        background: #fff;
+        margin-top:20rpx;
+        padding-left:30rpx;
+        .flexhead{
+            text-align:right;
+            font-size:24rpx;
+            line-height:55rpx;
+            padding-right:20rpx;
+        }
+      }
+  }
+  .sure{
+      width:670rpx;
+      height:92rpx;
+      line-height:92rpx;
+      text-align:center;
+      color:#fff;
+      font-size:32rpx;
+      background: #F23535;
+      border-radius:46rpx;
+      margin:100rpx auto;
+  }
+
+</style>
+<template>
+    <view class="updatebaby">
+        <view  class="babycontent">
+            <view class="flexR  updateChildren">
+                <text class="title">宝宝头像</text>
+                {{item.gender}}
+                <view class="flexhead">
+                    <image src="{{headImg}}"  wx:if="{{headImg}}" class="headertou" @tap="uploadbaby()"></image>
+                    <image src="{{updatebaby.gender=='male'?'/images/box.png':'/images/girl.png'}}"  class="headertou defaultImg" @tap="uploadbaby()" wx:if="{{!headImg}}"></image>
+                    </view>
+            </view>
+            <view class="flexR updateChildren heighttop">
+                <text class="title text">宝宝昵称</text>
+                <view  class="flexhead">
+                     <input type="text" value="{{updatebaby.nickname}}"  @input="tapvlaue"/>
+                </view>
+            </view>
+            <view class="flexR updateChildren heighttop">
+                <text class="title text">宝宝性别</text>
+                <view  class="flexhead">
+                     <picker bindchange="bindPickerChange" value="{{index}}   " range="{{sexArr}}" range-key="name">
+                            <view class="picker">
+                                {{updatebaby.gender=='male'?'男孩':'女孩'}}
+                            </view>
+                    </picker>
+                </view>
+            </view>
+            <view class="flexR updateChildren heighttop">
+                <text class="title text">宝宝生日</text>
+                 <view  class="flexhead">
+                    <picker mode="date" value="{{date}}" start="1900-09-01" end="{{endDate}}" bindchange="bindDateChange">
+                        <view class="picker">
+                        {{updatebaby.birthday?updatebaby.birthday:'请选择'}}
+                        </view>
+                    </picker>
+                 </view>   
+            </view>
+      </view>
+       <view class="flexR updateChildren heighttop bordertop" @tap.stop="enterinterset">
+                <text class="title text">兴趣标签</text>
+                <view  class="flexhead ">{{interestArr}}</view>
+                <image src="/images/arrows.png" class="rightimg"></image>
+        </view>
+        <button class="sure" @tap.stop="updateChildrenFun({{tagsId}})">完成</button>
+    </view>
+</template>
+<script>
+import wepy from "wepy";
+import {pRequest,pGetRequest} from "../../../utils/requestUtils";
+const app =wepy.$instance
+ const qiniuUploader = require("../../../utils/qiniuUploader");
+export default class updatebaby extends wepy.page{
+ config={
+      navigationBarTitleText: '宝宝资料'
+    }
+   data={
+     updatebaby:{},
+     babyId:'',
+     sexArr:[{
+       name:'男孩',
+       value:'male',
+     },{
+        name:'女孩',
+        value:'famale',
+     }],
+     interestArr:[],
+     tagsId:[],
+     imageArr:'',
+     headImg:'',
+    endDate:''
+   }
+   methods={
+       uploadbaby(){
+           let that = this 
+         wx.chooseImage({
+            count: 1,
+            sizeType: ['original', 'compressed'],
+            sourceType: ['album', 'camera'],
+            success (res) {
+                that.imageArr = res.tempFilePaths
+                that.upqiniu()
+            }
+        })
+       },
+       bindDateChange(e){
+           this.updatebaby.birthday = e.detail.value
+       },
+       bindPickerChange(e){
+           console.log()
+           this.updatebaby.gender = this.sexArr[e.detail.value].value 
+       },
+       enterinterset(){
+          // debugger
+           let insterArr = JSON.stringify(this.updatebaby.listUcTagePojo)
+           wx.navigateTo({
+               url:'/pages/babyrecord/updatebaby/interest?insterArr='+insterArr
+           })
+       },
+       tapvlaue(e){
+           //debugger
+          this.updatebaby.nickname = e.detail.value
+          this.$apply()
+        //  console.log(this.updatebaby.nickname)
+       },
+       getinterestF(){
+           this.$apply()
+       },
+       updateChildrenFun(tagsId){
+          console.log(tagsId)
+        //  debugger
+          if(tagsId.length<1){
+              wx.showToast({
+                title: '兴趣不能为空',
+                icon: 'none',
+                duration: 2000  //持续的时间
+              }) 
+              return
+          }
+          if(!this.updatebaby.birthday || this.updatebaby.birthday==''){
+              wx.showToast({
+                title: '请添加宝宝生日',
+                icon: 'none',
+                duration: 2000  //持续的时间
+              }) 
+              return
+          }
+
+           pRequest('xb/front/auth/ucBaby/updateV1',{
+              birthday:this.updatebaby.birthday+' 00:00:00',
+              gender:this.updatebaby.gender,
+              tagIds:tagsId,
+              id:this.updatebaby.id,
+              nickname:this.updatebaby.nickname,
+              headUrl:this.headImg
+           }).then(res=>{
+              var pages = getCurrentPages()
+                pages.forEach((item) => {
+                   if (item.route == 'pages/babyrecord/babyrecord') {
+                     item.getChildrenList()
+                   }
+                 })
+                  wx.navigateBack()  
+           })
+
+       }
+    
+   }
+   upqiniu(){
+      console.log('image:',this.imageArr[0])
+      var fileName=this.imageArr[0].split('//')[1]
+       pGetRequest('xb/front/auth/td/qiniu?filename='+fileName+'&isPrivate=false',{}).then(res=>{
+         console.log(res)
+          let that = this
+         that.domain = res.domain+'/'
+         that.tokenqiniu = res.token
+         qiniuUploader.upload(that.imageArr[0], (res) => {
+              that.headImg = 'http://p5mbint1y.bkt.clouddn.com/'+res.key
+              this.$apply()
+             // this.GetAvatars()
+         }, (error) => {
+		     console.log('error: ' + error);
+         }, {
+            region: 'ECN',
+            domain: that.domain, // // bucket 域名，下载资源时用到。如果设置，会在 success 
+            uptoken: that.tokenqiniu, // 由其他程序生成七牛 uptoken
+    
+        }, (res) => {
+            console.log('上传进度', res.progress)
+            console.log('已经上传的数据长度', res.totalBytesSent)
+            console.log('预期需要上传的数据总长度', res.totalBytesExpectedToSend)
+        });
+       })
+     
+   }
+   onLoad(option){
+   // debugger
+     this.babyId = option.id
+      this.getbaby(this.babyId)
+      this.endDate = new Date().pattern('YYYY-MM-dd')
+   }
+   onShow(){
+    //console.log(this.interestArr)
+   }
+   getbaby(id){    
+       pGetRequest('xb/front/auth/ucBaby/view/'+id,{}).then(res=>{
+           this.updatebaby = res
+           this.headImg = res.headUrl
+           if(res.listUcTagePojo){
+             res.listUcTagePojo.map(item=>{
+                 this.interestArr.push(item.name)
+                 this.tagsId.push(item.id)
+             })
+           }
+           this.$apply()
+       })
+
+   }
+}
+    
+</script>
+
+

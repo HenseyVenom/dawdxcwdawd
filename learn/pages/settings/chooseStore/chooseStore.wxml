@@ -1,0 +1,7 @@
+<view class='chooseStore'>
+  <view class='choose' wx:for="{{storeList}}" wx:for-item='item' wx:for-index="index" wx:key="" bindtap='selectShop'>
+    <text>{{item.name}}</text>
+    <image src="../../../images/checked.png" class='checked' wx:if="{{index == storeCount}}"></image>
+  </view>
+  <view class='sureBottom sureChoose'>确定</view>
+</view>

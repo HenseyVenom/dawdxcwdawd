@@ -1,0 +1,168 @@
+<style scoped lang='less'>
+  .teachList{
+    .teacherCard{
+      background: #FFFFFF;
+      border: 0 solid #979797;
+      box-shadow: 0 0 12rpx 0 rgba(213,213,213,0.50);
+      border-radius: 10rpx;
+      margin-bottom: 40rpx;
+      .teacherTop{
+        width: 100%;
+        padding: 40rpx 0;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        .teachBackground{
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          height: 300rpx;
+          width: 100%;
+          z-index: 1;
+          border-top-left-radius: 10rpx;
+          border-top-right-radius: 10rpx;
+        }
+        .teacherImage{
+          width: 100rpx;
+          height: 100rpx;
+          border-radius: 50%;
+          flex-shrink: 0;
+          border: 1px solid #FFFFFF;
+          z-index: 2;
+          position: relative;
+        }
+        .name{
+           font-size: 40rpx;
+           color: white;
+           margin: 38rpx 30rpx 22rpx;
+          z-index: 2;
+           .age{
+             opacity: 0.5;
+             font-size: 24rpx;
+             margin-left: 30rpx;
+           }
+         }
+      }
+
+      .detail{
+        margin: 0rpx 30rpx 34rpx;
+        font-size: 28rpx;
+        color: #888888;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 5;
+        overflow: hidden;
+      }
+    }
+  }
+
+</style>
+<template>
+    <view class="teachList">
+      <view class="teacherCard flexC" wx:for="{{teachList}}" wx:for-index="i" wx:for-item="teacher" wx:key="teacher_{{i}}">
+        <view class="teacherTop flexC">
+          <image class="teacherImage" src="{{teacher.bannerUrl}}" mode="aspectFill"></image>
+          <text class="name">{{teacher.personName}}<text class="age">{{teacher.teachAge?(teacher.teachAge+'教龄'):''}}</text></text>
+          <image class="teachBackground" src="/images/teach_img.png" mode="aspectFill"></image>
+        </view>
+        <!--<image class="teacherImage" src="{{teacher.bannerUrl}}" mode="aspectFill" wx:if="{{false}}"></image>-->
+        <!--{{teacher.remark}}-->
+        <rich-text class="detail" nodes="{{teacher.remark}}"></rich-text>
+        <!--<text class="detail">{{teacher.remark}}</text>-->
+      </view>
+      <emptyView wx:if="{{!teachList||teachList.length==0}}" :height.sync="emptyHeight">
+      </emptyView>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import {pRequest,pGetRequest} from "../utils/requestUtils";
+    import {jsGetAge} from "../utils/util";
+    import { connect } from 'wepy-redux'
+    import emptyView from './emptyView'
+    const app=wepy.$instance
+    @connect({
+      shopId (state) {
+        return state.counter.shopId
+      }
+    })
+
+    export default class TeacherList extends wepy.component {
+      props={
+      }
+      components={
+        emptyView
+      }
+      data = {
+        teachList: [],
+        emptyHeight:'560rpx'
+      }
+      watch={
+        shopId(newVal){
+          if(newVal){
+            this.getTeacherList()
+          }
+        }
+      }
+      getTeacherList(){
+        if (app.isUseSaas()) {
+          pRequest("stu/home/teacherlist", {
+            page: {
+              pageSize: 50,
+              pageNum: 1,
+            },
+            shopId: app.globalData.shopId,
+          }).then((res) => {
+            this.teachList = this.convertTeacher(res.list)
+            this.$apply()
+          })
+        } else {
+          if(this.shopId==0)return
+          pGetRequest('xb/front/unAuth/organShop/viewOrganShop/' + this.shopId).then((res)=>{
+            this.teachList=convertTeacherFormXB(res.ucShopTeacherPojoList)
+            this.$apply()
+          }).catch((err)=>{
+            console.log('err:',err)
+
+          })
+        }
+      }
+      refresh(){
+        this.getTeacherList()
+      }
+    }
+
+
+    function convertTeacher(list){
+      return list.map((item)=>{
+        var age=jsGetAge(item.hireDate)
+        item.teachAge=age[0]?(age[0]+'年'):(age[1]?(age[1]+'个月'):'')
+        return item
+      })
+    }
+    function testStr (str) {
+      var result = str
+      if (str.search('<br>') !== -1) {
+        result = str.replace(/<br>/g, '')
+      }
+      result = str.replace(/<\/p><p>/g, ' ')
+
+      return result
+    }
+
+    function convertTeacherFormXB(list) {
+      if(!list)return[]
+      return list.map((item)=>{
+        console.log('list:',testStr(item.detailIntro))
+        return{
+          bannerUrl:item.headUrl,
+          personName:item.name,
+          teachAge:'',
+          remark: testStr(item.detailIntro.replace(/\<img/gi, '<img class="rich-img" style="width: 100%;height: auto;" '))
+        }
+      })
+    }
+</script>

@@ -1,0 +1,22 @@
+<view class='staffManage'>
+    <view class='filter'>
+        <input class='text' bindinput='keyvalue'  placeholder='通过人员名称搜索'></input>
+        <image src='../../../images/search.png' class='search'></image>
+    </view>
+    <view class='counselor' >
+      <view wx:for="{{ManagePersonList}}" wx:for-index="i" wx:for-item="items" wx:key="{{i}}">
+      <view class='ShopName'>{{items.shopName}}</view>
+        <view class='counselorLsit'  wx:for="{{items.nodeList}}" wx:for-item="item" wx:key=" " data-item="{{item}}" bindtap='enteredtorinfo'>   
+            <view class='right'>
+              <text class='type'>顾问</text>
+              <image src='../../../images/arrow_right.png' class='arrow_right'></image>
+            </view>
+            <view class='left'>
+              <text class='name'>{{item.personName}}</text>
+              <text class='tell'>{{item.phone}}</text>
+            </view>
+        </view>
+       </view>
+    </view>
+    <view class='addConselor' bindtap='addinfo'>新增</view>
+</view>

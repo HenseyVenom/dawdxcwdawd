@@ -1,0 +1,64 @@
+/* pages/userManage/bookRecord/bookRecord.wxss */
+.bg-white{
+  background: #fff;
+}
+.text-blue{
+  color: #3399ff;
+}
+.text-orange{
+  color: #ff9c0f;
+}
+.reservedPage{
+  margin-top: 10rpx;
+  padding-bottom: 100rpx;
+}
+
+.reservedList .reservedItem{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 35rpx 30rpx;
+  position: relative;
+  margin-bottom: 10rpx;
+}
+.reservedList .reservedItem .left{
+  line-height: 44rpx;
+  padding-top: 30rpx;
+  font-size: 28rpx;
+}
+.reservedList .reservedItem .left image{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 120rpx;
+	height: 50rpx;
+}
+.reservedList .reservedItem .right{
+  background: #f5f5f5;
+  padding: 25rpx 20rpx;
+  font-size: 22rpx;
+  text-align: center;
+  line-height: 34rpx;
+  border-radius: 4px;
+}
+
+.reservedPage .fixedBottom{
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  padding: 25rpx 0;
+  border-top: solid 1px #ededed;
+}
+.reservedPage .fixedBottom view{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ff9c0f;
+  font-size: 36rpx;
+}
+
+.emptyView{
+  height: 100%;
+}

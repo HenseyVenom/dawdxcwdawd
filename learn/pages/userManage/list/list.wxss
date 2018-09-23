@@ -1,0 +1,127 @@
+/* pages/userManage/list/list.wxss */
+@import '../../../app.wxss';
+.bg-white{
+  background: #fff;
+}
+.flex{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.flex .left{
+  flex: 1
+}
+.flex .right{
+  flex: 2;
+  position: relative;
+}
+.clientPage{
+  margin-top: 10rpx;
+  padding-bottom: 100rpx;
+}
+.clientInfo .flex{
+  padding: 28rpx 30rpx;
+  border-bottom: 1rpx solid #ededed;
+}
+.clientInfo .flex .left image{
+  width: 30rpx;
+  margin-right: 30rpx;
+}
+.clientInfo .flex4 .left image{
+  width: 25rpx;
+  height: 30rpx;
+  margin-right: 36rpx;
+}
+.clientInfo .flex .right{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 28rpx;
+}
+.clientInfo .flex .right .picker{
+  width: 100%;
+  position: relative;
+  z-index: 2;
+  height: 100%;
+}
+.clientInfo .flex .right .picker .content{
+  min-height: 20rpx;
+}
+.clientInfo .flex .right .content.gray{
+  color: #999999;
+}
+.clientInfo .flex.flex-btn{
+  padding: 26rpx 30rpx;
+}
+.clientInfo .flex.flex-btn .right .button{
+  border-radius: 6px;
+	border: solid 1px #ff9c0f;
+  color: #ff9c0f;
+  font-size: 26rpx;
+  padding: 8rpx 20rpx;
+  display: inline-block;
+  position: absolute;
+  right: 30rpx;
+  z-index: 1;
+}
+
+.clientInfo  .childInfo{
+  margin-top: 10rpx;
+}
+.clientPage .addBtn{
+  width: 104rpx;
+  height: 104rpx;
+  position: fixed;
+  right: 30rpx;
+  bottom: 120rpx;
+}
+.clientPage .fixedBottom{
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  padding: 25rpx 0;
+   border-top: solid 1px #ededed;
+}
+.clientPage .fixedBottom view{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ff9c0f;
+  font-size: 36rpx;
+}
+.clientPage .fixedBottom image{
+  width: 23rpx;
+	height: 34rpx;
+  margin-right: 10rpx;
+}
+.handelLaytou{
+  align-items: center;
+  justify-content: space-between;
+  margin:30rpx 20rpx;
+}
+.handelButton{
+  height: 80rpx;
+  width: 346rpx;
+  background: white;
+  border-radius: 6rpx;
+  border: 1px solid #ededed;
+  font-size: 30rpx;
+  text-align: center;
+  line-height: 80rpx;
+  display: table-cell;
+  vertical-align: middle;
+}
+.handelButton .call{
+  width: 22rpx;
+	height: 29rpx; 
+  position:relative;
+  top:2rpx;
+}
+.handelButton .editor{
+  width: 23rpx;
+	height: 27rpx; 
+  position:relative;
+  top:2rpx;
+}

@@ -1,0 +1,15 @@
+<!--pages/bankCard/bankCardUnbinding/bankCardUnbinding.wxml-->
+<form-button class='bank_card flexC'>
+  <view class='card_title flexR'>
+    <view class='card_company flexR'>
+      <image class='card_icon' src='/images/{{bankCard.bankName}}.png'></image>
+    </view>
+    <view class='card_text flexC'>
+      <text style='font-size:36rpx;'>{{bankCard.bankName}}</text>
+      <text style='font-size:24rpx;margin-top:20rpx'>储蓄卡</text>
+    </view>
+  </view>
+  <view class='card_number'>{{bankCard.cardNumber}}</view>
+  <image class='alpha_icon' src='/images/{{bankCard.bankName}}.png'></image>
+</form-button>
+<form-button class='unbinding_button' wx:if="{{false}}">解除绑定</form-button>

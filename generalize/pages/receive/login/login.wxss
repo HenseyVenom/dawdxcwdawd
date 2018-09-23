@@ -1,0 +1,72 @@
+/* pages/receive/login/login.wxss */
+Page{
+  background-color: white;
+}
+.logo{
+  width: 146rpx;
+  height: 146rpx;
+  margin: 98rpx auto 0;
+  display: block;
+}
+.icon{
+  width: 32rpx;
+  height: 30rpx;
+  flex-shrink: 0;
+  align-self: center;
+  margin-right: 24rpx;
+}
+.delete_icon{
+  width: 30rpx;
+  height: 30rpx;
+  align-self: center;
+}
+.name{
+  font-size: 32rpx;
+  color: #1e81d2;
+  margin:13rpx auto 0;
+  display: block;
+  text-align: center;
+}
+.input_frame{
+  width: 628rpx;
+  height: 88rpx;
+  border-bottom: 1px solid #EDEDED;
+  display: flex;
+  flex-direction: row;
+  margin: 0 auto;
+  align-items: center;
+}
+.input_text{
+  background: transparent;
+  font-size: 28rpx;
+  flex-grow: 1;
+}
+.verify_button{
+  width: 200rpx;
+  font-size: 28rpx;
+  color: #66A1FD;
+  flex-shrink: 0;
+  text-align: center;
+}
+.verify_button_disabled{
+  color: #cccccc;
+}
+
+.login_button{
+  width: 628rpx;
+  height: 88rpx;
+  color: white;
+  font-size: 36rpx;
+  margin: 60rpx auto 0;
+  text-align: center;
+  line-height: 88rpx;
+  border-radius: 200rpx;
+  background-color: #66A1FD!important;
+}
+.login_button_disabled{
+  background-color: #E4E4E4!important;
+  color: #909090;
+}
+.protocal{
+  color: #66A1FD
+}

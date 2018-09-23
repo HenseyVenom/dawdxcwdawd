@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "待处理",
+  "usingComponents":{
+    "filterDate":"../../components/topDateFilter/topDateFilter",
+    "emptyView":"../../components/empty/emptyView",
+    "bookModal":"../../components/bookModal/bookDateModal",
+    "i-load-more": "../../components/load-more/index"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "pages": [
+    
+    "pages/login/login",  
+    "pages/index/index",
+    "pages/logs/logs",
+    "pages/particulars/particulars",
+    "pages/awardRecord/awardRecord",
+    "pages/bankCard/bankCardManage/bankCardManage",
+    "pages/bankCard/bankCardBinding/bankCardBinding",
+    "pages/bankCard/bankCardList/bankCardList",
+    "pages/bankCard/bankCardUnbinding/bankCardUnbinding",
+    "pages/bankCard/withdrawRecord/withdrawRecord",
+    
+    "pages/bankCard/withdraw/withdraw",
+   "pages/rewardDetail/rewardDetail"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#f23535",
+    "navigationBarTitleText": "培训机构",
+    "navigationBarTextStyle": "light"
+  }
+}

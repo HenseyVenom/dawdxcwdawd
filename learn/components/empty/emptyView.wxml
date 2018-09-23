@@ -1,0 +1,7 @@
+<!--component/empty/emptyView.wxml-->
+<view class='emptyView' style="height:{{height}}">
+  <view class='empty_content'>
+    <image class='emptyIcon' src="/images/empty_icon.png" mode='aspectFit'></image>
+    <text class='emptyText'>{{text}}</text>
+  </view>
+</view>

@@ -1,0 +1,48 @@
+/* pages/bankCard/bankCardManage/bankCardManage.wxss */
+
+.item{
+  width: 100%;
+  height: 110rpx;
+  display: flex;
+  flex-direction: row;
+  background-color: white;
+}
+.item_icon{
+  width: 96rpx;
+  height: 110rpx;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.item_content{
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.item_bottom_border{
+  border-bottom: 1px solid #EDEDED;
+}
+.item_text{
+  font-size: 32rpx;
+  color: #333333;
+}
+.item_bubble{
+  width: 62rpx;
+  height: 28rpx;
+  line-height: 28rpx;
+  font-size: 24rpx;
+  text-align: center;
+  border-radius: 12rpx;
+  background: #ff9c0f;
+  color: white;
+}
+.item_arrow{
+  width: 16rpx;
+  height: 25rpx;
+  margin-right: 30rpx;
+  margin-left: 16rpx;
+}

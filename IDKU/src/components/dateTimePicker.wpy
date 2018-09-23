@@ -1,0 +1,82 @@
+<style scoped lang='less'>
+
+</style>
+<template>
+  <picker mode="multiSelector" bindchange="bindMultiPickerChange" bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{multiArray}}">
+    <slot></slot>
+    <!--<input value='{{time}}' placeholder='选择时间'/>-->
+  </picker>
+
+</template>
+
+<script>
+    import wepy from 'wepy'
+    const date = new Date();
+    const years = [];
+    const months = [];
+    const days = [];
+    const hours = [];
+    const minutes = [];
+
+    for (let i = 2018; i <= date.getFullYear() + 5; i++) {
+      years.push("" + i);
+    }
+
+    for (let i = 1; i <= 12; i++) {
+      if (i < 10) {
+        i = "0" + i;
+      }
+      months.push("" + i);
+    }
+
+    for (let i = 1; i <= 31; i++) {
+      if (i < 10) {
+        i = "0" + i;
+      }
+      days.push("" + i);
+    }
+
+    for (let i = 0; i < 24; i++) {
+      if (i < 10) {
+        i = "0" + i;
+      }
+      hours.push("" + i);
+    }
+
+    for (let i = 0; i < 60; i++) {
+      if (i < 10) {
+        i = "0" + i;
+      }
+      minutes.push("" + i);
+    }
+
+    export default class DateTimePicker extends wepy.page {
+        data = {
+          time: '',
+          multiArray: [years, months, days, hours, minutes],
+          multiIndex: [0, 0, 0, 0, 0],
+        }
+        methods={
+          //获取时间日期
+          bindMultiPickerChange: function (e) {
+            // console.log('picker发送选择改变，携带值为', e.detail.value)
+            this.multiIndex=e.detail.value
+            const index = this.multiIndex;
+            const year = this.multiArray[0][index[0]]
+            const month = this.multiArray[1][index[1]]
+            const day = this.multiArray[2][index[2]]
+            const hour = this.multiArray[3][index[3]]
+            const minute = this.multiArray[4][index[4]]
+            this.time=year + '-' + month + '-' + day + ' ' + hour + ':' + minute
+            console.log(this.time);
+            this.$emit('onDateChange',this.time)
+
+          },
+          //监听picker的滚动事件
+          bindMultiPickerColumnChange: function (e) {
+            var column=e.detail.column
+            this.multiIndex[column]=e.detail.value
+          },
+        }
+    }
+</script>

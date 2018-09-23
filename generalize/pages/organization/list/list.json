@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "培训机构优惠活动",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "form-button": "../../../components/formButton/formButton",
+    "empty-view": "../../../components/empty/emptyView"
+  }
+}

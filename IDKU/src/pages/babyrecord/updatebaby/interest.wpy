@@ -1,0 +1,144 @@
+<style lang="less" scoped>
+.intersettile{
+    width:100%;
+    height:70rpx;
+    line-height:70rpx;
+    color: #F23535;
+    background:rgba(242,53,53,0.2);
+    font-size:24rpx;
+    margin-top:20rpx;
+    padding-left:30rpx;
+}
+.intersetList{
+    flex-wrap: wrap;
+    justify-content: space-between; 
+    padding:0rpx 30rpx;
+   .intersets{
+       width:160rpx;
+       height:60rpx;
+       text-align:center;
+       border-radius: 10rpx;
+       background: #F5F5F5;
+        margin-top:20rpx;
+       font-size:28rpx;
+       line-height:60rpx;
+     }
+     .selected{
+         color:#fff;
+     }
+
+   }
+   .interSure{
+       background: #F23535;
+       color:#fff;
+       font-size:32rpx;
+       //position: absolute;
+       bottom:60rpx;
+       width:670rpx;
+       height:92rpx;
+       line-height:92rpx;
+       text-align:center;
+       display:block;
+       margin:160rpx auto;
+       border-radius: 46rpx;
+      
+   }
+</style>
+<template>
+  <view>
+       <view class="intersettile">最多可选择5个兴趣标签</view>
+      <view class="flexR intersetList">
+        <view class="intersets {{item.selected ? 'selected themeBackgroundColor':''}}" wx:for="{{tags}}" wx:for-index="i" wx:for-item="item" wx:key="baby_{{i}}" @tap.stop="clickTag({{i}})">{{item.name}}</view>
+      </view>   
+      <button class="interSure" @tap="backupdate">完成</button>
+    </view>  
+   
+</template>
+
+<script>
+import wepy from 'wepy'
+import {pRequest,pGetRequest} from "../../../utils/requestUtils"
+export default class interest extends wepy.page{
+    config={
+         navigationBarTitleText:'兴趣'
+    }
+   data={
+       tags:[],
+       selectedTags:[]
+
+   }
+   methods={
+    clickTag(i){
+        var item=this.tags[i]
+        if(!this.addTags(item)){
+          return
+        }
+        this.tags[i].selected=!this.tags[i].selected
+      },
+      backupdate(){
+        var pages = getCurrentPages()
+            pages.forEach((item) => {
+            if (item.route == 'pages/babyrecord/updatebaby/updatebaby') {
+                let arr = [],tad=[];
+                this.selectedTags.map(item=>{
+                    arr.push(item.name)
+                    tad.push(item.id)
+                })
+              
+                item.setData({
+                  interestArr:arr,
+                  tagsId:tad
+                })
+               // item.getinterestF()
+            }
+            })
+               wx.navigateBack()
+      }
+   }
+
+   onLoad(option){
+       this.getinterest()
+      //  debugger
+       if(option.insterArr){ 
+          let interset=JSON.parse(option.insterArr);
+          this.selectedTags  = interset;
+       }    
+   }
+   getinterest(){
+     pGetRequest('xb/front/unAuth/home/tagList?type=course').then((res)=>{
+        res.forEach((item)=>{
+          item.selected=false
+        })
+        this.tags=res
+        this.selectedTags.forEach(item=>{
+              for(var i = 0 ;i<this.tags.length; i++){
+                  if(item.id ==this.tags[i].id){
+                     this.tags[i].selected=true  
+                  }
+              }
+          })
+        this.$apply()
+    })
+   }
+   addTags(tag){
+      var index =this.selectedTags.findIndex((item)=>{return item.id==tag.id})
+      if(index>=0){//已选
+        this.selectedTags.splice(index, 1)
+      }else{//未选过
+        if(this.selectedTags.length<5){
+          this.selectedTags.push(tag)
+        }else{//不能再选择了
+          wx.showToast({
+               title: '兴趣最多只能选择五个',
+                icon: 'none',
+                duration: 2000  //持续的时间
+          })
+          return false
+        }
+      }
+      return true
+    }
+}
+</script>
+
+

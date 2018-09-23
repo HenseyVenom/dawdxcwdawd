@@ -1,0 +1,192 @@
+<style scoped lang='less'>
+  .course-order-page{
+    height: 100%;
+    background: #f5f5f5;
+    .order-list{
+      background: #fff;
+      .order-item{
+        background: #fff;
+        margin-left: 30rpx;
+        border-bottom: 1px solid #f5f5f5;
+        padding: 24rpx  30rpx 24rpx 0;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        image{
+          width: 172rpx;
+          height: 152rpx;
+          border-radius: 20rpx;
+          background: #eee;
+          margin-right: 22rpx;
+        }
+        .right{
+          flex: 1;
+          .right-top{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            .title{
+              font-size: 32rpx;
+              .type{
+                margin-left: 10rpx;
+                display: inline-block;
+                vertical-align: middle;
+                // width: 72rpx;
+                // height: 32rpx;
+                padding: 2rpx 16rpx;
+                // line-height: 32rpx;
+                color: #fff;
+                font-size: 20rpx;
+                // text-align: center;
+                background: #F23535;
+                border-radius: 20rpx;
+                // position: relative;
+                // top: -2rpx;
+                // z-index: 0
+              }
+            }
+            .state{
+              font-size: 24rpx;
+            }
+          }
+          .right-bottom{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            .info{
+              font-size: 24rpx;
+              color: #909090;
+              view{
+                margin: 18rpx 0;
+                &:last-of-type{
+                  margin: 0
+                }
+              }
+            }
+            .price{
+              font-size: 36rpx;
+              color: #222222;
+            }
+          }
+        }
+      }
+    }
+  }
+</style>
+<template>
+  <view class='course-order-page'>
+    <view class="order-list">
+      <view class="order-item" wx:for="{{orderList}}" wx:key="i" wx:for-index="i" @tap.stop="toDetail({{item}})">
+        <image src="{{item.courseLogo}}"></image>
+        <view class="right">
+          <view class="right-top">
+            <view class="title">{{item.courseName}} <text class="type">{{item.orderType==='online'?'线上': '线下'}}</text></view>
+            <text class="state">{{status[item.status]}}</text>
+          </view>
+          <view class="right-bottom">
+            <view class="info">
+              <view>{{item.shopName}}</view>
+              <view>{{item.orderDate}}</view>
+            </view>
+            <view class="price">￥{{item.orderAmount}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+    <emptyView wx:if="{{!orderList||orderList.length==0}}" :height.sync="emptyHeight" style="padding-top: 200rpx;">
+    </emptyView>
+  </view>
+
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import {pRequest,pGetRequest} from '../utils/requestUtils'
+  const app = wepy.$instance
+  import emptyView from '../components/emptyView'
+  export default class CourseOrder extends wepy.page {
+    config={
+      enablePullDownRefresh: true,
+      navigationBarTitleText: '课程订单'
+    }
+    components={
+      emptyView
+    }
+    data = {
+      emptyHeight: '560rpx',
+      status: {
+        'unpayed': '未支付',
+        'failed': '支付失败',
+        'success': '支付成功',
+        'processing': '处理中',
+        'part_repayed': '部分还款',
+        'repayed': '全部还清',
+        'refund': '退款'
+      },
+      page: {
+        page: 0,
+        size: 10,
+        current: 1
+      },
+      orderList: []
+    }
+    onLoad(options){
+      this.getOrderList()
+    }
+    getOrderList(){
+      wx.showLoading({
+        title: '加载中',
+      })
+      pGetRequest('xb/front/auth/repayment/list?page=' + this.page.page + '&size=' + this.page.size
+      ).then(res => {
+        // console.log(res);
+        wx.hideLoading()
+        this.page = {
+          size: res.size,
+          totalPage: res.totalPages,
+          page: res.number
+        }
+        if(res.content){
+          res.content.map(item=>{
+            item.orderDate = item.orderTime.substr(0, 4) + '年' + item.orderTime.substr(5, 2) + '月' + item.orderTime.substr(8, 2) + '日'
+          })
+        }
+        if (res.number === 0) {
+          this.orderList = res.content
+        } else {
+          this.orderList = this.orderList.concat(res.content)
+        }
+        this.$apply()
+      })
+    }
+
+    methods={
+      toDetail (e) {
+        let orderId = e.id
+        wx.navigateTo({
+          url: '/pages/orderDetail?orderId=' + orderId
+        })
+      }
+    }
+    onPullDownRefresh() {
+      this.orderList=[]
+      this.page.page = 0
+      this.getOrderList()
+    }
+    onReachBottom(event) {
+      this.page.page++
+
+      if (this.page.totalPage <= this.page.page ) {
+        wx.showToast({
+          title: '没有更多了',
+          icon: 'none'
+        })
+        return
+      }
+      this.getOrderList()
+    }
+
+
+
+  }
+</script>

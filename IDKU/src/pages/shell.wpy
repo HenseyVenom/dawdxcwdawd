@@ -1,0 +1,220 @@
+<style scoped lang='less'>
+  .shanxing {
+    position: relative;
+    width: 100%;
+    height: 380 rpx;
+    align-items: center;
+
+    .sx1 {
+      position: absolute;
+      width: 2280 rpx;
+      height: 2280 rpx;
+      border-radius: 1140 rpx;
+      top: -1900 rpx;
+      left: -765 rpx;
+      z-index: -1;
+    }
+    .title {
+      margin-top: 42 rpx;
+      font-size: 28 rpx;
+      color: white;
+    }
+    .name {
+      font-size: 96 rpx;
+      color: white;
+    }
+    .menuCard {
+      width: 670 rpx;
+      height: 152 rpx;
+      background: #FFFFFF;
+      border: 0 solid #979797;
+      box-shadow: 0 0 12 rpx 0 rgba(207, 203, 203, 0.50);
+      border-radius: 10 rpx;
+      margin-top: 36 rpx;
+      justify-content: space-around;
+      .cardItem {
+        width: 140 rpx;
+        font-size: 28 rpx;
+        color: #121212;
+        align-items: center;
+        justify-content: center;
+        image {
+          width: 40 rpx;
+          height: 40 rpx;
+        }
+        text {
+          margin-top: 18 rpx;
+        }
+      }
+    }
+  }
+
+  .bigTitle {
+    font-size: 40 rpx;
+    color: #121212;
+    margin: 54 rpx 40 rpx 0;
+    padding-bottom: 32 rpx;
+    border-bottom: 1px solid #ededed;
+  }
+
+  .centerItem {
+    height: 110 rpx;
+    margin-left: 40 rpx;
+    margin-right: 40 rpx;
+    border-bottom: 1px solid #ededed;
+    align-items: center;
+    position: relative;
+    .icon {
+      width: 44 rpx;
+      height: 44 rpx;
+      align-items: center;
+      justify-content: center;
+      .image1 {
+        width: 44 rpx;
+        height: 44 rpx;
+      }
+    }
+    text {
+      font-size: 32 rpx;
+      color: #121212;
+      margin-left: 20 rpx;
+    }
+    .missionButton {
+      height: 50 rpx;
+      font-size: 24 rpx;
+      border-radius: 6 rpx;
+      line-height: 50 rpx;
+      padding-left: 21 rpx;
+      padding-right: 21 rpx;
+      position: absolute;
+      right: 0;
+      top: 30 rpx;
+      border: 1px solid #B9B9B9;
+    }
+    .missionDone {
+      color: #B9B9B9;
+    }
+  }
+</style>
+<template>
+  <web-view src="{{url}}" bindmessage="msgHandle"></web-view>
+  <view wx:if="{{false}}">
+    <view class="shanxing shanxing1 flexC" wx:if="{{false}}">
+      <view class="sx1 themeBackgroundColor"></view>
+      <text class="title">赚贝壳，当钱花</text>
+      <text class="name" wx:if="{{isLogin}}">3000</text>
+      <text class="name" style="font-size: 72rpx" wx:else>登录</text>
+      <view class="menuCard flexR">
+        <view class="cardItem flexC">
+          <image src="/images/sign_in.png" model="aspectFit"></image>
+          <text>签到</text>
+        </view>
+        <view class="cardItem flexC">
+          <image src="/images/detail.png" model="aspectFit"></image>
+          <text>明细</text>
+        </view>
+        <view class="cardItem flexC">
+          <image src="/images/mall.png" model="aspectFit"></image>
+          <text>兑换商城</text>
+        </view>
+      </view>
+    </view>
+    <view class="bigTitle">积分任务</view>
+    <view class="centerItem flexR">
+      <view class="icon flexC">
+        <image src="/images/user.png" class="image1"></image>
+      </view>
+      <text>注册</text>
+      <text class="missionButton {{forbid?'missionDone':('')}}">+5积分</text>
+    </view>
+    <view class="centerItem flexR">
+      <view class="icon flexC">
+        <image src="/images/new_user.png" class="image1"></image>
+      </view>
+      <text>邀请好友</text>
+      <text class="missionButton {{forbid?'missionDone':('themeColor themeBorder')}}">+0~100积分</text>
+    </view>
+    <view class="centerItem flexR">
+      <view class="icon flexC">
+        <image src="/images/card_baby.png" class="image1"></image>
+      </view>
+      <text>完善宝宝档案</text>
+      <text class="missionButton {{forbid?'missionDone':('themeColor themeBorder')}}">+5积分</text>
+    </view>
+    <view class="centerItem flexR">
+      <view class="icon flexC">
+        <image src="/images/book_course.png" class="image1"></image>
+      </view>
+      <text>预约试听课</text>
+      <text class="missionButton {{forbid?'missionDone':('themeColor themeBorder')}}">+5积分</text>
+    </view>
+    <view class="centerItem flexR">
+      <view class="icon flexC">
+        <image src="/images/shop_cart.png" class="image1"></image>
+      </view>
+      <text>购买课程</text>
+      <text class="missionButton {{forbid?'missionDone':('themeColor themeBorder')}}">+0~100积分</text>
+    </view>
+    <view class="centerItem flexR">
+      <view class="icon flexC">
+        <image src="/images/form.png" class="image1"></image>
+      </view>
+      <text>完善资料</text>
+      <text class="missionButton {{forbid?'missionDone':('themeColor themeBorder')}}">+5积分</text>
+    </view>
+    <view style="height:36rpx"></view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import network from '../network'
+
+  const app = wepy.$instance
+
+  export default class Shell extends wepy.page {
+    data = {
+      isLogin: false,
+      forbid: true,
+      address: '/miniProgram/shell',
+      url: ''
+    }
+
+    onLoad() {
+      // this.url=network.webUrl+this.address+'?access_token='+app.getAccessToken()+'&phone='+app.getPhone()+'&os=app_wxxcx'
+    }
+
+    onShow() {
+      if (!app.isLogin()) {
+        wx.showModal({
+          title: '登录失效',
+          content: '登录已过期是否重新登录',
+          success: (action) => {
+            if (action.confirm) {
+              wx.reLaunch({
+                url: '/pages/login/login',
+              })
+            } else {
+              wx.showToast({
+                title: '登录已过期',
+                icon: 'none'
+              })
+            }
+          }
+        })
+      } else {
+        this.url = network.webUrl + this.address + '?access_token=' + app.getAccessToken() + '&phone=' + app.getPhone() + '&os=app_wxxcx'
+      }
+    }
+
+    methods = {
+      msgHandle(e) {
+        debugger
+        wx.showToast({
+          title: e.detail.value,
+          icon: 'title'
+        })
+      }
+    }
+  }
+</script>

@@ -1,0 +1,27 @@
+/* pages/userManage/userManage.wxss */
+.page{
+  font-size: 30rpx;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+.page .navbar{
+  background: #fff;
+  padding: 0 35rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: solid 1px #ededed;
+}
+.page .navbar text{
+  padding: 30rpx 0 25rpx;
+  border-bottom: 2px solid #fff;
+}
+.page .navbar text.active{
+  color: #f23535;
+  border-bottom: 2px solid #f23535;
+}
+.list{
+  height: calc(100vh - 100rpx);
+  overflow: auto;
+}

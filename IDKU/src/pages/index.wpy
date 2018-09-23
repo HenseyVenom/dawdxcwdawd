@@ -1,0 +1,468 @@
+<style lang="less">
+  .topBanner {
+    position: relative;
+    width: 100%;
+    min-height: 100rpx;
+    .swipper{
+      height: 360rpx;
+    }
+    .top_swiper {
+      width: 100%;
+      height: 360rpx;
+    }
+    .shopLogo {
+      width: 120rpx;
+      height: 120rpx;
+      position: absolute;
+      bottom: -98rpx;
+      left: 40rpx;
+      /*background-color: saddlebrown;*/
+    }
+  }
+
+  .shopName {
+    font-size: 40rpx;
+    color: #121212;
+    margin-top: 38rpx;
+    margin-left: 180rpx;
+    align-items: center;
+    .downArrow {
+      width: 20rpx;
+      height: 12rpx;
+      margin-left: 20rpx;
+    }
+    text{
+      max-width: 400rpx;
+      overflow: hidden;
+      text-overflow:ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  .menu {
+    margin: 25rpx 40rpx;
+    background: #FFFFFF;
+    border: 0 solid #979797;
+    box-shadow: 0 0 12rpx 0 rgba(213, 213, 213, 0.50);
+    border-radius: 10rpx;
+    align-items: center;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    .item {
+      align-items: center;
+      margin-top: 32rpx;
+      margin-bottom: 24rpx;
+      image {
+        width: 88rpx;
+        height: 88rpx;
+      }
+      text {
+        font-size: 28rpx;
+        color: #121212;
+        margin-top: 12rpx;
+      }
+    }
+  }
+
+  .slide-image {
+    width: 100%;
+    height: 360rpx;
+  }
+
+  .top_swiper .wx-swiper-dots.wx-swiper-dots-horizontal {
+    margin-bottom: 2rpx;
+    /*right: 0rpx !important;*/
+    /*left: unset;*/
+    bottom: 10rpx;
+  }
+
+  .top_swiper .wx-swiper-dot {
+    display: inline-flex;
+    width: 10rpx;
+    height: 10rpx;
+    border-radius: 50%;
+    margin-left: 14rpx;
+    justify-content: space-between;
+    background-color: white;
+  }
+
+  .top_swiper .wx-swiper-dot::before {
+    content: '';
+    flex-grow: 1;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 8rpx;
+  }
+
+  .top_swiper .wx-swiper-dot-active {
+    width: 26rpx;
+  }
+
+  .top_swiper .wx-swiper-dot-active::before {
+    background-color: #f23535;
+  }
+
+  .xb_banner {
+    width: 680rpx;
+    height: 160rpx;
+    margin: 42rpx 40rpx;
+    .xb_slide-image {
+      width: 100%;
+      height: 160rpx;
+    }
+  }
+
+  .index_tab {
+    align-items: center;
+    margin: 52rpx 40rpx;
+    height: 22rpx;
+    justify-content: space-between;
+    position: relative;
+    .tab_item {
+      text-align: center;
+      font-size: 28rpx;
+      color: #121212;
+      line-height: 44rpx;
+      align-items: center;
+      .arrow {
+        width: 20rpx;
+        height: 12rpx;
+        margin-left: 10rpx;
+      }
+    }
+    .currentTab {
+      font-size: 44rpx;
+    }
+    .categoryList {
+      position: absolute;
+      left: -40rpx;
+      right: -40rpx;
+      top: 44rpx;
+      max-height: 590rpx;
+      background-color: white;
+      z-index: 10;
+      overflow: overlay;
+      .categoryItem {
+        border-bottom: 1px solid #E9E9E9;
+        margin: 0 40rpx;
+        height: 96rpx;
+        line-height: 96rpx;
+        font-size: 28rpx;
+        color: #A3A3A3;
+        :last-of-type {
+          border-bottom: 0;
+        }
+      }
+    }
+  }
+
+  .courseList {
+    margin: 0rpx 40rpx 40rpx;
+  }
+
+</style>
+<template>
+  <!--<view class="container">-->
+  <!--<scroll-view scroll-y style='height: 100vh' bindscrolltolower="reachBottom">-->
+  <view class="topBanner">
+    <swiper indicator-dots="{{true}}" autoplay="{{true}}" interval="{{1500}}" duration="{{1000}}" class="top_swiper" wx:if="{{topBanner}}" class="swipper">
+      <view wx:for="{{topBanner}}" wx:key="banner_{{i}}" wx:for-index="i" wx:for-item="item" @tap="toWebUrl({{item}})">
+        <swiper-item class="top_swiper_item">
+          <image src="{{item.image}}" class="slide-image" width="355" height="150"/>
+        </swiper-item>
+      </view>
+    </swiper>
+    <image class="shopLogo" src="{{shopLogo}}"></image>
+  </view>
+  <view class="shopName flexR" @tap="changeStore">
+    <text>{{storeName}}</text>
+    <image class="downArrow" src="/images/down_arrow.png"></image>
+  </view>
+  <view class="menu flexR">
+    <view class="item flexC" @tap="clickMenu('book')">
+      <image src="/images/menu_book.png"></image>
+      <text>预约</text>
+    </view>
+    <view class="item flexC" @tap="clickMenu('discount')">
+      <image src="/images/menu_discount.png"></image>
+      <text>优惠券</text>
+    </view>
+    <view class="item flexC" @tap="clickMenu('scan')">
+      <image src="/images/menu_scan.png"></image>
+      <text>扫一扫</text>
+    </view>
+    <view class="item flexC" @tap="clickMenu('message')">
+      <image src="/images/menu_message.png"></image>
+      <text>消息</text>
+    </view>
+  </view>
+  <swiper wx:if="{{false}}" indicator-dots="{{true}}" autoplay="{{true}}" interval="{{1500}}" duration="{{1000}}" class="xb_banner">
+    <block wx:for="{{imgUrls}}" wx:key="xb_banner_{{i}}" wx:for-index="i" wx:for-item="item">
+      <swiper-item>
+        <image src="{{item}}" class="xb_slide-image" width="355" height="150"/>
+      </swiper-item>
+    </block>
+  </swiper>
+  <view class="index_tab flexR">
+    <view class="tab_item flexR {{currentTab==0?'currentTab themeColor':''}}" @tap="onTabChange(0)">课程
+      <image class="arrow"
+             src="/images/arrow-{{currentTab!=0?'black-down':(showCategory?'red-up':'red-down')}}.png"></image>
+    </view>
+    <text class="tab_item {{currentTab==1?'currentTab themeColor':''}}" @tap="onTabChange(1)">优惠活动</text>
+    <text class="tab_item {{currentTab==2?'currentTab themeColor':''}}" @tap="onTabChange(2)">机构概况</text>
+    <text class="tab_item {{currentTab==3?'currentTab themeColor':''}}" @tap="onTabChange(3)">教师介绍</text>
+    <view class="categoryList flexC" wx:if="{{showCategory}}">
+      <text class="categoryItem {{currentCategory==item.name?'themeColor':''}}" wx:for="{{courseTypeList}}" wx:for-index="i" @tap.stop="selectCourseType({{item.name}})">{{item.name}}</text>
+    </view>
+  </view>
+  <gridCourseList class="courseList" :showMask.sync="showCategory" :courseType.sync="currentCategory" wx:if="{{currentTab==0}}"></gridCourseList>
+  <activityList class="courseList" wx:if="{{currentTab==1}}" @toActivityDetail.user="toActivityDetail"></activityList>
+  <view class="courseList" wx:if="{{currentTab==2}}">
+    <rich-text nodes="{{shopContent}}"></rich-text>
+  </view>
+  <teacherList class="courseList" wx:if="{{currentTab==3}}" ></teacherList>
+  <!--</view>-->
+  <!--</scroll-view>-->
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import {connect} from 'wepy-redux'
+  import {pRequest,pGetRequest} from "../utils/requestUtils";
+  import gridCourseList from '../components/gridCourseList'
+  import activityList from '../components/activityList'
+  import teacherList from '../components/teacherList'
+  import {changeShopId} from "../store/actions"
+  import {organId} from "../appConfig";
+
+  const app = wepy.$instance
+  @connect({
+    shopId (state) {
+      return state.counter.shopId
+    }
+  }, {
+    changeShopId
+  })
+
+  export default class Index extends wepy.page {
+    config={
+      enablePullDownRefresh:true
+    }
+
+    components = {
+      gridCourseList, activityList, teacherList
+    }
+    data = {
+      imgUrls: [
+        'http://img02.tooopen.com/images/20150928/tooopen_sy_143912755726.jpg',
+        'http://img06.tooopen.com/images/20160818/tooopen_sy_175866434296.jpg',
+        'http://img06.tooopen.com/images/20160818/tooopen_sy_175833047715.jpg'
+      ],
+      currentTab: 0,
+      showCategory: false,
+      currentCategory: -1,
+      storeName: '',
+      shopLogo:'',
+      topBanner:null,
+      shopContent:'',
+      courseTypeList:[]
+    }
+
+    computed = {
+      now() {
+        return +new Date()
+      }
+    }
+    methods = {
+      toWebUrl (e) {
+        wx.navigateTo({
+          url: '/pages/web?url=' + e.href
+        })
+      },
+      toActivityDetail (activity) {
+        wx.navigateTo({
+          url: '/pages/activityDetail?id=' + activity.id
+        })
+      },
+      clickMenu(menu) {
+        console.log('click', menu)
+        switch (menu) {
+          case 'book':
+            if (app.isUseSaas()) {
+              wx.navigateTo({url: '/pages/schedule'})
+            }else{
+              wx.navigateTo({url:'/pages/courseList'})
+            }
+            break
+          case 'discount':
+            wx.navigateTo({url: '/pages/coupons'})
+            break
+          case 'scan':
+            wx.scanCode({
+              success: (res) => {
+                console.log(res)
+                if(res.result.indexOf('/pages/payToShop')==0){
+                  var query= res.result.split('?')[1].split('&')
+                  if(query[2]){
+                    var shopId=query[2].split('=')[1]
+                    if(this.shopId==shopId){
+                      console.log('shop same')
+                      wx.navigateTo({
+                        url: res.result
+                      })
+                    }else{
+                      wx.showToast({title:'不是同一店铺',icon:'none'})
+                    }
+                  }else{
+                    wx.showToast({title:'二维码不正确',icon:'none'})
+                  }
+                }else{
+                  pGetRequest('xb/front/unAuth/organShop/QRCode?enCode='+res.result).then((res)=>{
+                    debugger
+                    if(res.deCode){
+                      var shopId=res.deCode.split('&')[1].split('=')[1]
+                      if(this.shopId==shopId){
+                        wx.navigateTo({
+                          url: '/pages/payToShop?shopId='+shopId
+                        })
+                      }else{
+                        wx.showToast({title:'不是同一店铺',icon:'none'})
+                      }
+                    }else{
+                      wx.showToast({title:'不支持的二维码',icon:'none'})
+                    }
+                  }).catch((err)=>{
+                    wx.showToast({title:'不支持的二维码',icon:'none'})
+                  })
+                }
+              },
+            })
+            break
+          case 'message':
+            wx.navigateTo({url: '/pages/news'})
+            break
+        }
+      },
+      onTabChange(tab) {
+        if (tab != 0) {
+          this.showCategory = false
+        } else {
+          if (this.currentTab == 0) {
+            this.showCategoryToggle()
+          }
+        }
+        this.currentTab = tab
+      },
+      closeCategory() {
+        this.showCategory = false
+      },
+      changeStore() {
+        wx.navigateTo({
+          url: '/pages/storeList'
+        })
+      },
+      selectCourseType(name){
+        this.currentCategory=name
+        this.showCategoryToggle()
+      }
+    }
+    onReachBottom(){
+      console.log('bottom')
+      switch (this.currentTab){
+        case 0:
+          this.$invoke('gridCourseList','loadmore')
+          break
+        case 1:
+          this.$invoke('activityList','loadmore')
+          break
+      }
+    }
+    onPullDownRefresh(){
+      this.getIndexInfo()
+      this.$invoke('gridCourseList','refresh')
+      this.$invoke('activityList','refresh')
+      this.$invoke('teacherList','refresh')
+    }
+
+    showCategoryToggle() {
+      this.showCategory = !this.showCategory
+    }
+
+    getDefaultShop() {
+      if (app.isUseSaas()) {
+        pRequest('stu/home/shopList', {
+          businessId: app.globalData.organizationId,
+          page: {
+            pageNum: 1,
+            pageSize: 1,
+          }
+        }).then((res) => {
+          if (res.list && res.list.length > 0) {
+            app.saveShopInfo(res.list[0])
+            this.storeName = res.list[0].shopName
+            this.shopContent = res.list[0].content
+            this.methods.changeShopId(res.list[0].id)
+            this.$apply()
+          }
+        }).catch((err) => {
+          console.log('err:', err)
+        })
+      } else {
+        pRequest('xb/front/unAuth/organShop/list/v1?organ_id='+organId).then((res)=>{
+          console.log('res:', res)
+          if (res.content && res.content.length > 0) {
+            var defaultShop = res.content[0]
+            if(this.shopId!=defaultShop){
+            this.methods.changeShopId(defaultShop.id)
+            }else{
+              this.onPullDownRefresh()
+            }
+          }
+        }).catch((err)=>{
+          console.log('err:',err)
+        })
+      }
+    }
+    getIndexBanner(){
+      pGetRequest('xb/front/unAuth/home/bannerList?shop_id='+this.shopId+'&page=0&size=5',{}).then((res)=>{
+        this.topBanner=res.content
+      })
+    }
+
+    getIndexInfo(){
+      this.getIndexBanner()
+      pGetRequest('xb/front/unAuth/organShop/viewOrganShop/' + this.shopId).then((res)=>{
+        this.storeName = res.ucOrganShopPojo.name
+        this.shopLogo = res.ucOrganShopPojo.logoUrl
+        app.saveShopInfo(res)
+        this.shopContent = res.ucOrganShopPojo.intro
+        this.$apply()
+      })
+    }
+    events = {}
+    watch={
+      shopId(){
+        wx.startPullDownRefresh()
+        // this.onPullDownRefresh()
+      }
+    }
+    onShow(){
+      if(this.shopId){
+        this.onPullDownRefresh()
+      }
+    }
+    onLoad() {
+      if(!this.shopId||this.shopId==0){
+        this.getDefaultShop()
+      }else{
+        this.onPullDownRefresh()
+      }
+      this.getCourseType()
+    }
+    getCourseType(){
+      pGetRequest('xb/front/unAuth/home/tagList?type=shop').then((res)=>{
+        this.courseTypeList=res
+        this.$apply()
+      })
+    }
+  }
+</script>

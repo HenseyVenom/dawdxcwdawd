@@ -1,0 +1,196 @@
+/* pages/userManage/userManage.wxss */
+.userPage{
+  padding-bottom:97rpx;
+}
+.bg-white{
+  background: #fff;
+}
+.userPage .clientList .clientItem{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx 20rpx;
+  border-bottom: 1px solid #ededed;
+}
+.userPage .clientList .clientItem .left{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.userPage .clientList .clientItem .left image{
+  width: 80rpx;
+	height: 80rpx;
+	background-color: #eaebeb;
+  border-radius: 50%;
+  margin-right: 20rpx;
+}
+.userPage .clientList .clientItem .left .client-info .name{
+  font-size: 30rpx;
+  line-height: 40rpx;
+  
+  display: inline-block;
+}
+.userPage .clientList .clientItem .left .client-info .name text{
+  font-size: 28rpx;
+  margin-left:20rpx;
+}
+.userPage .clientList .clientItem .left .client-info .tel{
+  font-size: 28rpx;
+  color: #666666;
+}
+.userPage .clientList .clientItem .right{
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  font-size: 28rpx;
+  flex-shrink: 0;
+}
+.userPage .clientList .clientItem .right text{
+  padding: 13rpx 30rpx;
+  background-color: #f5f5f5;
+	border-radius: 30rpx;
+}
+.userPage .clientList .clientItem .right image{
+  width: 16rpx;
+  height: 25rpx;
+  margin-left: 10rpx;
+}
+.userPage .clientList .clientItem .right .text-red{
+  color: #f23535;
+}
+.userPage .clientList .clientItem .right .text-blue{
+  color: #3399ff;
+}
+.userPage .clientList .clientItem .right .text-orange{
+  color: #ff9c0f;
+}
+.userPage .addClient{
+  position: fixed;
+  left: 0rpx;
+  bottom:0rpx;
+  width:100%;
+  height: 87rpx;
+	background-color: #ffffff;
+	border-top: solid 1px #ededed;
+  line-height:87rpx;
+  text-align:center;
+  font-size: 36rpx;
+  color: #ff9c0f;
+}
+.top_search {
+  padding: 12rpx 20rpx;
+  background-color: white;
+  border-bottom: solid 1px #ededed;
+  position: relative;
+  z-index: 99;
+}
+
+.search {
+  height: 66rpx;
+  width: 100%;
+  background-color: #f2f2f2;
+  border-radius: 8rpx;
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+}
+
+.search_icon {
+  width: 25rpx;
+  height: 25rpx;
+  margin-right: 10rpx;
+  margin-left: 20rpx;
+}
+
+.search_input {
+  flex-grow: 1;
+  font-size: 24rpx;
+  color: #999;
+}
+.filter-area{
+  position: relative;
+}
+/* .filter-area .filter-item{
+  flex: 1;
+} */
+.filter-area .filter-top{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #ededed;
+  position: relative;
+  z-index: 99;
+}
+.filter-area .filter-top .filter-item{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex:1;
+  font-size: 34rpx;
+}
+.filter-area .filter-top .filter-item text.active{
+  color: #f23535;
+}
+.filter-area .filter-top .filter-item:first-of-type{
+  border-right: 1rpx solid #ededed;
+}
+.filter-area .filter-top .filter-item image{
+  width: 16rpx;
+	height: 9rpx;
+  margin-left: 10rpx;
+}
+.filter-area .filter-content{
+  position: absolute;
+  width: 100%;
+  top: 87rpx;
+  left:0;
+  z-index: 99;
+  background: #fff;
+}
+.filter-area .filter-content .filter-term{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1rpx solid #ededed;
+  padding: 30rpx 40rpx;
+  font-size: 30rpx;
+}
+
+.filter-area .filter-content .filter-term image{
+  width: 35rpx;
+	height: 25rpx;
+}
+.mask{
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 90;
+  background-color:#000;
+  opacity:0.3;
+}
+.clientList .infocontent{
+  border-top:1px solid ededed;
+  background:#fff;
+  padding:27rpx 38rpx 22rpx 28rpx;
+   border-bottom:20rpx solid #f8f8f8;
+  
+}
+.clientList .infocontent .infoeditor{
+  font-size: 26rpx;
+  color:#999;
+  line-height: 38rpx;
+}
+.clientList .infocontent .infoeditor .fang{
+  width: 18rpx;
+	height: 23rpx;
+}
+.clientList .infocontent .infodate{
+   font-size: 24rpx;
+   color:#999;
+   margin-top:6rpx;
+}

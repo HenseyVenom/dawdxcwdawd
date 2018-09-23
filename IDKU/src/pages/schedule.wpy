@@ -1,0 +1,887 @@
+<template>
+  <view class="page">
+    <view class="topTab">
+      <navBar :tabs="tabs" :currentTab.sync="currentTab" style="flex-grow: 1"></navBar>
+    </view>
+    <view class='appointment bg-white'>
+      <view class='scheduleTop'>
+        <view class='flex-top flexR'>
+          <text style='font-weight:bold;font-size:24rpx' class='themeColor'>2018课表</text>
+          <formButtonToggleCalendar @click.user="toggleCalendar">
+            <text style='font-size:24rpx' class='text-orange'>全部课程</text>
+          </formButtonToggleCalendar>
+        </view>
+        <weekday class='weekBar' style="width:100%" :currentDate.sync="currentDate"></weekday>
+      </view>
+      <view class="calendar-wrap" wx:if='{{showCalendar==true}}'>
+        <calendar :currentDate.sync="currentDate"></calendar>
+      </view>
+    </view>
+    <view class='schedule'>
+      <view class='courseList noCourse' wx:if='{{(!courseList[now]||courseList[now].length==0)}}'>
+        暂时没有课程~
+        <image src='/images/noCont.jpg' mode='aspectFill'></image>
+      </view>
+      <view class='courseList flexC' wx:else>
+        <view wx:for='{{courseList}}' wx:for-item='dayList' wx:for-index='i' wx:key='c_{{i}}'>
+          <view class='courseCardExternal' wx:for="{{dayList}}" wx:for-item="course" wx:for-index="j"
+                wx:key="j_{{i}}_{course.id}}_{{j}}" catchtap='bindCourseClick' data-index='{{j}}'
+                wx:if='{{now==i}}'>
+            <view class='courseCard'>
+              <image class='courseImg' src='{{course.courseDTO.imgUrl}}' mode='aspectFit'></image>
+            </view>
+            <view class='courseContent'>
+              <view class='courseTop flexR'>
+                <view class='left'>
+                  <view style='font-size:30rpx;'>
+                    {{course.courseDTO.courseName}}
+                    <text style='font-size: 24rpx;' wx:if='{{course.courseDTO.strMinAge||course.courseDTO.strMaxAge}}'>
+                      {{course.courseDTO.strMinAge}} - {{course.courseDTO.strMaxAge}}岁
+                    </text>
+                    <text style='color: #999999;font-size: 24rpx;'>老师：{{course.staffList[0].staffName}}</text>
+                  </view>
+                  <text style='font-size: 24rpx;margin-top:17rpx;'>上课时间：{{course.startTime}} - {{course.endTime}}</text>
+                </view>
+                <view class='right flexR'>
+                  <view class='course_state themeBackgroundColor' wx:if='{{!course.isLine||course.isLine!=1}}' @tap.stop='toappoint({{course}})'>预约
+                  </view>
+                  <view class='course_state' style="background: #FFA10A" wx:else=''>
+                    排队
+                  </view>
+                </view>
+              </view>
+              <view class='card_bottom'>
+                <view class='avatar_group'>
+                  <view class='member' wx:for="{{course.studentDTOList}}" wx:for-item="user" wx:for-index="j"
+                        wx:key="{{course.id}}_{{j}}" wx:if="{{j<6}}">
+                    <image class='avatar'
+                           src="{{user.photo?user.photo:user.gender==1?'/images/default2.png':'/images/default1.png'}}"
+                           mode='aspectFit'></image>
+                    <text class='name'>{{user.studentName}}</text>
+                  </view>
+                  <text class='student_avatar_more' wx:if="{{course.studentList.length>=6}}">···</text>
+                </view>
+                <text class='courseMember'>{{course.studentNum}}/{{course.num}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+    <view class='mask' wx:if='{{showSelect}}'>
+      <view class='checkBox' wx:if='{{showCheck}}'>
+        <view class='title themeColor'>选择孩子</view>
+        <view class='content'>
+          <formButtonStudentList class='select'>
+            <checkbox-group bindchange="checkboxChange">
+              <label class="checkbox" wx:for="{{students}}" wx:for-item='student' wx:for-index="i" wx:key="child_{{i}}">
+                <checkbox value="{{student.id}}"/>{{student.studentName}}
+              </label>
+            </checkbox-group>
+          </formButtonStudentList>
+        </view>
+        <view class='buttons flexR'>
+          <formButtonSelectCancel class='button bg-white' @click.user='cancelAppoint'>
+            <view>取消</view>
+          </formButtonSelectCancel>
+          <formButtonSelectOk class='button themeBackgroundColor'  @click.user='selected'>
+            <view style="color: #ffffff">预约</view>
+          </formButtonSelectOk>
+        </view>
+      </view>
+      <view class='checkBox' wx:if='{{showConf}}'>
+        <view class='title themeColor'>确定预约该课程吗？</view>
+        <view class='content'></view>
+        <view class='buttons flexR'>
+          <formButtonConfirmCancel class='button bg-white' @click.user='cancelAppoint'>
+            <view>取消</view>
+          </formButtonConfirmCancel>
+          <formButtonConfirmBook class='button themeBackgroundColor' @click.user='confAppoint'>
+            <view style="color: #ffffff">预约</view>
+          </formButtonConfirmBook>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+<!--课程表-->
+<script>
+  import wepy from 'wepy'
+  import formButton from '../components/formButton'
+  import weekday from '../components/weekday'
+  import calendar from '../components/calendar'
+  import {pRequest} from  '../utils/requestUtils'
+  import utils from '../utils/util'
+  import navBar from '../components/navbar'
+
+  export default class Schedule extends wepy.page {
+    components = {
+      formButtonStudentList:formButton,
+      formButtonConfirmCancel:formButton,
+      formButtonConfirmBook:formButton,
+      formButtonSelectOk:formButton,
+      formButtonSelectCancel:formButton,
+      formButtonToggleCalendar:formButton,
+      formButton,weekday,calendar,navBar
+    }
+    data = {
+      currentDate:null,
+      showCalendar:false,
+      now:-1,
+      courseList:null,
+      showSelect:false,
+      showCheck:false,
+      showConf:false,
+      checkedStudents:null,
+      nowId:'',
+      students:[],
+      currentTab: 0,
+      tabs: ['试听课', '正式课']
+    }
+
+    /**
+     * 生命周期函数--监听页面加载
+     */
+    onLoad(options) {
+      this.currentDate= new Date().pattern("YYYY-MM-dd")
+      this.now=new Date().getDay()-1
+      this.getWeekCourseList(this.currentDate)
+      this.getStudents()
+    }
+    onShow(){
+
+    }
+    methods={
+      toggleCalendar(){
+        this.showCalendar=true
+        this.$broadcast("startRenderCalendar");//通知日历组件可以开始渲染
+      },
+      toappoint(course){
+        console.log('course:',course)
+        this.nowId=course.id
+        this.checkedStudents=null
+        this.showSelect = true
+        this.showCheck = true
+        this.showConf = false
+      },
+      cancelAppoint(){
+        this.showSelect = false
+        this.showCheck = false
+        this.showConf = false
+      },
+      selected(){
+        if (this.data.checkedStudents == null || this.data.checkedStudents.length < 1) {
+          wx.showToast({
+            title: '请选择孩子',
+            icon:'none',
+            duration: 1000
+          })
+          return
+        }
+        this.checkClash()
+      },
+      // 确定预约课程
+      confAppoint() {
+        pRequest('ews/courseTerm/studentReservationsClass', {
+          id: this.nowId,
+          isLoop: 0,
+          studentIdsList: this.checkedStudents
+        }).then((res) => {
+          wx.showToast({
+            title: '预约成功',
+            icon: 'success',
+            duration: 1000  //持续的时间
+          })
+          this.getWeekCourseList(new Date(this.currentDate).pattern("YYYY-MM-dd"))
+          this.showSelect = false
+          this.showCheck = false
+          this.showConf = false
+          this.$apply()
+        }).catch((res) => {
+          console.log('err:',res)
+        })
+      },
+      checkboxChange(e){
+        this.checkedStudents=e.detail.value
+      }
+    }
+    events = {
+      calChangeSelectedDay: function (date, moduleId, e) {
+        this.currentDate=date
+        this.now=(new Date(date)).getDay()-1
+        this.showCalendar=false
+      },
+      onDayChanged(e){
+        this.currentDate=e.currentDate.date.pattern("YYYY-MM-dd");
+        this.now=e.currentDate.date.getDay()-1
+      },
+    }
+    watch={
+      currentTab(){
+        this.getWeekCourseList(this.currentDate)
+      }
+    }
+    // 检查冲突
+    checkClash() {
+      pRequest('stu/course/validateStudentData', {
+        studentIdsList: this.checkedStudents,
+        isLoop: 0,
+        id: this.nowId
+      }).then((res) => {
+        console.log('res', res)
+        if (res.length <= 0) {
+          this.showCheck=false
+          this.showConf=true
+        } else {
+          var that=this
+          wx.showToast({
+            title: '已经预约过该节课了',
+            icon: 'none',
+            duration: 2000,  //持续的时间
+            success(){
+              console.log('this:',this)
+              that.showCheck=false
+              that.showConf=false
+              that.showSelect = false
+              that.$apply()
+            }
+          })
+        }
+        this.$apply()
+      }).catch((res) => {})
+    }
+    getStudents() {
+      pRequest('stu/myHome/familyMemberDetail', {}).then((res) => {
+        this.students=res
+      }).catch((res) => {
+      })
+    }
+    getWeekCourseList(newDate) {
+      wx.showLoading({})
+      pRequest('stu/course/listForWeek', {
+        startDate: newDate,
+        courseType:this.currentTab==0?0:2
+      }).then((res) => {
+        wx.hideLoading()
+        let weekList = []
+        for (var key in res) {
+          weekList.push(res[key])
+        }
+        this.courseList=weekList
+        this.$apply()
+      }).catch((res) => {
+        if(res){
+          wx.hideLoading()
+        }
+      })
+    }
+  }
+</script>
+<style scoped lang='less'>
+
+  .page {
+    background-color: white !important;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+
+  .box {
+    display: flex;
+    background: #f7f7f7;
+  }
+
+  .box-lr {
+    flex-direction: row;
+  }
+
+  .box-rl {
+    flex-direction: row-reverse;
+  }
+
+  .box-tb {
+    flex-direction: column;
+  }
+
+  .box-pack-center {
+    justify-content: center;
+  }
+
+  .box-align-center {
+    align-items: center;
+  }
+
+  .box-wrap {
+    flex-wrap: wrap;
+  }
+
+  .flex {
+    flex-grow: 1;
+  }
+
+  .bg {
+    background-image: linear-gradient(to bottom, #faefe7, #ffcbd7);
+    overflow: hidden;
+  }
+
+  .pink-color {
+    color: #2d99fc;
+  }
+
+  .white-color {
+    color: #fff;
+  }
+
+  .fs24 {
+    font-size: 24rpx;
+  }
+
+  .fs28 {
+    font-size: 28rpx;
+  }
+
+  .fs32 {
+    font-size: 32rpx;
+  }
+
+  .fs36 {
+    font-size: 36rpx;
+  }
+
+  .top-handle {
+    height: 80rpx;
+  }
+
+  .prev {
+    text-align: right;
+    height: 80rpx;
+  }
+
+  .next {
+    height: 80rpx;
+  }
+
+  .prev-handle {
+    width: 80rpx;
+    height: 100%;
+  }
+
+  .next-handle {
+    width: 80rpx;
+    height: 100%;
+  }
+
+  .date-area {
+    width: 375rpx;
+    height: 80rpx;
+    text-align: center;
+  }
+
+  .weeks {
+    height: 50rpx;
+    line-height: 50rpx;
+    opacity: 0.5;
+  }
+
+  .week {
+    text-align: center;
+  }
+
+  .days {
+    height: 500rpx;
+  }
+
+  .grid {
+    width: 14.285714285714285%;
+  }
+
+  .day {
+    width: 60rpx;
+    height: 60rpx;
+    font-size: 26rpx;
+    font-weight: 200;
+  }
+
+  .normal-day-color {
+    color: #999;
+  }
+
+  .day-choosed-color {
+    color: #fff;
+  }
+
+  .todo-dot {
+    width: 10rpx;
+    height: 10rpx;
+    border-radius: 50%;
+    background-color: #2d99fc;
+  }
+
+  .day-with-dot {
+    height: 72rpx;
+  }
+
+  .disable-day-color {
+    color: #ddd;
+  }
+
+  .disable-day-circle {
+    background-color: #fbfdff;
+  }
+
+  .border-radius {
+    border-radius: 50%;
+    position: relative;
+    left: 0;
+    top: 0;
+  }
+
+  .pink-bg {
+    background-color: #2d99fc;
+  }
+
+  .purple-bg {
+    background-color: #b8b8f1;
+  }
+
+  .right-triangle::after {
+    content: "";
+    display: block;
+    width: 0;
+    height: 0;
+    border: 15rpx solid transparent;
+    border-left-color: #2d99fc;
+    position: absolute;
+    right: -22rpx;
+    top: 18rpx;
+  }
+
+  .left-triangle::before {
+    content: "";
+    display: block;
+    width: 0;
+    height: 0;
+    border: 15rpx solid transparent;
+    border-right-color: #2d99fc;
+    position: absolute;
+    left: -22rpx;
+    top: 18rpx;
+  }
+
+  .tips {
+    text-align: center;
+    margin-top: 20rpx;
+    margin-bottom: 20rpx;
+  }
+
+  .types {
+    background-color: #ffedf4;
+    height: 50rpx;
+  }
+
+  .types-desc {
+    padding: 0 20rpx;
+  }
+
+  .type-name {
+    margin-top: 50rpx;
+    margin-bottom: 30rpx;
+  }
+
+  .type-desc {
+    padding: 0 35rpx;
+    line-height: 38rpx;
+  }
+
+  .explain {
+    border-top: 1px solid #eee;
+    width: 90%;
+    margin: 20rpx 5% 20rpx 5%;
+    padding: 20rpx 0;
+  }
+
+  .explain-title {
+    font-weight: bold;
+    margin-bottom: 15rpx;
+  }
+
+  .explain-item {
+    padding: 8rpx 20rpx;
+    color: #fff;
+  }
+
+  .left-border-radius {
+    border-top-left-radius: 20rpx;
+    border-bottom-left-radius: 20rpx;
+  }
+
+  .right-border-radius {
+    border-top-right-radius: 20rpx;
+    border-bottom-right-radius: 20rpx;
+  }
+
+  .appointment {
+    position: relative;
+    flex-shrink: 0;
+    height: 228rpx;
+  }
+
+  .schedule {
+    flex-grow: 1;
+    /* background-color: white; */
+  }
+
+  .appointment .scheduleTop {
+    box-shadow: 0px 8rpx 18rpx 0px rgba(85, 138, 249, 0.15);
+  }
+
+  .appointment .scheduleTop .flex-top {
+    padding: 25rpx 30rpx;
+    font-size: 28rpx;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .appointment .scheduleTop .flex-top .text-orange {
+    font-size: 22rpx;
+    color: #ffa10a;
+  }
+
+  .appointment .scheduleTop .flex-title {
+    align-items: center;
+  }
+
+  .appointment .scheduleTop .flex-title .flex-item {
+    flex: 1;
+    text-align: center;
+    position: relative;
+  }
+
+  .appointment .scheduleTop .flex-title .flex-item .item-weekday {
+    font-size: 26rpx;
+    line-height: 30rpx;
+  }
+
+  .appointment .scheduleTop .flex-title .flex-item .item-date {
+    font-size: 20rpx;
+    margin: 10rpx 0 15rpx;
+  }
+
+  .appointment .scheduleTop .flex-title .flex-item.current {
+    color: #5484fd;
+  }
+
+  .appointment .scheduleTop .flex-title .flex-item.current:after {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    background-color: #5484fd;
+    width: 100%;
+  }
+
+  .page .schedule .noCourse {
+    text-align: center;
+    padding-top: 300rpx;
+    color: #999;
+    position: relative;
+    z-index: 0;
+    font-size: 32rpx;
+  }
+
+  .page .schedule .noCourse image {
+    z-index: -1;
+    width: 100%;
+    height: 80vh;
+    position: absolute;
+    top: 10rpx;
+    left: 0;
+  }
+
+  .page{
+    .schedule{
+      overflow: overlay;
+      .courseList{
+        height: 100%;
+        .courseCardExternal{
+          position: relative;
+          margin: 10rpx 20rpx;
+          box-shadow: 0px 0px 12px 0px rgba(204, 204, 204, 0.31);
+          border-radius: 10px;
+          .courseCard{
+            display: flex;
+            flex-direction: column;
+
+            /* color: white; */
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            flex-shrink: 0;
+            /* background-color: rgba(0, 0, 0, 0.5); */
+            &:first-of-type {
+              margin-top: 23rpx;
+            }
+
+            &:last-of-type {
+              margin-bottom: 23rpx;
+            }
+            .courseImg{
+              width: 100%;
+              height: 250rpx;
+              background-color: #F8F8F8;
+            }
+          }
+          .courseContent{
+            .courseTop{
+              justify-content: space-between;
+              .left{
+                flex-grow: 1;
+                margin-left: 10rpx;
+              }
+              .right{
+                flex-shrink: 0;
+                position: relative;
+                align-items: center;
+                .course_state{
+                  margin-right: 18rpx;
+                  width: 145rpx;
+                  height: 60rpx;
+                  font-size: 30rpx;
+                  color: white;
+                  line-height: 60rpx;
+                  image{
+                    position: absolute;
+                    width: 148rpx;
+                    height: 90rpx;
+                    z-index: -1;
+                    right: 10rpx;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .page .schedule .courseList .courseItem {
+    padding: 30rpx;
+    border-bottom: 1px solid #ededed;
+  }
+
+  .page .schedule .courseList .courseItem .courseTitle {
+    align-items: center;
+  }
+
+  .page .schedule .courseList .courseItem .courseTitle .left {
+    font-size: 32rpx;
+  }
+
+  .page .schedule .courseList .courseItem .courseTitle .left .text-blue {
+    font-size: 26rpx;
+    margin-right: 20rpx;
+  }
+
+  .page .schedule .courseList .courseItem .courseTitle .right {
+    font-size: 28rpx;
+  }
+
+  .page .schedule .courseList .courseItem .courseCont {
+    margin: 18rpx 0;
+    color: #666;
+    font-size: 26rpx;
+  }
+
+  .page .schedule .courseList .courseItem .courseCont text {
+    margin-right: 20rpx;
+    font-size: 26rpx;
+  }
+
+  .page .schedule .courseList .courseItem .courseOrdered {
+    align-items: center;
+    color: #999;
+    font-size: 24rpx;
+  }
+
+  .appointment .calendar-wrap {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 11;
+    background: #f7f7f7;
+    border-bottom: 1px solid #ededed;
+  }
+
+  .page .mask {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    background: rgba(0, 0, 0, 0.3);
+  }
+
+  .page .mask .checkBox {
+    width: 600rpx;
+    padding: 20rpx;
+    margin: 300rpx auto 0;
+    border-radius: 7px;
+    background-color: white;
+  }
+
+  .page .mask .checkBox .title {
+    font-size: 36rpx;
+    color: #4995f7;
+    text-align: center;
+    margin-top: 20rpx;
+  }
+
+  .page .mask .checkBox .content {
+    width: 86%;
+    font-size: 34rpx;
+    color: #333;
+    margin: 30rpx auto 20rpx;
+    position: relative;
+  }
+
+  .page .mask .checkBox .content .checkbox {
+    display: block;
+    width: 100%;
+    position: relative;
+    height: 50rpx;
+  }
+
+  .page .mask .checkBox .content .checkbox checkbox {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  .page .mask .checkBox .buttons {
+    width: 86%;
+    margin: 40rpx auto 20rpx;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .page .mask .checkBox .buttons .button {
+    font-size: 32rpx;
+    width: 47%;
+    text-align: center;
+    line-height: 80rpx;
+    border: solid 1px #ededed;
+    color: #333;
+  }
+
+  .page .mask .checkBox .buttons .button.bg-blue {
+    color: #fff;
+  }
+  .lineUp{
+    height: 71rpx;
+    background-color: #ffffff;
+    box-shadow: 0px 2rpx 12rpx 0px rgba(85, 138, 249, 0.26);
+    border-radius: 8rpx;
+    margin-left: 40rpx;
+    margin-right: 40rpx;
+    padding-top: 9rpx;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: -9rpx;
+  }
+  .lineUpAvatarGroup{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    flex-grow: 1;
+    flex-shrink: 0
+  }
+
+  .cardBackground {
+    width: 730rpx;
+    height: 350rpx;
+  }
+
+  .mask {
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+
+
+  .card_bottom {
+    display: flex;
+    flex-direction: row;
+    border-top: 1rpx solid  #ededed;
+    padding-top: 20rpx;
+    margin-top: 25rpx;
+  }
+
+  .avatar_group {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    height: 80rpx;
+  }
+
+  .courseMember {
+    flex-shrink: 0;
+    align-self: flex-end;
+    font-size: 22rpx;
+    color: #999;
+    margin: 20rpx;
+  }
+
+  .member {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 22rpx;
+  }
+
+  .member:first-of-type {
+    margin-left: 0rpx;
+  }
+
+  .avatar {
+    width: 50rpx;
+    height: 50rpx;
+    border-radius: 50%;
+    flex-shrink: 0
+  }
+
+  .name {
+    color: #999999;
+    font-size: 20rpx;
+    margin-top: 9rpx;
+    width: 80rpx;
+    flex-shrink: 0;
+    text-align: center;
+  }
+
+  .course_state {
+    position: absolute;
+    width: 148rpx;
+    height: 90rpx;
+    z-index: 1;
+    right: 10rpx;
+  }
+
+  .student_avatar_more {
+    width: 51rpx;
+    height: 51rpx;
+    border-radius: 50%;
+    background: white;
+    font-size: 22rpx;
+    text-align: center;
+    line-height: 51rpx;
+    color: #999;
+    box-shadow: 0px 0px 1px 0px rgba(184, 184, 184, 0.92);
+    margin-left: 27rpx;
+  }
+  .weekBar{
+    color: #4f9eff;
+  }
+</style>

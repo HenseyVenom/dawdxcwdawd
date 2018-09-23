@@ -1,0 +1,31 @@
+.boundStore{
+  box-sizing:border-box;
+  width:100%;
+}
+.boundStore .Store{
+  height: 90rpx;
+  background:#fff;
+  font-size: 32rpx;
+  color:#333;
+  line-height:90rpx;
+  display:flex;
+  padding:0px 28rpx;
+}
+.boundStore .Store .label{
+  display:block;
+   width:144rpx;
+}
+.boundStore .storeName{
+  flex:1;
+  color: #999999;
+  font-size:30rpx;
+  text-align:right;
+}
+.boundStore .storeName .arrow_right{
+  width: 16rpx;
+	height: 25rpx;
+  margin-left:10rpx;
+}
+.boundStore .sureStore{
+  margin:337rpx auto;
+}

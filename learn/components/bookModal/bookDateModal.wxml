@@ -1,0 +1,24 @@
+<!--components/bookModal/bookDateModal.wxml-->
+<view class='modal' wx:if="{{showBookModal}}">
+  <view class='content flexC'>
+    <view class='title'>预约试听时间</view>
+    <view class='dateView flexR' wx:if="{{!courseName}}">
+      <text style='flex-grow:1'>课程</text>
+      <input class='dateText' value='{{bookCourse}}' bindinput='changeInput'></input>
+    </view>
+    <view class='dateView flexR'>
+      <text style='flex-grow:1'>日期</text>
+      <picker mode="date" value="{{date}}" start="{{startdate}}" bindchange="bindDateChange">
+        <view class='dateText'>{{date}}</view>
+      </picker>
+    </view>
+    <view class='dateView flexR'>
+      <text style='flex-grow:1'>时间</text>
+      <picker mode="time" value="{{time}}" bindchange="bindTimeChange">
+        <view class='dateText'>{{time}}</view>
+      </picker>
+    </view>
+    <view class='confirmButton themeBackgroundColor' catchtap='confirmDate'>确定</view>
+    <image class='close' src='/images/close.png' catchtap='cancelModal'></image>
+  </view>
+</view>

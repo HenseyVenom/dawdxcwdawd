@@ -1,0 +1,96 @@
+<!--pages/receive/course/course.wxml-->
+<view class='top_banner'>
+  <swiper indicator-dots="true" autoplay="true" interval="5000" duration="500" class='top_swiper'>
+    <swiper-item wx:for="{{courseDetail.classBanner}}" wx:for-index="i" wx:for-item='item' wx:key="{{i}}">
+      <image src="{{item.image}}" class="slide-image" mode='aspectFill' wx:if="{{!item.video}}" />
+      <video src='{{item.video}}' class='slide-image' wx:else></video>
+    </swiper-item>
+  </swiper>
+</view>
+<view class='course_specification flexR'>
+  <view class='item flexR'>
+    <image class='icon' src='/images/course_style.png' mode='aspectFit'></image>
+    <text>类型：{{courseDetail.tags[0]?courseDetail.tags[0].name:''}}</text>
+  </view>
+  <view class='item flexR'>
+    <image class='icon' src='/images/course_hour.png' mode='aspectFit'></image>
+    <text>课时数：{{courseDetail.classHour}}</text>
+  </view>
+  <view class='item flexR'>
+    <image class='icon' src='/images/course_minute.png' mode='aspectFit'></image>
+    <text>时长：{{courseDetail.classLong}}分钟</text>
+  </view>
+  <view class='item flexR'>
+    <image class='icon' src='/images/course_age.png'></image>
+    <text>年龄：{{courseDetail.ageStart}}-{{courseDetail.ageEnd}}岁</text>
+  </view>
+  <view class='item flexR'>
+    <image class='icon' src='/images/course_audio.png' mode='aspectFit'></image>
+    <text>试听课：{{courseDetail.isOpenRegistration?'有':'无'}}</text>
+  </view>
+  <view class='item flexR'>
+    <image class='icon' src='/images/course_time.png' mode='aspectFit'></image>
+    <text>时段：{{courseDetail.classTime}}</text>
+  </view>
+</view>
+<view class='course_price_view '>
+  <text class='course_name'>{{courseDetail.name}}</text>
+ <view><text class='price'>¥</text><text style='font-size: 48rpx;color:#000029;'>{{courseDetail.activityPrice}}</text> <text class='prices1' >¥{{courseDetail.price}}</text></view>
+ <!--  -->
+ <text class='paydiscount' wx:if="{{courseDetail.payReduceAmount}}">下单后再立减{{courseDetail.payReduceAmount}}元</text>
+  <view class='discounts flexR'>
+    <text wx:for="{{courseDetail.mcCouponFrontBizPojos}}" wx:for-index="j" wx:key="coupon_{{j}}">{{item.name}}</text>
+  </view>
+</view>
+
+<view class='course_institutions_wrapper' style='margin-top:20rpx;'>
+  <view class='course_institutions flexR'>
+    <text class='title'>培训机构</text>
+    <view class='flexC ' style='flex-grow:1'>
+      <text class='name'>{{courseDetail.shopName}}</text>
+      <text class='name' style='margin-top:0'>{{courseDetail.area}}{{courseDetail.address}}</text>
+    </view>
+    <image class='item_arrow' src='/images/arrows.png'></image>
+  </view>
+</view>
+<view class='course_institutions_wrapper' wx:if="{{courseDetail.ucShopTeacherPojoList && courseDetail.ucShopTeacherPojoList.length>0}}">
+  <view class='course_institutions flexR'>
+    <text class='title' style='align-self:center;'>授课老师</text>
+    <image class='teachers' wx:for="{{courseDetail.ucShopTeacherPojoList}}" wx:for-index="k" wx:key="teacher_{{k}}" src='{{item.headUrl}}'></image>
+  </view>
+</view>
+<view class='course_institutions_wrapper' wx:if="{{courseDetail.mcGiftTemplatePojoList}}">
+  <view class='course_institutions flexR' style='border-bottom:0;'>
+    <text class='title'>预约试听</text>
+    <text class='name'>{{courseDetail.mcGiftTemplatePojoList[0]?courseDetail.mcGiftTemplatePojoList[0].name:''}}</text>
+  </view>
+</view>
+
+<view class='course_detail'>
+  <view class='course_introduce flexR'>
+    <image class='indicator'></image>
+    <text>课程介绍</text>
+  </view>
+  <view class='detail_web'>
+    <rich-text nodes="{{courseDetail.classIntro}}"></rich-text>
+  </view>
+</view>
+
+<view class='bottom flexR' wx:if="{{true}}">
+  <view class='left flexR'>
+    <view class='handle flexC' catchtap='phoneFun' data-phone='{{courseDetail.telephone}}'>
+      <image src='/images/img_shop_phone.png'></image>
+      <text>电话咨询</text>
+    </view>
+    <view class='handle flexC' style='margin-left:54rpx;'>
+      <image src='/images/img_stk_grey.png'></image>
+      <text>预约试听</text>
+    </view>
+  </view>
+  <form-button class='right' wx:if="{{isShare}}" catchtap='buyCourse'>
+    购买课程
+  </form-button>
+  <form-button class='right' wx:else="{{isShare}}" catchtap='shareCourse'>
+    分享课程
+  </form-button>
+</view>

@@ -1,0 +1,3 @@
+<!--pages/webDownload/webDownload.wxml-->
+<web-view src="{{url}}"></web-view>
+<!-- <web-view src="https://saas.atzhixiao.com/static/111.html"></web-view> -->

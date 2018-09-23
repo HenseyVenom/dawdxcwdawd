@@ -1,0 +1,12 @@
+<image class='logo' src='/images/logo1.png'></image>
+<text class='name'>学贝CRM</text>
+<view class='input_frame' style='margin-top:104rpx'>
+  <input class='input_text' placeholder='手机号' type="number" confirm-type="next" bindinput="bindInputPhone" value='{{phoneNumber}}'></input>
+</view>
+<view class='input_frame' style='margin-top:36rpx'>
+  <input class='input_text' placeholder='验证码' type="number" bindinput="bindInputPassword" value='{{verifyCode}}'></input>
+  <form-button class="verify_button {{timeCount>0||!phoneNumber?'verify_button_disabled':''}}" catchtap="sendVerifyCode">{{timeCount>0?(timeCount+'s重发验证码'):'发送验证码'}}</form-button>
+</view>
+<form bindsubmit="bindSubmit" report-submit>
+  <button class='login_button themeBackgroundColor' open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="onGotUserInfo" formType="submit">登录</button>
+</form>

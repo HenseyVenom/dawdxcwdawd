@@ -1,0 +1,235 @@
+<style scoped lang="less">
+ .updatepersonName{
+     width:100%;
+     height:100%;
+     background: #F5F5F5;
+     .nickname{
+      height:100rpx;
+      padding:0rpx 30rpx 0rpx 30rpx;
+      border-bottom:1px solid #EEEEEE;
+      line-height:100rpx;
+      .wenbenName{
+        font-size:28rpx;
+        color: #121212;
+        width:120rpx;
+      }
+       .arrow_right{
+        width:15rpx;
+        height:25rpx;
+        display: block;
+        position: relative;
+        top:38rpx;
+        margin-left:10rpx;
+      }
+      .wenshu{
+        flex:1;
+        padding:24rpx 0rpx;
+        line-height:60rpx;
+        margin-right:10rpx;
+        font-size:28rpx;
+        color:#909090;
+        text-align: right;
+        .selectTing{
+          text-align:right;
+          font-size:28rpx;
+          color: #909090;
+        }
+        .inputName{
+          text-align:right;
+          color:#222;
+          font-size:28rpx;
+          line-height:60rpx;
+
+        }
+        .userinfo-avatar{
+          width:100rpx;
+          height:100rpx;
+          border-radius:100%;
+          float: right;
+
+        }
+
+
+      }
+
+    }
+    .persoanshu{
+      background:#fff;
+      margin-top:20rpx;
+      padding:0rpx 0rpx 0rpx 30rpx;
+      .default{
+        font-size:28rpx;
+        color: #808080;
+        text-align:right;
+      }
+      .activescity{
+        color:#121212;
+
+      }
+    }
+    .sure{
+      width:670rpx;
+      display: block;
+      height:92rpx;
+      line-height: 92rpx;
+      font-size:32rpx;
+      color:#fff;
+      text-align:center;
+      margin: 180rpx auto;
+      background: #F23535;
+      border-radius: 5px;
+    }
+ }
+</style>
+<template>
+    <view class="updatepersonName">
+    <view class="persoanshu">
+        <view class="flexR nickname borderbox">
+         <text class="wenbenName">城市</text>
+         <view class="wenshu">
+           <picker mode="region" @change="bindRegionChange" value="{{region}}" custom-item="{{customItem}}" class="default {{region.length>0? 'activescity':''}}">
+             <view class="picker">
+               {{ region.length>0 ?  addresString : '请选择'}}
+             </view>
+           </picker>
+         </view>
+         <image src="/images/arrow_right.png" class="arrow_right"></image>
+       </view>
+      <view class="flexR nickname borderbox">
+        <text class="wenbenName">详细地址</text>
+        <view class="wenshu">
+            <input type="text" placeholder="请输入小区-楼号-单元号-门牌号" class="inputName" value="{{address}}" @input="setparent" data-name="address"/>
+        </view>
+      </view>
+      </view>
+       <button class="sure" @tap="updateaddress()" >确定</button>
+    </view>
+
+</template>
+<script>
+import wepy from "wepy";
+import {pRequest,pGetRequest} from "../../../utils/requestUtils";
+export default class address extends wepy.page {
+  config = {
+    navigationBarTitleText: '地址'
+  }
+  data = {
+    region: [],
+    addresString: '',
+    address: '',
+    addressType: '',
+    defaultaAddress: '',
+    updateFault: 1,
+    haveFoucs:false
+  }
+  methods = {
+    bindRegionChange(e) {
+      console.log(e.detail.value)
+      this.region = e.detail.value
+      console.log(this.region)
+      //  debugger
+      this.addresString = this.region.join('')
+      // debugger
+      this.appellation = this.region[0]
+      debugger
+      this.cityId = this.region[1]
+      //debugger
+      this.districtId = this.region[2]
+
+    },
+    setparent(e) {
+      this.address = e.detail.value
+    },
+    updateaddress() {
+      console.log(this.region.length)
+      if (this.region.length < 1) {
+        wx.showToast({
+          title: '请选择区域',
+          icon: 'none',
+          duration: 2000
+        })
+        return
+      }
+      if (this.address == '') {
+        wx.showToast({
+          title: '请填写详情地址',
+          icon: 'none',
+          duration: 2000
+        })
+        return
+      }
+      if (this.address.length > 50) {
+        wx.showToast({
+          title: '地址的长度不能对80个字符',
+          icon: 'none',
+          duration: 2000
+        })
+        return
+      }
+
+      if (this.updateFault == 2) {
+        let address = this.addresString + this.address
+        pRequest('/front/auth/ucMemberInfo/updateReciveAdress?receivingAddress=' + address, {}).then(res => {
+          var pages = getCurrentPages()
+          pages.forEach((item) => {
+            if (item.route == 'pages/setting/personal/personal') {
+              item.getinfo()
+            }
+          })
+
+        })
+      }
+
+      let url = this.addressType == 1 ? '/front/auth/ucMemberInfo/updateHomeAdress' : '/front/auth/ucMemberInfo/updateCompanyAddress'
+      // console.log(url)
+      pRequest(url + '?province=' + this.region[0] + '&city=' + this.region[1] + '&area=' + this.region[2] + '&address=' + this.address, {}).then(res => {
+        var pages = getCurrentPages()
+        pages.forEach((item) => {
+          //.log(item)
+          // debugger
+          if (item.route == 'pages/setting/personal/personal') {
+            item.getinfo()
+          }
+          if (item.route == 'pages/setting/personal/selectAddress') {
+            item.getAddress()
+          }
+        })
+        wx.navigateBack()
+
+      })
+
+
+    },
+    onHaveFocus(e) {
+      this.haveFoucs=true
+    },
+    onLoseFocus(e) {
+      this.haveFoucs=false
+    }
+  }
+
+  onLoad(option) {
+    if (option.type == 1 || option.type == 2) {
+      this.addressType = option.type
+      this.address = option.DetailAddress
+      this.region = JSON.parse(option.address)
+      this.addresString = this.region.join('')
+      this.defaultaAddress = option.default
+      debugger
+      if ((this.addresString + this.address) == this.defaultaAddress) {
+        this.updateFault = 2
+      }
+    } else {
+      this.updateFault = 2
+      this.addressType = 1
+    }
+
+    this.$apply()
+
+  }
+
+}
+</script>
+
+
+

@@ -1,0 +1,12 @@
+<!--pages/login/login.wxml-->
+<view class='viewContent'>
+  <view class='loginApp'>登录学贝代理</view>
+  <input value='{{phoneNumber}}' bindinput='bindInputPhone' placeholder='手机号' class='phone' type="number"></input>
+  <view class='verifybox'>
+    <input value="{{verifyCode}}" bindinput='bindInputPassword' placeholder='验证码' class='verify' type="number"></input>
+    <form-button class="verify_button {{timeCount>0||!phoneNumber?'verify_button_disabled':''}}" catchtap="sendVerifyCode">{{timeCount>0?(timeCount+'s重发验证码'):'发送验证码'}}</form-button>
+  </view>
+  <form-button open-type="getUserInfo" bindonGotUserInfo="onGotUserInfo" catchtap='login' class='submitlogin'>
+    登录
+  </form-button>
+</view>

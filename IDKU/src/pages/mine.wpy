@@ -1,0 +1,251 @@
+<style scoped lang='less'>
+   .infoUrse{
+     width:100%;
+     height:220rpx;
+     background: #F23535;
+     .userinfo {
+       display: flex;
+       flex-direction: column;
+       align-items: center;
+     }
+
+     .userinfo-avatar {
+       width: 128rpx;
+       height: 128rpx;
+       margin: 20rpx;
+       border-radius: 50%;
+       overflow: hidden;
+     }
+     .userinforight{
+       padding-top:30rpx;
+       .userinfo-nickname {
+         color: #aaa;
+         font-size:40rpx;
+         color: #FFFFFF;
+       }
+       .tell{
+         font-size:34rpx;
+         color:#fff;
+         display: block;
+         margin-top:10rpx;
+
+       }
+
+     }
+
+     .usermotto {
+       margin-top: 200px;
+     }
+   }
+  .mineList{
+    width:100%;
+    padding:0rpx 36rpx 0rpx 44rpx;
+    background:#fff;
+    .minesetting{
+      height:100rpx;
+      width:100%;
+      font-size:28rpx;
+      line-height:100rpx;
+      border-bottom:2rpx solid #E9E9E9;
+      vertical-align: middle;
+      flex-direction:row;
+      align-items:center;
+      .iconmine{
+        width:44rpx;
+        height:44rpx;
+      }
+      .jilu{
+        height:40rpx;
+      }
+      .order{
+        width:36rpx;
+        height:36rpx;
+      }
+      .shangorder{
+        width:36rpx;
+        heihgt:44rpx;
+      }
+      .card{
+        width:38rpx;
+        height:42rpx;
+      }
+      .iconsetting{
+        width:40rpx;
+        height:40rpx;
+      }
+      .mineName{
+        flex:1;
+        display:block;
+        padding-left:14rpx;
+      }
+      .jiluLeft{
+        padding-left:18rpx;
+      }
+      .orderLeft{
+        padding:22rpx;
+      }
+      .shangLeft{
+        padding-left:20rpx;
+      }
+      .arrow_right{
+        width:15rpx;
+        height:25rpx;
+      }
+    }
+  }
+  .topmine{
+    border-top:22rpx solid #f8f8f8;
+  }
+</style>
+<template>
+   <view class="mine">
+     <button open-type="getUserInfo" style="position: absolute;opacity: 0">认证</button>
+    <view class="flexR infoUrse">
+      <block class=" userinfo">
+          <!-- <image  class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image> -->
+          <view class="userinfo-avatar" wx:if="{{!personInfo.avatars}}">
+            <open-data type="userAvatarUrl" ></open-data>
+          </view>
+            <image class=" userinfo-avatar" src="{{personInfo.avatars}}" wx:if="{{personInfo.avatars}}"></image>
+          <view class="userinforight">
+            <text class="userinfo-nickname">{{personInfo.nickName}}</text>
+            <text class="tell">{{tellPhone}}</text>
+          </view>
+        </block>
+      </view>
+    </view>
+     <view class="mineList">
+        <view class="flexR minesetting" @tap.stop="toOtherPage({{'myCourse'}})">
+           <image src="/images/plan.png" class="iconmine"></image>
+           <text class="mineName">课程计划</text>
+          <image src="/images/arrow_right.png" class="arrow_right"></image>
+        </view>
+       <!--<view class="flexR minesetting" @tap.stop="toOtherPage({{'courseRecord/courseRecord'}})">-->
+         <!--<image src="/images/jilu.png" class="iconmine jilu" ></image>-->
+         <!--<text class="mineName jiluLeft">上课记录</text>-->
+         <!--<image src="/images/arrow_right.png" class="arrow_right"></image>-->
+       <!--</view>-->
+       <view class="flexR minesetting" @tap.stop="toOtherPage({{'courseOrder'}})">
+         <image src="/images/order.png" class="iconmine order"></image>
+         <text class="mineName orderLeft">课程订单</text>
+         <image src="/images/arrow_right.png" class="arrow_right"></image>
+       </view>
+       <view class="flexR minesetting" @tap.stop="showToast">
+         <image src="/images/shangorder.png" class="iconmine shangorder"></image>
+         <text class="mineName orderLeft">商品订单</text>
+         <image src="/images/arrow_right.png" class="arrow_right"></image>
+       </view>
+     </view>
+     <view class="mineList topmine">
+       <!--<view class="flexR minesetting" @tap.stop="toOtherPage({{'cardPack'}})">-->
+         <!--<image src="/images/card.png" class="iconmine card"></image>-->
+         <!--<text class="mineName shangLeft">卡包</text>-->
+         <!--<image src="/images/arrow_right.png" class="arrow_right"></image>-->
+       <!--</view>-->
+       <view class="flexR minesetting" @tap.stop="toOtherPage({{'coupons'}})">
+         <image src="/images/discounts.png" class="iconmine jilu"></image>
+         <text class="mineName jiluLeft">优惠券</text>
+         <image src="/images/arrow_right.png" class="arrow_right"></image>
+       </view>
+       <!--<view class="flexR minesetting">-->
+         <!--<image src="/images/attention.png" class="iconmine "></image>-->
+         <!--<text class="mineName">我的关注</text>-->
+         <!--<image src="/images/arrow_right.png" class="arrow_right"></image>-->
+       <!--</view>-->
+       <view class="flexR minesetting" @tap.stop="toOtherPage({{'babyrecord/babyrecord'}})">
+         <image src="/images/baobao.png" class="iconmine"></image>
+         <text class="mineName">宝宝档案</text>
+         <image src="/images/arrow_right.png" class="arrow_right"></image>
+       </view>
+       <view class="flexR minesetting" @tap.stop="toOtherPage({{'news'}})">
+         <image src="/images/message.png" class="iconmine jilu"></image>
+         <text class="mineName jiluLeft">我的消息</text>
+         <image src="/images/arrow_right.png" class="arrow_right"></image>
+       </view>
+       <view class="flexR minesetting" @tap.stop="toOtherPage({{'setting/setting'}})">
+         <image src="/images/setting.png" class="iconmine iconsetting"></image>
+         <text class="mineName jiluLeft">设置</text>
+         <image src="/images/arrow_right.png" class="arrow_right"></image>
+       </view>
+     </view>
+   </view>
+
+</template>
+
+<script>
+    import wepy from 'wepy'
+    const app = wepy.$instance
+     import {pRequest,pGetRequest} from "../utils/requestUtils";
+    export default class Mine extends wepy.page {
+        config = {
+          "navigationBarTitleText" : "我的"
+        }
+        data = {
+          userInfo: {},
+          hasUserInfo: false,
+          canIUse: wx.canIUse('button.open-type.getUserInfo'),
+          tellPhone:'',
+          personImg:'',
+          personInfo:{}
+        };
+        onLoad(){
+          //this.tellPhone = app.getpersonPhone()
+
+          if (app.globalData.userInfo) {
+            this.userInfo =  res.userInfo
+            this.hasUserInfo = true
+          } else if (this.data.canIUse){
+            let that = this
+            wx.getUserInfo({
+              success:function(res){
+               // debugger
+                that.userInfo = res.userInfo;
+                that.$apply()
+              },
+              fail:function (res) {
+               // debugger
+              }
+            })
+          } else {
+            wx.getUserInfo({
+              success: res => {
+                app.globalData.userInfo = res.userInfo
+                this.userInfo =  res.userInfo
+                this.hasUserInfo = true
+              }
+            })
+          }
+        }
+        onShow(){
+           this.getpersonInfo()
+        }
+         methods={
+           getUserInfo: function(e) {
+             console.log(e)
+             app.globalData.userInfo = e.detail.userInfo
+             this.userInfo =  res.userInfo
+             this.hasUserInfo = true
+           },
+           toOtherPage (e) {
+             wx.navigateTo({
+               url: '/pages/' + e
+             })
+           },
+           showToast () {
+             wx.showToast({
+               icon: 'none',
+               title: '该功能正在开发中！'
+             })
+           }
+
+
+        }
+        getpersonInfo(){
+          pGetRequest('xb/front/auth/ucMember/info', {}).then(res => {
+            this.personInfo =res
+            this.tellPhone =(''+ res.mobile).substr(0,3)+"****" +(''+res.mobile).substr(8)
+           this.$apply()
+          })
+        }
+    }
+</script>

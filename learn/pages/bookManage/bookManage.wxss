@@ -1,0 +1,106 @@
+/* pages/bookManage/bookManage.wxss */
+.list {
+  width: 100%;
+  height: 100%;
+  /* overflow-y: auto; */
+}
+
+.item {
+  background: white;
+  margin-bottom: 18rpx;
+  flex-shrink: 0;
+}
+
+.top {
+  padding: 41rpx 30rpx 32rpx;
+  position: relative;
+  border-bottom: 1px solid #ededed;
+}
+
+.corner_icon {
+  width: 133rpx;
+  height: 79rpx;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.username {
+  font-size: 30rpx;
+  color: #333;
+}
+
+.phone {
+  font-size: 30rpx;
+  color: #39f;
+  margin-left: 20rpx;
+  text-decoration: underline;
+}
+.allocateTime{
+  height: 36rpx;
+  padding-left: 13rpx;
+  padding-right: 13rpx;
+  line-height: 36rpx;
+  text-align: center;
+  border-radius: 18rpx;
+  background: #f5f5f5;
+  margin-left: 10rpx;
+  font-size: 20rpx;
+  color: #999999;
+}
+
+.time {
+  font-size: 28rpx;
+  color: #333;
+}
+
+.source {
+  font-size: 20rpx;
+  color: #ccc;
+  float: right;
+  margin-top: 20rpx;
+}
+
+.middle {
+  padding: 25rpx 30rpx;
+}
+
+.leftCourse{
+  flex-grow: 1;
+  color: #999999;
+  font-size: 26rpx;
+}
+.orderTime{
+  background: #f5f5f5;
+  border-radius: 2rpx;
+  align-items: center;
+  width: 231rpx;
+  align-content: center;
+  font-size: 22rpx;
+  color: #333333;
+  justify-content: center;
+}
+
+.bottom {
+  width: 100%;
+  border-top: 1px solid #ededed;
+  border-bottom: 1px solid #ededed;
+  background: white;
+  height: 80rpx;
+}
+.handleButton{
+  flex-grow: 1;
+  font-size: 30rpx;
+  align-items: center;
+}
+.buttonText{
+  text-align: center;
+  border-right: 1rpx solid #ededed;
+  width: 100%;
+}
+borderNone{
+  border-right: 0rpx;
+}
+.emptyView{
+  height: 100%;
+}

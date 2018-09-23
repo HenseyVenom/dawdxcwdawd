@@ -1,0 +1,54 @@
+/* pages/login/login.wxss */
+.viewContent{
+  width:100%;
+  height:100%;
+  background:#fff;
+  padding:0rpx 40rpx;
+}
+.loginApp{
+  font-size:32rpx;
+  padding-top:90rpx;
+}
+.viewContent .phone{
+  height:90rpx;
+  line-height:90rpx;
+  border-bottom:2rpx solid #E9E9E9;
+  font-size:30rpx;
+  margin-top:40rpx;
+
+}
+.verifybox{
+  height:90rpx;
+  line-height:90rpx;
+  border-bottom:2rpx solid #E9E9E9;
+  font-size:30rpx;
+  margin-top:40rpx;
+  position: relative
+}
+.verify{
+  height:90rpx;
+  line-height:90rpx;
+  width:60%;
+}
+.verify_button{
+  color: #F23535;
+  font-size:30rpx;
+  position: absolute;
+  right:0rpx;
+  top:0rpx;
+}
+.verify_button_disabled{
+  color: #cccccc;
+}
+.submitlogin{
+  width:100%;
+  height:94rpx;
+  line-height:94rpx;
+  text-align: center;
+  background: #F23535;
+  border-radius: 5rpx;
+  color:#fff;
+  display: block;
+  font-size:36rpx;
+  margin-top:74rpx;
+}

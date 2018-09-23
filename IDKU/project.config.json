@@ -1,0 +1,15 @@
+{
+	"description": "originazation user",
+	"setting": {
+		"urlCheck": true,
+		"es6": false,
+		"postcss": false,
+		"minified": false,
+		"newFeature": true
+	},
+	"compileType": "miniprogram",
+	"appid": "wx043062c5c6d267d6",
+	"projectname": "id-ku",
+	"miniprogramRoot": "./dist",
+	"condition": {}
+}

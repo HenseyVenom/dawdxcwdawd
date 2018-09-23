@@ -1,0 +1,307 @@
+<style lang="less" scoped>
+.pinless{
+    width:100%;
+    height:100%;
+    background: #F5F5F5;
+}
+  .binding_item_wrapper{
+    width: 100%;
+    padding-left:40rpx;
+    //padding: 0 40rpx;
+    height: 100rpx;
+    background: white;
+    .binding_item{
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        height: 100%;
+        border-bottom: 1px solid #EDEDED;
+        align-items: center;
+        font-size: 30rpx;
+        color: #121212;
+        padding-right:40rpx;
+        .title{
+          width:190rpx;
+        }
+        .input{
+            flex-grow: 1;
+            text-align: right;
+            font-size:24rpx;
+                       color: #909090;
+        }
+        .selectvank{
+             flex-grow: 1;
+              text-align: right;
+              color: #909090;
+                font-size:24rpx;
+        }
+        .arrow_right{
+            width:15rpx;
+            height:25rpx;
+            margin-left:16rpx;
+        }
+        .verify_button{
+            width:160rpx;
+            height:48rpx;
+            border-radius: 24rpx;
+            line-height:48rpx;
+            font-size:24rpx;
+            text-align:center;
+        }
+        .activeColor{
+          background: #F23535;
+          color:#fff;
+        }
+        .unactiveColor{
+            background: #F5F5F5;
+            color: #909090;
+        }
+    }
+}
+.yanzheng{
+ margin-top:20rpx;
+}
+.sure{
+    background: #F23535;
+    width:670rpx;
+    height:92rpx;
+    text-align:center;
+    font-size:32rpx;
+    line-height:92rpx;
+    color:#fff;
+    margin-top:170rpx;
+    border-radius: 46rpx;
+}
+
+
+</style>
+
+<template>
+    <view class="pinless">
+         <view class='binding_item_wrapper flexR'>
+            <view class='binding_item'>
+                 <text class='title' type='number'>姓名</text>
+                    <input class='input' placeholder='请输入' value='{{name}}' @input='bindInput' data-name='name' placeholder-style='color: #B9B9B9;'></input>
+            </view>
+        </view> 
+        <view class='binding_item_wrapper flexR'>
+            <view class='binding_item'>
+                 <text class='title' type='number'>身份证号</text>
+                    <input class='input' placeholder='请输入' value='{{Idcard}}' @input='bindInput' data-name='Idcard' placeholder-style='color: #B9B9B9;'></input>
+            </view>
+        </view>
+        <view class='binding_item_wrapper flexR'>
+            <view class='binding_item'>
+                 <text class='title' type='number'>银行卡号</text>
+                    <input class='input' placeholder='请选择' value='{{cardNumber}}' @input='bindInput' data-name='cardNumber' placeholder-style='color: #B9B9B9;'></input>
+            </view>
+        </view>
+        <view class='binding_item_wrapper flexR'>
+            <view class='binding_item'>
+                 <text class='title' type='number'>选择银行</text>
+                <!-- <input class='input' placeholder='请输入' value='{{name}}' @input='selectcard' data-name='name' placeholder-style='color: #B9B9B9;'></input> -->
+                 <picker @change="bindPickerChange" value="{{value}}" range="{{cardArray}}"
+                   range-key='value'
+                   class='selectvank'
+                 >
+                    <view class="picker">
+                    {{cardName?cardName:'请选择'}}
+                    </view>
+                   </picker>
+                    <image src="/images/arrow_right.png" class="arrow_right"></image>
+            </view>
+        </view> 
+        <view class='binding_item_wrapper flexR'>
+            <view class='binding_item'>
+                 <text class='title' type='number'>预留手机</text>
+                <input class='input' placeholder='请输入' value='{{phone}}' @input='bindInput' data-name='phone' placeholder-style='color: #B9B9B9;'></input>
+            </view>
+        </view> 
+        <view class='binding_item_wrapper flexR yanzheng'>
+            <view class='binding_item'>
+                 <text class='title' type='number'>验证码</text>
+                <input class='input'  value='{{verify}}' @input='bindInput' data-name='verify' placeholder-style='color: #B9B9B9;'></input>
+                <button class="verify_button {{timeCount>0 ? 'unactiveColor':'activeColor'}}" @tap="sendbankcode" disabled="{{timeCount>0}}">
+            {{timeCount>0?'已发送':'获取验证码'}}
+          </button>                    
+            </view>
+        </view> 
+        <button class="sure" @tap="surebank">确定</button>         
+    </view>
+</template>
+<script>
+import wepy from "wepy";
+import {pRequest,pGetRequest} from '../../../utils/requestUtils'
+import { connect } from 'wepy-redux'
+ const app=wepy.$instance
+ const TIME_COUNT = 60
+ @connect({
+    shopId (state) {
+      return state.counter.shopId
+    }
+  })
+export default class pinless extends wepy.page{
+  data={
+      timer:null,
+       name:'', 
+      timeCount:0,
+      phone:'',
+      verify:'',
+      cardNumber:'',
+      Idcard:'',
+      cardName:'',
+      bankcode:0,
+      cardArray:[
+           
+      ]
+
+  }
+  methods={
+    surebank(){
+        
+         if(!this.yanzhen()){
+            return
+          }
+          if(this.verify==''){
+            wx.showToast({
+                title:'请输入验证码',
+                icon: 'none'
+            })         
+             return
+          }
+        pRequest('xb/front/auth/ucMember/ystBindBankCard?bankVerificationCode='+this.verify,{
+           
+       }).then(res=>{
+           wx.navigateTo({
+            url:'/pages/setting/bankcard/bankcard'
+           })
+       })
+    },
+    
+     bindInput(e){
+        // debugger
+         let key =  e.currentTarget.dataset.name
+         this[key] =   e.detail.value
+        //  console.log(this.name+'--'+this.phone+'--'+this.Idcard+'--'+this.cardNumber)
+
+     } ,
+     bindPickerChange(e){
+       this.cardName = this.cardArray[e.detail.value].value
+       this.bankcode = this.cardArray[e.detail.value].key
+     },
+     sendbankcode(){
+      if(!this.yanzhen()){
+        return
+      }
+      
+       pRequest('xb/front/auth/ucMember/ystApplyBindBankCard?',{
+            bankCode : this.bankcode ,
+            bankMobile: this.phone ,
+            bankName: '枝江银行' ,
+            cardNo: this.cardNumber ,
+            id :this.shopId ,
+            identityNo : this.Idcard ,
+            name:this.name,
+       },{
+         'Authorization': 'Bearar' + app.getAccessToken()
+       }).then(res=>{
+          this.countDown()
+       })
+    
+  
+     }
+  }
+  onLoad(){
+    this.bankcardList()
+  }
+  countDown() {
+    this.timeCount = TIME_COUNT
+    if (this.timer) return
+    this.timer = setInterval(() => {
+       // console.log('timeCount:', this.timeCount)
+        if (this.timeCount > 0 && this.timeCount <= TIME_COUNT) {
+        this.timeCount--
+        this.$apply()
+        } else {
+        clearInterval(this.timer)
+        this.timeCount=0;
+        this.timer=null;
+        this.$apply()
+        }
+       }, 1000)
+     }
+  //获取银行卡列表‘
+  bankcardList(){
+    pGetRequest('xb/front/unAuth/ystBankList',{
+         'Authorization': 'Bearar' + app.getAccessToken()
+    }).then(res=>{
+        console.log(res)
+        this.cardArray = res
+        this.$apply()
+    })
+  }
+  
+  yanzhen(){
+       var par = /^[\u4E00-\u9FA5]{2,20}$/
+        if (!par.test(this.name)) {
+            wx.showToast({
+                title: '姓名最少2个字，最多20个字,只支持汉字',
+                icon: 'none'
+            })
+           return
+        }   
+        if(!/^\d{6}(18|19|20)?\d{2}(0[1-9]|1[012])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)$/i.test(this.Idcard)){
+           let tip = "身份证号格式错误";
+             wx.showToast({
+                title:tip,
+                icon: 'none'
+            })
+          
+             return     
+        }
+
+         if(this.cardNumber.length < 16 || this.cardNumber.length > 19) {
+            wx.showToast({
+                title:'银行卡号长度必须在16到19之间',
+                icon: 'none'
+            })
+             return ;
+           }
+           var num = /^\d*$/; //全数字
+           if(!num.exec(this.cardNumber)) {
+            wx.showToast({
+                title:'银行卡号必须全为数字',
+                icon: 'none'
+            })
+             return 
+           }
+         if(this.cardName==''){
+            wx.showToast({
+                title: '请选择银行卡',
+                icon: 'none'
+            })
+             return 
+         }
+         if(this.phone==''){
+            wx.showToast({
+                title:'手机号不能空',
+                icon: 'none'
+            })
+          return 
+        }
+        if(!/^1[3,4,5,7,8][0-9]{9}$/.test(this.phone)){
+            wx.showToast({
+                title:'手机号格式不正确',
+                icon: 'none'
+            })
+            return 
+        } 
+
+        return true
+  }
+
+}
+</script>
+
+
+

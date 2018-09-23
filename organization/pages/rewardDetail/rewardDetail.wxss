@@ -1,0 +1,38 @@
+/* pages/rewardDetail/rewardDetail.wxss */
+.rewardPage .reward-items .reward-top{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  padding: 27rpx 40rpx;
+  font-size: 32rpx;
+  margin-bottom: 20rpx;
+}
+.text-red{
+  color: #F23535;
+}
+.rewardPage .reward-items  .reward-center{
+  background: #fff;
+  padding: 30rpx 40rpx;
+  font-size: 30rpx;
+  margin-bottom: 20rpx;
+}
+.reward-center .reward-item{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.reward-item3{
+  align-items:flex-start !important;
+}
+.reward-item3 .gray{
+  font-size: 24rpx;
+  color: #888888;
+}
+.reward-center .reward-item view{
+  line-height: 50rpx;
+}
+.reward-center .reward-item .text-gray{
+  color:  #888888;
+  width: 25%;
+}

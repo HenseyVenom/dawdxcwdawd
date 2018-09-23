@@ -1,0 +1,335 @@
+<style scoped lang='less'>
+  .reserve-page{
+    font-size: 28rpx;
+    color: #121212;
+    height: 100%;
+    background: #F4F4F4;
+    .course-area{
+      padding: 40rpx;
+      background: #fff;
+      margin-bottom: 20rpx;
+      .course-shop{
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        .red-bg{
+          color: #fff;
+          background: #F23535;
+          border-radius: 100px;
+          font-size: 20rpx;
+          padding: 4rpx 16rpx;
+          margin-right: 16rpx;
+        }
+        text{
+          font-size: 30rpx;
+        }
+      }
+      .course-intro{
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        margin-top: 40rpx;
+        .left{
+          width: 140rpx;
+          height: 140rpx;
+          border-radius: 8rpx;
+          background: #eee;
+          margin-right: 28rpx;
+        }
+        .right{
+          .course-type{
+            font-size: 24rpx;
+            color: #888888;
+          }
+          .course-name{
+            font-size: 30rpx;
+            margin: 10rpx 0;
+          }
+          .course-prize.text-red{
+            font-size: 34rpx;
+            color: #F23535;
+          }
+        }
+      }
+    }
+    .bookable-area{
+      background: #fff;
+      .date-tabs{
+        padding: 40rpx;
+        white-space: nowrap;
+        .date-item{
+          margin-right: 40rpx;
+          display:inline-block;
+          font-size: 28rpx;
+          &.text-red{
+            color: #F23535;
+          }
+        }
+      }
+      .bookable-list{
+        .bookable-title{
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 20rpx 70rpx 20rpx 40rpx;
+          background: #F4F4F4;
+          text{
+            text-align: center;
+            flex: 1;
+            &:first-of-type{
+              flex: 1.5;
+            }
+          }
+        }
+        .bookable-courses{
+          .bookable-course{
+            padding: 30rpx 70rpx 30rpx 40rpx;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #F4F4F4;
+            position: relative;
+            view{
+              text-align: center;
+              flex: 1;
+              &:first-of-type{
+                flex: 1.5;
+              }
+              button{
+                width: 120rpx;
+                font-size: 26rpx;
+                color: #FFFFFF;
+                background: #F23535;
+                border-radius: 30rpx;
+                padding: 12rpx 28rpx;
+                line-height: 1;
+                &.disabled{
+                  background: #D8D8D8;
+                }
+              }
+            }
+            .float-img{
+              position: absolute;
+              left: 0;
+              top: 0;
+              width: 80rpx;
+              height: 80rpx;
+            }
+          }
+        }
+      }
+    }
+  }
+  .modalContent{
+    border-radius: 10rpx;
+    width: 550rpx;
+    align-items: center;
+    position: relative;
+    .modalTitle{
+      font-size: 34rpx;
+      color: #030303;
+      margin-top: 56rpx;
+    }
+    .close{
+      position: absolute;
+      top: 0;
+      right: 0;
+      color: #121212;
+      padding: 0 24rpx;
+      font-size: 60rpx;
+    }
+    .childrenList{
+      width: 300rpx;
+      margin: 30rpx auto 20rpx;
+      .checkbox{
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        flex-direction: row-reverse;
+        align-items: center;
+        margin: 26rpx 0;
+      }
+    }
+    .buttons{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      border-top: 1px solid #ededed;
+      text{
+        flex: 1;
+        text-align: center;
+        font-size: 40rpx;
+        padding: 20rpx 0;
+      }
+      .cancel{
+        color: #f23535;
+        border-right: 1px solid #ededed;
+      }
+    }
+  }
+</style>
+<template>
+  <view class="reserve-page">
+    <view class="course-area">
+      <view class="course-shop">
+        <view class="red-bg">已认证</view>
+        <text>{{shopInfo.shopName}}</text>
+      </view>
+      <view class="course-intro">
+        <image class="left" src=""></image>
+        <view class="right">
+          <view class="course-type">
+            <text>绘画</text> <text space="ensp" class="line"> | </text>
+            <text>3-6周岁</text> <text space="ensp" class="line"> | </text>
+            <text>免费试听</text>
+          </view>
+          <view class="course-name">少儿美术创意课程</view>
+          <view class="course-prize text-red">¥1620</view>
+        </view>
+      </view>
+    </view>
+    <view class="bookable-area">
+      <scroll-view  class="date-tabs" scroll-x="true">
+        <text class="date-item {{activeDate===idx?'text-red':''}}" wx:for="{{dateTabs}}" ex:key="idx" wx:for-index="idx" @tap.stop="selectDate({{idx}})">{{item.week}}{{item.month}}月{{item.day}}日</text>
+      </scroll-view>
+      <view class="bookable-list">
+        <view class="bookable-title">
+          <text>上课时间</text>
+          <text>上课老师</text>
+          <text>操作</text>
+        </view>
+        <view class="bookable-courses">
+          <view class="bookable-course" wx:for="{{courses}}" wx:key="i" wx:for-index="i">
+            <image wx:if="{{item.status===1}}" class="float-img" src="/images/reserved.png"></image>
+            <view>{{item.startTime}}-{{item.endTime}}</view>
+            <view>{{item.teacher}}</view>
+            <view>
+              <button class="{{item.status===0?'':'disabled'}}" disabled="{{item.status===1}}" @tap.stop="clickReserve({{item}})" @tap.stop="selectChild">预约</button>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <wepyModal :showModal.sync="showModal">
+      <view class="modalContent flexC">
+        <text class="modalTitle">请选择孩子</text>
+        <view class="childrenList">
+          <checkbox-group @change="checkboxChange">
+            <label class="checkbox" wx:for="{{items}}" wx:key="i">
+              <checkbox value="{{item.name}}" checked="{{item.checked}}"/> <text>{{item.value}}</text>
+            </label>
+          </checkbox-group>
+        </view>
+        <text class="close" @tap.stop="closeModal">×</text>
+        <view class="buttons">
+          <text class="cancel" @tap.stop="closeModal">取消</text>
+          <text class="confirm">确定</text>
+        </view>
+      </view>
+    </wepyModal>
+  </view>
+
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import wepyModal from '../components/modal'
+  const app = wepy.$instance
+  export default class ReserveCourse extends wepy.page {
+    config = {
+      navigationBarTitleText: '预约课程'
+    }
+    components = {
+      wepyModal
+    }
+    data = {
+      dateTabs: [],
+      activeDate: 0,
+      courses: [
+        {
+          startTime: '13：00',
+          endTime: '14：00',
+          teacher: '宋佳佳',
+          status: 0
+        },
+        {
+          startTime: '14：00',
+          endTime: '15：00',
+          teacher: '宋佳佳',
+          status: 1
+        },
+        {
+          startTime: '16：00',
+          endTime: '17：00',
+          teacher: '宋佳佳',
+          status: 1
+        }
+      ],
+      showModal: false,
+      items: [
+        {name: 'USA', value: '美国'},
+        {name: 'CHN', value: '中国'},
+        {name: 'BRA', value: '巴西'}
+      ],
+      shopInfo:{},
+      courseDetail:{},
+    }
+    methods = {
+      selectDate (e) {
+        this.activeDate = e
+      },
+      clickReserve (e) {
+        console.log(e)
+      },
+      selectChild () {
+        this.showModal = true
+      },
+      checkboxChange (e) {
+        console.log('checkbox发生change事件，携带value值为：', e.detail.value)
+      },
+      closeModal () {
+        this.showModal = false
+      }
+    }
+    onLoad (options) {
+      this.courseDetail=options
+      this.shopInfo=app.getShopInfo()
+
+    }
+    onShow () {
+      this.sortDate(new Date())
+    }
+    sortDate(oDate) { // 初始化当前周期数据
+      const that = this
+      const week = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
+      // let year = oDate.getFullYear()
+      // 当前日期
+      let currentDate = new Date()
+      console.log(currentDate);
+      // 选中的日期是星期几0-6
+      // let today = oDate.getDay()
+      let arr = []
+      let nowTime = oDate.getTime()
+      let dayTime = 24 * 60 * 60 * 1000
+      for (var i = 0; i < 7; i++) {
+        let todayDate = new Date(nowTime + dayTime * i)
+        let todayYear = todayDate.getFullYear()
+        let todayMonth = todayDate.getMonth() + 1
+        let todayDay = todayDate.getDate()
+        let todayWeek = todayDate.getDay()
+        arr.push({
+          year: todayYear,
+          month: todayMonth,
+          day: todayDay,
+          week: (currentDate.getFullYear() === todayYear && currentDate.getMonth() + 1 === todayMonth && currentDate.getDate() === todayDay) ? '今天' : week[todayWeek]
+        })
+      }
+      arr[1].week = '明天'
+      arr[2].week = '后天'
+      that.dateTabs = arr
+      return arr
+    }
+  }
+</script>

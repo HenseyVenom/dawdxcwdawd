@@ -1,0 +1,18 @@
+/* components/topDateFilter/topDateFilter.wxss */
+@import '../../app.wxss';
+.filterView {
+  /* width: 100%; */
+  margin: 20rpx 0 20rpx 20rpx;
+}
+
+.filter {
+  width: 168rpx;
+  height: 66rpx;
+  color: #333;
+  font-size: 28rpx;
+  line-height: 66rpx;
+  text-align: center;
+  border-radius: 6rpx;
+  margin-right: 10rpx;
+  background-color: white;
+}

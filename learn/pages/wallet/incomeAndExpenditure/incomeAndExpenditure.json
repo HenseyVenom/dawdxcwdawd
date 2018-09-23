@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "收支明细",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "empty-view": "../../../components/empty/emptyView"
+  }
+}

@@ -1,0 +1,36 @@
+/* components/modal/modal.wxss */
+@import '../../app.wxss';
+.modal{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index:111;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.2)
+}
+
+.content{
+  background: white;
+  border-radius: 10rpx;
+  position: relative;
+  width: 490rpx;
+  align-items: center;
+	box-shadow: 0px 2px 4.8px 0.2px rgba(153, 153, 153, 0.95);
+  padding: 50rpx;
+}
+
+
+.confirmButton{
+  width: 100%;
+  height: 80rpx;
+  border-radius: 6rpx;
+  font-size: 34rpx;
+  line-height: 80rpx;
+  text-align: center;
+  color: white;
+}

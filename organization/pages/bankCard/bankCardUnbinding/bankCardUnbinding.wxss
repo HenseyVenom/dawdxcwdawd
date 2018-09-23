@@ -1,0 +1,58 @@
+/* pages/bankCard/bankCardUnbinding/bankCardUnbinding.wxss */
+.bank_card{
+  width: 691rpx;
+  height: 300rpx;
+  margin: 29rpx auto 0;
+  background: linear-gradient(to right,rgb(243,97,97),rgb(242,56,56));
+  border-radius: 10rpx;
+  position: relative;
+  overflow: hidden;
+}
+
+.card_title{
+  margin-top: 47rpx;
+  margin-left: 41rpx;
+  
+}
+.card_text{
+  justify-content: center;
+  color: white;
+  margin-left: 30rpx;
+}
+.card_company{
+  width: 90rpx;
+  height: 90rpx;
+  background: white;
+  border-radius: 50%;
+}
+.card_icon{
+  width: 60rpx;
+  height: 60rpx;
+  margin: 15rpx;
+}
+.card_number{
+  margin-left:161rpx; 
+  margin-top: 57rpx;
+  font-size: 36rpx;
+  color: white;
+}
+.alpha_icon{
+  width: 270rpx;
+  height: 270rpx;
+  opacity: 0.1;
+  position: absolute;
+  right: -30rpx;
+  bottom: -49rpx;
+}
+
+.unbinding_button{
+  display: block;
+  height: 88rpx;
+  border-radius: 10rpx;
+  width: 625rpx;
+  margin: 99rpx auto 0;
+  line-height: 88rpx;
+  text-align: center;
+  color: white;
+  font-size: 36rpx;
+}

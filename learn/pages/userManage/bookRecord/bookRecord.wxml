@@ -1,0 +1,22 @@
+<view  class='reservedPage'>
+  <view class='reservedList'>
+    <view class='reservedItem bg-white' wx:for='{{reservedList}}' wx:for-index="idx" wx:key="unique_{{idx}}">
+      <view class='left'>
+        <view>
+          <image src='../../../images/reserve1.png' wx:if="{{item.isSign==2}}"></image>
+        </view>
+        <view>课程：{{item.course}}</view>
+        <view>门店：{{item.shopName}}</view>
+      </view>
+      <view class='right'>
+        <view>预约到店时间</view>
+        <view class='{{!item.isOut?"text-blue":"text-orange"}}'>{{item.reserveTime}}</view>
+      </view>
+    </view>
+    <emptyView class="emptyView" height="500rpx;" text="还没有预约过" wx:if="{{reservedList.length==0}}"></emptyView>
+  </view>
+  <form-button class='fixedBottom bg-white' catchtap='book'>
+    <view>新增预约到店</view>
+  </form-button>
+</view>
+<bookModal showBookModal="{{showBookModal}}" bindbookDateConfirm="confirmDate" ></bookModal>

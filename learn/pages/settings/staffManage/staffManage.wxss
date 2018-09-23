@@ -1,0 +1,92 @@
+.staffManage .filter{
+  padding:12rpx 20rpx;
+  background:#fff;
+  /* height:66rpx; */
+  border-bottom:1px solid #ededed;
+  position: relative;
+}
+.staffManage .filter .text{
+  height:66rpx;
+  background-color: #f2f2f2;
+	border-radius: 8rpx;
+  font-size: 24rpx;
+  padding-left:45rpx;
+}
+.search{
+  position:absolute;
+  left:30rpx;
+  top:32rpx;
+  width: 23rpx;
+	height: 25rpx;
+  z-index:111;
+}
+.staffManage .counselor .ShopName{
+  height:60rpx;
+  font-size:26rpx;
+  line-height:60rpx;
+  padding-left:20rpx;
+  color:#999;
+}
+.staffManage .counselor .counselorLsit{
+  height:130rpx;
+  background:#fff;
+  border-bottom:1px solid #ededed;
+  display:flex;
+  align-items: center;
+  /* padding:30rpx; */
+  /* width: calc(100% + 75px); */
+  box-sizing:border-box;
+  /* margin-right: -75px; */
+  flex-direction: row-reverse;
+}
+.staffManage .counselor .counselorLsit .left{
+  flex:1;
+  margin-left: 30rpx;
+}
+.staffManage .counselor .counselorLsit .left .name{
+  display: block;
+  font-size:34rpx;
+  color:#333;
+  line-height:35rpx;
+}
+.staffManage .counselor .counselorLsit .left .tell{
+  color:#666;
+  font-size:28rpx;
+}
+.staffManage .counselor .counselorLsit .right{
+  width:100rpx;
+  margin-top:10rpx;
+  flex-shrink: 0;
+  margin-right: 30rpx;
+}
+.staffManage .counselor .counselorLsit .right .type{
+  color: #999999;
+  font-size:30rpx;
+}
+.staffManage .counselor .counselorLsit .right .arrow_right{
+  width: 16rpx;
+	height: 25rpx;
+  margin-left:18rpx;
+}
+.staffManage .counselor .counselorLsit .deleteButton{
+  width: 75px;
+  height: 100%;
+  line-height: 130rpx;
+  text-align: center;
+  color: white;
+  flex-shrink: 0;
+  font-size: 32rpx;
+}
+.staffManage .addConselor{
+  position: fixed;
+  bottom:0px;
+  left:0px;
+  height:88rpx;
+  font-size:36rpx;
+  color: #ff9c0f;
+  text-align:center;
+  background-color: #ffffff;
+  border-top: solid 1px #ededed;
+  width:100%;
+  line-height:88rpx;
+}

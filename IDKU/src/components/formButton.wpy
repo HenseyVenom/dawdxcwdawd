@@ -1,0 +1,77 @@
+<style scoped lang='less'>
+  .form-button {
+    position: relative;
+  }
+
+  button {
+    text-align: unset;
+    line-height: 1.5;
+    padding: 0;
+    background-color: transparent !important;
+    overflow: unset;
+  }
+
+  .formButton {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;
+  }
+
+  .content {
+    width: 100%;
+  }
+</style>
+<template>
+  <Component class="form-button" @tap.stop="buttonClick">
+    <slot class='content'></slot>
+    <form bindsubmit="bindSubmit" report-submit>
+      <button formType="submit" open-type='{{openType}}' bindgetuserinfo="{{bindgetuserinfo}}" class='formButton' data-name='{{buttonName}}'>
+      </button>
+    </form>
+  </Component>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  const util = require('../utils/util')
+  const app = wepy.$instance
+  export default class FormButton extends wepy.component {
+    props = {
+      openType: {
+        type: String,
+        value: '',
+      },
+      bindgetuserinfo: {
+        type: String,
+        value: 'onGotUserInfo',
+      },
+      buttonName: {
+        type: String,
+        value: '',
+      }
+    }
+    data = {}
+    methods = {
+      bindSubmit: function (e) {
+        var formId = e.detail.formId
+        console.log("formId:", formId)
+        if (!formId || formId == 'the formId is a mock one' || formId == '' || formId == null) return
+        app.globalData.formIds.push({
+          formId: e.detail.formId,
+          date: new Date().pattern('YYYY-MM-dd HH:mm:ss')
+        })
+      },
+      onGotUserInfo: function (res) {
+        var userInfo = res
+        var myEventOption = {}
+        this.$emit('onGotUserInfo', userInfo, myEventOption)
+      },
+      buttonClick(e){
+        this.$emit('click', e, {})
+      },
+    }
+  }
+</script>

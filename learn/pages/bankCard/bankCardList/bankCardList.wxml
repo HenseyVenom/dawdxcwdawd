@@ -1,0 +1,8 @@
+<!--pages/bankCard/bankCardList/bankCardList.wxml-->
+<form-button class='bank_card_item flexR' catchtap='bankCardItem' wx:if='{{bankCard.bankName}}'>
+  <image class='bank_icon' src='/images/img/{{bankimgurl}}.png' ></image>
+  <text class='bank_name'>{{bankCard.bankName}}</text>
+  <text class='back_number'>{{bankCard.cardNumber}}</text>
+  <image class='arrow_right' src='../../../images/arrow_right.png'></image>
+</form-button>
+<form-button class='add_bank_card' wx:if='{{!bankCard.bankName}}' catchtap='addNewBankCard'><text style='font-weight:bold;font-size:50rpx;'>+</text> 添加银行卡</form-button>

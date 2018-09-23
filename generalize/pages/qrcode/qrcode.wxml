@@ -1,0 +1,14 @@
+<view class="qrcode flexC">
+    <view class="userinfo">
+      <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
+      <block wx:else>
+        <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl||'/images/img_mhead.png'}}" mode="cover"></image>
+        <view style='margin-left:32rpx'>
+           <view class='userinfo-nickname'>{{userData.cooperationLinkman}}</view> 
+           <view class='userinfo-tell'>{{userData.popularizeAgentMobile}}</view>
+        </view>       
+      </block>
+    </view>
+    <image src="{{imgUrl}}" style='width:500rpx;diplay:block;margin:20rpx auto' mode='aspectFit'></image>
+    <button data-name="invite" class='shareBtn' disabled='{{!query}}' catchtap='shareCourse'>立即分享</button>
+</view>

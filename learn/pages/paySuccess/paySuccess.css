@@ -1,0 +1,24 @@
+.page .success {
+  background: #fff;
+  padding: 100rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 48rpx;
+}
+.page .success image {
+  width: 84rpx;
+  height: 84rpx;
+  margin-right: 40rpx;
+}
+.page .button {
+  display: block;
+  width: 625rpx;
+  height: 88rpx;
+  background-color: #f23535;
+  border-radius: 10rpx;
+  margin: 200rpx auto;
+  text-align: center;
+  line-height: 88rpx;
+  color: #fff;
+}

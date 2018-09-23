@@ -1,0 +1,32 @@
+<!--pages/wallet/wallet.wxml-->
+<view class="userinfo themeBackgroundColor">
+  <image src='/images/indexbj.png' class='walletbj'></image>
+  <block>
+    <view style='margin-top:62rpx;position:absolute;z-index:11;'>
+      <image class='shell' src='../../images/shell.png' />
+      <text class='shell_text'>{{accountInfo.creditAvailableAmount}}</text>
+    </view>
+    <text class='frozen_shell'  style='margin-top:62rpx;position:absolute;top:82rpx;z-index:11;' >冻结：{{accountInfo.creditFrozenAmount}}个</text>
+    <form-button class='withdraw' catchtap='itemClick' data-name='withdraw' data-path='bankCard' style='margin-top:62rpx;position:absolute;z-index:11;top:162rpx;'>提现</form-button>
+  </block>
+  <!-- <view class='circle1'></view>
+  <view class='circle2'></view>
+  <view class='circle3'></view>
+  <view class='circle4'></view> -->
+</view>
+
+<form-button class='item' catchtap='itemClick' data-path='wallet' data-name='incomeAndExpenditure'>
+  <text>收支明细</text>
+  <image class='item_arrow' src='/images/arrow_right.png' mode='aspectFit'></image>
+</form-button>
+
+<form-button class='item' catchtap='itemClick' data-name='bankCardManage' data-path='bankCard' wx:if="{{false}}">
+  <text>银行卡管理</text>
+  <!-- <text class='item_right_text'>{{bankCard.name?'':'未绑定'}}</text> -->
+  <image class='item_arrow' src='/images/arrow_right.png' mode='aspectFit'></image>
+</form-button>
+
+<form-button class='item' button-name='invite' catchtap='share'>
+  <text>邀请有礼</text>
+  <text class='item_right_text themeColor'>+0~100贝壳</text>
+</form-button>

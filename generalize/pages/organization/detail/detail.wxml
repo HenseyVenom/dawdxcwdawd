@@ -1,0 +1,94 @@
+<view class='activityDetail'>
+  <view class='organbanner'>
+    <swiper indicator-dots="true" autoplay="true" interval="5000" duration="500" class='organswiper'>
+      <!-- <block wx:for="{{activityDetail.imgUrls}}" wx:for-index="i" wx:key="banner_{{i}}"> -->
+      <swiper-item>
+        <image src="{{activityDetail.image}}" class="slide-image" />
+      </swiper-item>
+      <!-- </block> -->
+    </swiper>
+  </view>
+  <view class='Marginleft activitybox'>
+    <view class='activityDetail-title'>{{activityDetail.activityName}}</view>
+    <view class='activityDetail-time'>
+      <text class='time'>活动时间：</text>截止到{{activityDetail.endDateFormat}}</view>
+  </view>
+  <view class='Marginleft activitybox'>
+    <view class='address'>
+      {{activityDetail.ucOrganShopFrontDistanceBizPojo
+.name}}
+      <view class='symbol flexR'>
+        <text wx:for="{{activityDetail.ucOrganShopFrontDistanceBizPojo.attributedsId}}" wx:for-index="i" wx:key="attribute_{{i}}">{{item.name}}</text>
+      </view>
+    </view>
+    <view class='location'>
+      <image src='/images/ic_location.png' class='ic_location'></image>
+      <text>{{activityDetail.ucOrganShopFrontDistanceBizPojo.city}}{{activityDetail.ucOrganShopFrontDistanceBizPojo.area}}{{activityDetail.ucOrganShopFrontDistanceBizPojo.address}}</text>
+      <view class='textCall'  catchtap='phoneFun' data-phone='{{activityDetail.ucOrganShopFrontDistanceBizPojo.telephone}}'>
+        <image src='/images/img_shop_phone.png' class='img_shop_phone'></image>
+      </view>
+    </view>
+  </view>
+  <view class='Marginleft Activity'>
+    <view class='Deatil'>活动详情</view>
+    <view class='detail_web'>
+      <rich-text nodes="{{activityDetail.activityDetail}}"></rich-text>
+    </view>
+  </view>
+
+  <view class='Marginleft moreDetil'>
+    <view class='moreDetil-title'>
+      本店更多活动
+      <image src='/images/arrows.png' class='arrows'></image>
+    </view>
+    <view class='moreDetil-list' wx:for="{{activityDetail.ucShopActivityFrontBizPojoList}}" wx:for-index="i" wx:key="activity_{{i}}">
+      <image class='tu'></image>
+      <view class='moreDetil-right'>
+        <text class='biao'>{{item.activityName}}</text>
+        <view class='school'>
+          <image class='addressImg' src='{{item.image}}'></image>
+          乐高少儿艺术培训学校
+        </view>
+        <text class='meter'>110m</text>
+      </view>
+    </view>
+  </view>
+  <view class='Marginleft moreDetil'>
+    <view class='moreDetil-title'>
+      本店更多课程
+      <image src='/images/arrows.png' class='arrows'></image>
+    </view>
+    <view class='moreDetil-list' wx:for="{{activityDetail.ucShopCourseBizPojoList}}" wx:for-index="i" wx:key="course_{{i}}">
+      <image class='tu' src="{{item.logoUrl}}"></image>
+      <view class='moreDetil-right'>
+        <text class='biao'>{{item.name}}</text>
+        <view class='price'>
+          <text class='monet'>￥</text>
+          <text class='discount'>{{item.activityPrice}}</text>
+          <text class='oldpeice'>¥{{item.price}}</text>
+        </view>
+        <view class='school'>
+          <image class='addressImg' src='/images/ic_location.png'></image>
+           {{item.shopName}}
+        </view>
+        <view class='baio'>
+          <text class='yellow'>{{item.courseTagName}}</text>
+          <text class='free'>{{item.ageStart}}-{{item.ageEnd}}周岁</text>
+        </view>
+        <text class='meter'>{{item.distan}}</text>
+      </view>
+    </view>
+  </view>
+  <view class='organizationfooter'>
+    <view class='footercall' catchtap='phoneFun' data-phone='{{activityDetail.ucOrganShopFrontDistanceBizPojo.telephone}}'>
+      <image class='call' src='/images/img_shop_phone.png'></image>
+      <text class='fee5'>电话咨询</text>
+    </view>
+    <view class='foontJion' wx:if="{{Isshow}}" catchtap='buyCourse'>
+      参加活动
+    </view>
+    <view class='foontJion' wx:if="{{!Isshow}}">
+      <button data-name="shareBtn" catchtap='shareCourse' style=' background: #F23535;color:#fff;'>立即分享</button>
+    </view>
+  </view>
+</view>

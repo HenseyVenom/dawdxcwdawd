@@ -1,0 +1,38 @@
+<!--pages/bankCard/bankCardBinding/bankCardBinding.wxml-->
+<view class='binding_item'>
+  <text class='title' type='number'>姓名</text>
+  <input class='input' placeholder='请输入' value='{{name}}' bindinput='bindInput' data-name='name' placeholder-style='color:#ccc;'></input>
+</view>
+<view class='binding_item'>
+  <text class='title' type='number'>银行名称</text>
+  <input class='input' placeholder='请输入' value='{{idCard}}' bindinput='bindInput' data-name='idCard' placeholder-style='color:#ccc;'></input>
+</view>
+<view class='binding_item'>
+  <text class='title'>银行卡号</text>
+  <input class='input' placeholder='请输入' type='number' value='{{bankCard}}' bindinput='bindInput' data-name='bankCard' placeholder-style='color:#ccc;'></input>
+</view>
+<view class='flexC'>
+  <view class='type_title'>账户类型</view>
+  <view class='flexR type_item' style='border-bottom:1px solid #EDEDED' catchtap='changeType' data-value="1">
+    <text>对私账户</text>
+    <image src="{{accountType==2?'/images/radio_unselected.png':'/images/radio_selected.png'}}"></image>
+  </view>
+  <view class='flexR type_item' catchtap='changeType' data-value="2">
+    <text>对公账户</text>
+    <image src="{{accountType==1?'/images/radio_unselected.png':'/images/radio_selected.png'}}"></image>
+  </view>
+</view>
+<view class='flexC'>
+  <view class='type_title'>开户行</view>
+  <picker mode="region" bindchange="bindRegionChange" value="{{region}}" custom-item="{{customItem}}">
+    <view class='binding_item flexR'>
+      <text style='margin-left:27rpx;'>开户地</text>
+      <text class='input' style="text-align:right;color:{{region.length==0?'#ccc':'#121212'}};">{{region.length==0?'请选择':(region[0]+'，'+region[1]+'，'+region[2])}}</text>
+    </view>
+  </picker>
+  <view class='binding_item'>
+    <text class='title' type='number'>分行或支行信息</text>
+    <input class='input' placeholder='请输入' value='{{branchName}}' bindinput='bindInput' data-name='branchName' placeholder-style='color:#ccc;'></input>
+  </view>
+</view>
+<form-button class='bind_button themeBackgroundColor' catchtap='bindingBankCard' disabled='{{!name||!idCard||!bankCard||region.length==0||!branchName}}' style="background-color:{{(!name||!idCard||!bankCard||region.length==0||!branchName)?'#d8d8d8 !important':''}}">绑定</form-button>

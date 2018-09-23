@@ -1,0 +1,31 @@
+<!--pages/orderManage/orderManage.wxml-->
+<filterDate bindfilterChange="changeFilter"></filterDate>
+<scroll-view scroll-y style='height:calc(100vh - 106rpx)' bindscrolltoupper="refresh" bindscrolltolower="loadMore">
+  <view class='list flexC'>
+    <view class='item' wx:for="{{list}}" wx:for-item="item" wx:for-index="i" data-i="{{i}}" wx:key="{{i}}">
+      <view class='rightBox flexC'>
+        <text class='price'>¥{{item.payMoney}}</text>
+        <text class='payWay'>{{item.payWay}}</text>
+      </view>
+      <view style='margin-left:27rpx;margin-top:38rpx;'>
+        <text class='username'>{{item.name}}</text>
+        <text class='phone' catchtap='callPhone' data-phone="{{item.phone}}">{{item.phone}}</text>
+      </view>
+      <view style='margin-left:27rpx;'>
+        <text class='time'>时间：{{item.time}}</text>
+      </view>
+      <view class='leftCourse flexC'>
+        <text>课程：{{item.course.courseName}}</text>
+        <text>门店：{{item.course.store}}</text>
+        <text wx:if="{{true}}">编号：{{item.orderNumber}}</text>
+      </view>
+      <text class='source'>来源：{{item.source}}</text>
+      <view class='bottom flexR'>
+        <view class='handleButton flexR' catchtap='addRecord' data-i='{{i}}'>
+          <text class='buttonText'>添加跟进记录</text>
+        </view>
+      </view>
+    </view>
+    <emptyView class="emptyView" height="60%" text="还没有订单" wx:if="{{list.length==0}}"></emptyView>
+  </view>
+</scroll-view>

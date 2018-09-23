@@ -1,0 +1,92 @@
+<style scoped lang='less'>
+  .settingcontent{
+    width:100%;
+    height:100%;
+    background: #F5F5F5;
+   // padding-left:30rpx;
+    .settingView{
+      width:100%;
+    //  margin-top:20rpx;
+      background: #fff;
+      padding-left:30rpx;
+      .settingborder{
+        border-bottom:2rpx solid #F5F5F5;
+        height:100rpx;
+        line-height:100rpx;
+        justify-content:center;
+        align-items:center;
+        padding-right:22rpx;
+      }
+      .flexstart{
+        flex:1;
+        display: block;
+        color: #222222;
+        font-size:30rpx;
+      }
+      .arrowRight{
+        width:15rpx;
+        height:25rpx;
+      }
+
+    }
+    .out{
+      width: 100%;
+      height: 88rpx;
+      background-color: #ffffff;
+      border: solid 1px #ededed;
+      line-height:88rpx;
+      text-align:center;
+      margin:48rpx auto;
+      color: #121212;
+    }
+  }
+
+</style>
+<template>
+  <view class="settingcontent">
+    <view class="settingView">
+      <view class="flexR settingborder" @tap="enterDetil('personal')">
+        <text class="flexstart">我的资料</text>
+        <image src="/images/arrow_right.png" class="arrowRight"></image>
+      </view>
+      <!-- <view class="flexR settingborder" @tap="enterDetil('bankcard')">
+        <text class="flexstart">银行卡</text>
+        <image src="/images/arrow_right.png" class="arrowRight"></image>
+      </view> -->
+    </view>
+    <view class='out' @tap.stop='enterlogin' wx:if="{{false}}">安全退出</view>
+
+  </view>
+
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import {pGetRequest} from "../../utils/requestUtils";
+  const app=wepy.$instance
+
+  export default class setting extends wepy.page {
+   config={
+     navigationBarTitleText:'设置'
+   }
+    data = {}
+   methods={
+     enterDetil(name){
+       wx.navigateTo({
+         url:'/pages/setting/'+name+'/'+name
+       })
+     },
+     enterlogin(){
+       // pGetRequest('xb/front/unAuth/WxCode/clearWxOpenId').then(
+       pGetRequest('xb/front/auth/ucMember/logout').then((res)=>{
+         app.logoOut()
+         wx.reLaunch({url:"/pages/login/login"})
+       }).catch((err)=>{
+         if(err){
+           console.log('logoOut err:',err)
+         }
+       })
+     }
+   }
+  }
+</script>

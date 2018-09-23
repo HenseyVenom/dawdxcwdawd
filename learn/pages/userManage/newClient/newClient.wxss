@@ -1,0 +1,67 @@
+.bg-white{
+  background: #fff;
+}
+.addClientPage{
+  font-size: 32rpx;
+}
+.addClientPage .parentInfo {
+  margin-bottom: 10rpx;
+}
+.addClientPage  .addItem{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx;
+  border-bottom: 1rpx solid #ededed;
+}
+.addClientPage  .addItem .left{
+  flex: 1
+}
+.addClientPage  .addItem .right{
+  flex:2;
+  text-align: right;
+  font-size: 30rpx;
+}
+.addClientPage  .addItem .phcolor{
+  color: #ccc;
+}
+.addClientPage  .addItem .right image{
+  width: 15rpx;
+  height: 25rpx;
+}
+.addClientPage  .addItem .right .gray{
+  color: #cccccc;
+}
+.addChildBtn{
+  width: 625rpx;
+	height: 66rpx;
+	background-color: #f0f0f0;
+	border-radius: 2px;
+  display: block;
+  margin: 25rpx auto;
+  text-align: center;
+  line-height: 66rpx;
+  color: #cccccc;
+  font-size: 24rpx;
+}
+.addChildBtn text{
+  border: 1px solid #cccccc;
+  border-radius: 50%;
+  width: 25rpx;
+  height: 25rpx;
+  line-height: 22rpx;
+  display: inline-block;
+  margin-right: 8rpx;
+}
+.submitBtn{
+  width: 625rpx;
+	height: 88rpx;
+  line-height: 88rpx;
+	background-color: #f23535;
+	border-radius: 10rpx;
+  display: block;
+  margin: 60rpx auto;
+  text-align: center;
+  color: #fff;
+  font-size: 36rpx;
+}

@@ -1,0 +1,9 @@
+<view class='page'>
+    <view class="success" hover-class="none" hover-stop-propagation="false">
+        <image class="" src="/images/success.png"></image>
+        支付成功
+    </view>
+    <form-button class="button">
+        完成
+    </form-button>
+</view>

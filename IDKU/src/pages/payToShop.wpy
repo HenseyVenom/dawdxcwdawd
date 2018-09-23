@@ -1,0 +1,702 @@
+<style scoped lang='less'>
+  .contaer {
+    background-color: #F5F5F5;
+    height: 100vh;
+    .shopInfo {
+      align-items: center;
+      background-color: white;
+      font-size: 32rpx;
+      color: #121212;
+      width: 100%;
+      .shopIcon {
+        position: relative;
+        overflow: unset;
+        margin-top: 28rpx;
+        image {
+          width: 128rpx;
+          height: 128rpx;
+          background-color: #FFDA01;
+          border-radius: 50%;
+        }
+        .auth {
+          position: absolute;
+          width: 92rpx;
+          height: 32rpx;
+          bottom: 0;
+          left: 64rpx;
+          font-size: 20rpx;
+          color: white;
+          background-color: #B9B9B9;
+          line-height: 32rpx;
+          border-radius: 200rpx;
+          text-align: center;
+        }
+      }
+    }
+    .item {
+      height: 100rpx;
+      background-color: white;
+      margin-bottom: 2rpx;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 40rpx;
+      font-size: 30rpx;
+      color: #222222;
+      .rightArrow {
+        width: 15rpx;
+        height: 20rpx;
+        margin-left: 22rpx;
+      }
+      .hint {
+        font-size: 24rpx;
+        color: #888888;
+        margin-left: 10rpx;
+      }
+      .price {
+        font-size: 34rpx;
+      }
+      .right {
+        align-items: center;
+      }
+      input {
+        width: 150rpx;
+      }
+      .payWayIcon{
+        width: 60rpx;
+        height: 60rpx;
+        margin-right: 18rpx;
+        flex-shrink: 0;
+      }
+      .radioButton{
+        width: 44rpx;
+        height: 44rpx;
+        flex-shrink: 0;
+      }
+    }
+    .gap {
+      margin-top: 20rpx;
+    }
+    .payWay {
+      background-color: white;
+      .title {
+        flex-grow: 1;
+        font-size: 30rpx;
+        color: #222222;
+        margin-left: 40rpx;
+        line-height: 100rpx;
+        border-bottom: 1px solid #F5F5F5;
+      }
+    }
+
+    .order_course_pay_holder {
+      height: 92rpx;
+    }
+    .order_course_pay {
+      height: 92rpx;
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: white;
+      .payInfo {
+        flex-grow: 1;
+        font-size: 28rpx;
+        color: #222222;
+        margin-left: 40rpx;
+        align-items: center;
+        .price {
+          font-size: 34rpx;
+          margin-right: 16rpx;
+        }
+        .rebate {
+          font-size: 24rpx;
+          color: #888888;
+        }
+      }
+      .payButton {
+        flex-shrink: 0;
+        width: 250rpx;
+        height: 92rpx;
+        line-height: 92rpx;
+        text-align: center;
+        font-size: 32rpx;
+        color: white;
+      }
+    }
+  }
+  .mark {
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, .6);
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    z-index: 111;
+    align-items: center;
+    justify-content: center;
+    .content {
+      width: 550rpx;
+      height: 546rpx;
+      background: #fff;
+      border-radius: 15rpx;
+      margin: 50rpx auto;
+      align-items: center;
+      .phoneFrame {
+        width: 432rpx;
+        height: 90rpx;
+        line-height: 90rpx;
+        border-bottom: 1px solid #E9E9E9;
+        font-size: 40rpx;
+        color: #121212;
+        .code{
+          flex-grow: 1;
+          height: 100%;
+          margin-right: 10rpx;
+          font-size: 28rpx;
+        }
+        .verifyButton{
+          flex-shrink: 0;
+          width: 200rpx;
+          height: 100%;
+          background-color: white;
+          font-size: 28rpx;
+          text-align: right;
+          padding: 0;
+          line-height: 90rpx;
+        }
+      }
+      .closeIcon{
+        align-self:flex-end;
+        margin-right: 25rpx;
+        margin-top: 25rpx;
+        width: 44rpx;
+        height: 44rpx;
+      }
+      .modalTitle{
+        font-size: 34rpx;
+        color: #030303;
+      }
+      .confirm{
+        width: 394rpx;
+        height: 96rpx;
+        line-height: 96rpx;
+        font-size: 36rpx;
+        color: white;
+        border: 1px solid #FF7FB5;
+        box-shadow: 0 8rpx 12rpx 0 #EFD9E3;
+        border-radius: 48rpx;
+        margin-top: 60rpx;
+      }
+    }
+  }
+  .selectCourse{
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, .6);
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    z-index: 111;
+    .content{
+      width: 100%;
+      height: 864rpx;
+      align-self: flex-end;
+      background-color: white;
+      .topButton{
+        flex-shrink: 0;
+        height: 90rpx;
+        border-bottom: 1px solid #E5E5E5;
+        justify-content: space-between;
+        .bt{
+          font-size: 40rpx;
+          color: #888888;
+          line-height: 90rpx;
+          padding: 0 40rpx;
+        }
+      }
+      .courseList{
+        flex-grow: 1;
+        overflow-y: overlay;
+      }
+    }
+  }
+</style>
+<template>
+  <view class="contaer">
+    <view class="shopInfo flexC">
+      <view class="shopIcon">
+        <image src="{{shopInfo.ucOrganShopPojo.logoUrl}}"></image>
+        <text class="auth themeBackgroundColor" wx:if="{{false}}">已认证</text>
+      </view>
+      <text style="margin: 20rpx 0 52rpx;">付款给 {{shopInfo.ucOrganShopPojo.name}}</text>
+    </view>
+    <view class="item flexR gap">
+      <text>付款金额<text class="hint">点击可修改</text></text>
+      <view class="flexR" style="align-items: center">
+        <view class="flexR" style="align-items: center">
+          <text class="themeColor">￥</text>
+          <input class="themeColor" maxlength="8" type="digit" value="{{inputPayPrice}}"
+                 bindinput="changePrice"/>
+        </view>
+        <image class="rightArrow" src="/images/arrow_right.png"></image>
+      </view>
+    </view>
+    <view class="item flexR gap" wx:if="{{inputPayPrice}}">
+      <text>可使用{{shellInfo.maxUserIntegral?shellInfo.maxUserIntegral:0}}贝壳抵扣{{shellInfo.maxUserIntegralAmount?shellInfo.maxUserIntegralAmount:0}}元</text>
+      <switch checked="{{useShell}}" bindchange="switchChange" color="#F23535" disabled="{{!shellInfo||!shellInfo.maxUserIntegral||shellInfo.maxUserIntegral<=0||inputPayPrice<=1}}"/>
+    </view>
+    <view class="item flexR"  @tap.stop="chooseCoupon"  wx:if="{{inputPayPrice}}">
+      <text>优惠券</text>
+      <view class="flexR" style="align-items: center">
+        <text class="themeColor">{{couponText}}</text>
+        <image class="rightArrow" src="/images/arrow_right.png"></image>
+      </view>
+    </view>
+    <view class="payWay gap flexR">
+      <text class="title">选择支付方式</text>
+    </view>
+    <view class="item flexR" @tap.stop="selectPayWay(0)">
+      <image class="payWayIcon" src="/images/wx_pay.png" ></image>
+      <text style="flex-grow: 1;">微信支付</text>
+      <image class="radioButton" src="{{payWay==0?'/images/button_check.png':'/images/button_uncheck.png'}}"></image>
+    </view>
+    <view class="item flexR"  @tap.stop="selectPayWay(1)" wx:if="{{false}}">
+      <image class="payWayIcon" src="/images/bank_pay.png" mode="aspectFit"></image>
+      <text style="flex-grow: 1;">银行卡支付</text>
+      <image class="radioButton" src="{{payWay==1?'/images/button_check.png':'/images/button_uncheck.png'}}"></image>
+    </view>
+
+    <view class="order_course_pay_holder"></view>
+    <view class="order_course_pay flexR">
+      <view class="payInfo flexR">
+        <text>实付金额：</text>
+        <text class="price themeColor">￥{{usedPayAmount}}</text>
+        <text class="rebate" wx:if="{{false}}">(可返积分5分)</text>
+      </view>
+      <view class="payButton themeBackgroundColor" @tap.stop="pay">
+        付款
+      </view>
+    </view>
+  </view>
+
+  <view class="mark flexR" wx:if="{{showBindPhone}}">
+    <view class="content flexC">
+      <image class="closeIcon" src="/images/close_modal.png" @tap.stop="closeModal"></image>
+      <text class="modalTitle">校验手机</text>
+      <text class="phoneFrame">{{userPhone}}</text>
+      <view class="phoneFrame flexR">
+        <input class="code" type="number" value="{{vercode}}" @input="vercodeFun" placeholder="请输入短信验证码"/>
+        <button class='verifyButton themeColor' @tap.stop="sendphone" disabled="{{timeCount>0}}">{{timeCount>0?(timeCount+'s重发验证码'):'发送验证码'}}</button>
+      </view>
+      <button class="confirm themeBackgroundColor" @tap.stop="surebingphone">确定</button>
+    </view>
+  </view>
+  <view class="selectCourse flexR" wx:if="{{showCourseList}}">
+    <view class="content">
+      <view class="topButton flexR">
+        <text class="bt">取消</text>
+        <text class="bt themeColor">确定</text>
+      </view>
+      <view class='tutorship_List' catchtap='enterDeatil' wx:for="{{courseList}}" wx:key="index" @tap.stop="clickCourse({{item}})">
+        <view class='flex-start'>
+          <view class='left'>
+            <image src='{{item.logoUrl}}'></image>
+          </view>
+          <view class='right'>
+            <view class='courseName text-gray'>
+              <text class="grayText" wx:if="{{item.courseTagName}}">{{item.courseTagName}}</text>
+              <text class="grayText" wx:if="{{item.ageTime}}">{{item.ageTime}}岁</text>
+              <text class="grayText" wx:if="{{item.isOpenRegistration}}">免费试听</text>
+            </view>
+            <view class='flex-start'>
+              <text style='font-size: 28rpx;color: #121212;'>{{item.name}}</text>
+            </view>
+            <view class='price'>
+              <text class='font-14 text-pink'>￥</text>
+              <text class='font-20 text-pink'>{{item.price}}</text>
+              <text class='delete-line' wx:if="{{false}}">免息分期</text>
+            </view>
+            <view class='address flex-between'>
+              <view><image src='/images/addressicon.png'></image>{{item.address}}</view>
+              <text wx:if="{{item.distance}}"><text style='color:#cdcdcd'>|</text> {{item.distance}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+<!--向商家付款-->
+<script>
+  import wepy from 'wepy'
+  import {pRequest, pGetRequest} from "../utils/requestUtils";
+  import {connect} from 'wepy-redux'
+  const TIME_COUNT = 60
+
+  const app = wepy.$instance
+  @connect({
+    shopId(state) {
+      return state.counter.shopId
+    }
+  })
+
+  export default class PayToShop extends wepy.page {
+    data = {
+      inputPayPrice:'',
+      vercode: '',
+      bankphone: '',
+      courseDetail: {
+        tag: '绘画',
+        ageTime: '3-6',
+        isOpenRegistration: false,
+        courseName: '少儿美术创意课程',
+      },
+      shopInfo: {},
+      changePrice: false,
+      useShell: false,
+      shellInfo: {},
+      coupon: {},
+      couponText: '',
+      payWay: 0,
+      usedPayAmount: '',
+      //免息
+      couponRateId: '',
+      installmentNum: '',
+      //贴息券
+      interest: '',
+      isBindPhone: false,
+      showBindPhone:false,
+      userPhone:'',
+      timeCount:0,
+      timer:'',
+      courseList:[],
+      page:app.isUseSaas()?{
+        pageNum:1,
+        pageSize:10,
+        addPage(){
+          this.pageNum++
+        },
+        refreshPage(){
+          this.pageNum==1
+        }
+      }:{
+        page:0,
+        size:10,
+        addPage(){
+          this.page++
+        },
+        refreshPage(){
+          this.page==1
+        },
+      },
+      isloading:false,
+      showCourseList:false,
+      rts:'',
+      rtn:'',
+    }
+    methods = {
+      vercodeFun(e) {
+        this.vercode = e.detail.value
+      },
+      sendphone() {
+        pRequest('xb/front/auth/ucMember/sendYstBindPhoneCode', {}).then(res => {
+          this.countDown()
+          console.log(res)
+        })
+      },
+      surebingphone() {
+        pRequest('xb/front/auth/ucMember/ystBindPhone?smsCode=' + this.vercode, {}).then(res => {
+          console.log(res)
+          wx.showToast({
+            title:'验证成功',
+            icon:'none'
+          })
+          this.showBindPhone=false
+          this.isBindPhone=true
+          this.$apply()
+        })
+      },
+      closeModal(){
+        this.showBindPhone=false
+      },
+      switchChange(e) {
+        this.useShell = e.detail.value
+        this.checkCouponAmount()
+      },
+      clickCourse(item){
+        this.showCourseList=false
+        this.courseDetail=item
+        this.loadOrder()
+      },
+      cancelCourse(){
+        this.showCourseList=false
+      },
+      changePrice(e) {
+        this.inputPayPrice = e.detail.value
+        this.coupon={}
+        this.couponText=''
+        this.useShell=false
+        if(!this.inputPayPrice){
+          this.usedPayAmount=''
+          return
+        }
+        this.requestShell()
+      },
+      chooseCoupon() {
+        if(!this.inputPayPrice){
+          wx.showToast({title:'请输入金额在选择优惠券'})
+        }
+        wx.navigateTo({
+          url: '/pages/coupons?from=2&courseId=' + this.shopId + '&useConditionAmount=' + this.inputPayPrice
+        })
+      },
+      couponChanged(item) {
+        console.log('coupon changes')
+        if(!item||item.isEmpty){
+          this.coupon={};
+          this.couponText=''
+          return
+        }
+        this.coupon = Object.assign({}, item)
+        this.interest = '';
+        this.couponRateId = '';
+        this.installmentNum = '';
+        switch (this.coupon.couponType) {
+          case 'partfree':
+            this.couponText = "利率" + (this.coupon.amount * 10) + "折"
+            this.interest = this.coupon.amount
+            break
+          case 'free':
+            this.couponText = "免" + this.coupon.freeInstallmentNum + "期"
+            this.couponRateId = this.coupon.id;
+            this.installmentNum = this.coupon.freeInstallmentNum;
+            break
+          case 'payment':
+            this.couponText = "抵" + this.coupon.amount + "元"
+            break
+          case 'discount':
+            this.couponText = "打" + (this.coupon.amount * 10) + "折"
+            break
+          case 'voucher':
+            this.couponText = "每满" + this.coupon.useConditionAmount + "减" + this.coupon.amount
+            break
+        }
+        this.checkCouponAmount()
+      },
+      pay() {
+        if(!this.isBindPhone){
+          wx.showToast({
+            title:'请先绑定手机号！',
+            icon:'none'
+          })
+          this.showBindPhone=true
+          return
+        }
+        if(!this.usedPayAmount){
+          wx.showToast({
+            title:'请先确定价格！',
+            icon:'none'
+          })
+          return
+        }
+        if(this.usedPayAmount<1){
+          wx.showToast({
+            title:'最小支付价格为1元！',
+            icon:'none'
+          })
+          return
+        }
+
+        wx.showLoading({
+          mask:true
+        })
+        // app.loginWixin((code) => {
+          pRequest('xb/front/auth/sign/order/pay', {
+            "couponAmountId": this.coupon.id,
+            "couponRateId": this.couponRateId,
+            "installmentNum": this.installmentNum,
+            "orderAmount": this.inputPayPrice,
+            "orderType": "online",
+            "payType": this.payWay == 0 ? 'YSTWECHATPAYMIN' : 'YSTQUICKPAY',
+            "shopId": this.shopId,
+            "useIntegral": this.useShell ? this.shellInfo.maxUserIntegral : 0,
+            "usedPayAmount": this.usedPayAmount,
+            "marketId":this.rtn,
+            // "wxCode": code
+          }).then((res) => {
+            this.wxPay(res)
+          }).catch((err) => {
+            if (err) {
+              wx.hideLoading()
+            }
+          })
+        // }, (err) => {
+        //   wx.hideLoading()
+        // })
+      },
+      selectPayWay(payWay){
+        this.payWay=payWay
+      }
+    }
+
+    onLoad(options) {
+      this.rts=options.rts
+      this.rtn=options.rtn
+      this.shopInfo = app.getShopInfo()
+      this.requestShell()
+      this.getUserInfo()
+    }
+    requestShell() {
+      if(!this.inputPayPrice){
+        return
+      }
+      // var price = this.courseDetail.purchaseMode == 'special' ? this.courseDetail.activityPrice : this.courseDetail.packagePrice
+      pRequest('xb/front/auth/sign/order/findUsableIntegral?amount=' + this.inputPayPrice).then((res) => {
+        this.shellInfo = res
+        this.$apply()
+        this.checkCouponAmount()
+      }).catch((err) => {
+      })
+    }
+
+    checkCouponAmount() {
+      wx.showLoading({})
+      var url = 'xb/front/auth/coupon/checkCouponAmount?useConditionAmount=' + this.inputPayPrice + "&shopId=" + this.shopId
+      if (this.coupon && this.coupon.id) {
+        url += ("&id=" + this.coupon.id)
+      }
+      if (this.useShell) {
+        url += ('&useIntegral=' + this.shellInfo.maxUserIntegral)
+      }
+      pGetRequest(url).then((res) => {
+        wx.hideLoading()
+        if(!this.inputPayPrice){
+          this.usedPayAmount=''
+          this.$apply()
+          return
+        }
+        this.usedPayAmount = res.payAmount
+        this.$apply()
+      }).catch((err) => {
+        if (err) {
+          wx.hideLoading()
+        }
+      })
+    }
+
+    getUserInfo() {
+      pGetRequest('xb/front/auth/mine/index').then((res) => {
+        var ystReqStatus = res.ucMemberPojo.ystReqStatus
+        this.isBindPhone = !ystReqStatus ? false : (ystReqStatus != 'ystBindBankCard' ? (ystReqStatus == 'createYstMember' ? false : true) : true)
+        this.userPhone=res.ucMemberPojo.mobile
+        this.$apply()
+      })
+    }
+    countDown() {
+      this.timeCount = TIME_COUNT
+      if (this.timer) return
+      this.timer = setInterval(() => {
+        console.log('timeCount:', this.timeCount)
+        if (this.timeCount > 0 && this.timeCount <= TIME_COUNT) {
+          this.timeCount--
+          this.$apply()
+        } else {
+          clearInterval(this.timer)
+          this.timeCount=0;
+          this.timer=null;
+          this.$apply()
+        }
+      }, 1000)
+    }
+
+    wxPay(res) {
+      var param=JSON.parse(res.payInfo)
+      param.success = (res) => {
+        wx.hideLoading()
+        wx.redirectTo({url: '/pages/courseOrder'})
+      }
+      param.fail = (err) => {
+        wx.showToast({
+          title: '支付失败',
+          icon: 'none'
+        })
+      }
+      wx.requestPayment(param)
+    }
+
+    //TODO 选课程逻辑未完成
+    refresh(){
+      if(this.isLoading){
+        return
+      }
+      this.page.refreshPage()
+      this.getPageList()
+    }
+    loadmore(){
+      console.log('loadmore')
+      if(this.isLoading){
+        return
+      }
+      if(this.isNoMore()){
+        return
+      }
+      this.page.addPage()
+      this.getPageList()
+    }
+    isNoMore(){
+      var isNoMore=false
+      var needShowLoadMore=true
+      if (app.isUseSaas()) {
+        if(this.page.pageCount == this.page.pageNo){
+          isNoMore=true
+          needShowLoadMore=this.page.pageCount>0
+        }
+      }else{
+        if(this.page.page >= (this.page.pageTotal-1)){
+          isNoMore = true
+          needShowLoadMore=this.page.pageTotal>0
+        }
+      }
+      if(isNoMore&&needShowLoadMore){
+        if (this.page.pageTotal != 0 || this.page.pageCount != 0) {
+          wx.showToast({
+            title: '没有更多了',
+            icon: 'none'
+          })
+        }
+      }
+      return isNoMore
+    }
+    getPageList(){
+      this.isLoading=true
+      if (!app.isUseSaas()) {
+        var url='xb/front/unAuth/organShop/shopCourse/list?page='+this.page.page+"&size="+this.page.size+"&shop_id="+this.shopId
+        pRequest(url).then((res)=>{
+          this.isLoading=false
+          console.log("res:",res)
+          this.page.pageTotal=res.totalPages
+          this.page.page=res.number
+          if(res.number==0){
+            this.courseList=convertCourseListFromXB(res.content)
+          }else{
+            this.courseList=this.courseList.concat(convertCourseListFromXB(res.content))
+          }
+          this.$apply()
+        }).catch((err)=>{
+          this.isLoading=false
+        })
+      }else{
+      }
+    }
+
+    loadOrder(){
+      this.requestShell()
+    }
+  }
+  function convertCourseListFromXB(list) {
+    return list.map((item)=>{
+      item.ageTime=item.ageStart+'-'+item.ageEnd
+      return item
+    })
+  }
+</script>

@@ -1,0 +1,19 @@
+<view class='Settings'>
+    <view class='settinglist' bindtap="entergrade">
+        <text class='settingtitle'>客户等级</text>
+        <image class='item_arrow' src='/images/arrow_right.png'></image>
+    </view>
+    <view class='settinglist' bindtap="enterinfo" wx:if="{{userType==1}}">
+        <text class='settingtitle'>人员管理</text>
+        <image class='item_arrow' src='/images/arrow_right.png'></image>
+    </view>
+    <!-- <view class='settinglist' bindtap="enterbound">
+        <text class='settingtitle'>绑定账号</text>
+        <image class='item_arrow' src='/images/arrow_right.png'></image>
+    </view> -->
+    <!-- <view class='settinglist' bindtap='enterlogin'>
+        <text class='settingtitle'>切换账号</text>
+        <image class='item_arrow' src='/images/arrow_right.png'></image>
+    </view> -->
+    <view class='out' bindtap='enterlogin'>退出</view>
+</view>

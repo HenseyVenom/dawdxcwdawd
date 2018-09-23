@@ -1,0 +1,192 @@
+<view class="container">
+    <view class="userinfo themeBackgroundColor">
+        <image src='/images/indexbj.png' class='bgindex'></image>
+        <view style='position:absolute;z-index:11;'>
+            <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl?userInfo.avatarUrl:'/images/img_mhead.png'}}" mode="cover"></image>
+            <view class="userinfo-nickname">{{xbName}}</view>
+        </view>
+    </view>
+    <scroll-view style="width:100%;position: absolute;top:360rpx" scroll-y>
+        <form-button class='item' catchtap='itemClick' data-name='wallet'>
+            <view class='item_icon'>
+                <image style='width:29rpx;height:35rpx;' src='/images/wallat.png' mode='aspectFit'></image>
+            </view>
+            <view class='item_content item_bottom_border'>
+                <text class='item_text'>贝壳钱包</text>
+                <view class='flexR'>
+                    <view class='item_bubble' wx:if="{{false}}"></view>
+                    <image class='item_arrow' src='/images/arrow_right.png'></image>
+                </view>
+            </view>
+        </form-button>
+        <form-button class='item' catchtap='itemClick' data-name='pending'>
+            <view class='item_icon'>
+                <image style='width:29rpx;height:35rpx;' src='/images/pending.png' mode='aspectFit'></image>
+            </view>
+            <view class='item_content item_bottom_border'>
+                <text class='item_text'>待处理</text>
+                <view class='flexR'>
+                    <view class='item_bubble' wx:if="{{pendingCount>0}}">{{pendingCount
+                        <=99?pendingCount: '99+' }}</view> <image class='item_arrow' src='/images/arrow_right.png'>
+                            </image>
+                    </view>
+                </view>
+        </form-button>
+        <form-button class='item' catchtap='itemClick' data-name='allocated' wx:if="{{userType==1}}">
+            <view class='item_icon'>
+                <image style='width:35rpx;height:30rpx;' src='/images/allocated.png' mode='aspectFit'></image>
+            </view>
+            <view class='item_content item_bottom_border'>
+                <text class='item_text'>已分配</text>
+                <view class='flexR'>
+                    <view class='item_bubble' wx:if="{{false}}"></view>
+                    <image class='item_arrow' src='/images/arrow_right.png'></image>
+                </view>
+            </view>
+        </form-button>
+        <form-button class='item' catchtap='itemClick' data-name='bookManage'>
+            <view class='item_icon'>
+                <image style='width:33rpx;height:30rpx;' src='/images/bookManage.png' mode='aspectFit'></image>
+            </view>
+            <view class='item_content item_bottom_border'>
+                <text class='item_text'>预约管理</text>
+                <view class='flexR'>
+                    <view class='item_bubble' wx:if="{{false}}">99+</view>
+                    <image class='item_arrow' src='/images/arrow_right.png'></image>
+                </view>
+            </view>
+        </form-button>
+        <form-button class='item' catchtap='itemClick' data-name='orderManage'>
+            <view class='item_icon'>
+                <image style='width:27rpx;height:30rpx;' src='/images/orderManage.png' mode='aspectFit'></image>
+            </view>
+            <view class='item_content item_bottom_border'>
+                <text class='item_text'>订单管理</text>
+                <view class='flexR'>
+                    <view class='item_bubble' wx:if="{{false}}"></view>
+                    <image class='item_arrow' src='/images/arrow_right.png'></image>
+                </view>
+            </view>
+        </form-button>
+        <form-button class='item item_bottom_border' catchtap='itemClick' data-name='userManage'>
+            <view class='item_icon'>
+                <image style='width:34rpx;height:26rpx;' src='/images/userManage.png' mode='aspectFit'></image>
+            </view>
+            <view class='item_content '>
+                <text class='item_text'>用户管理</text>
+                <view class='flexR'>
+                    <view class='item_bubble' wx:if="{{false}}"></view>
+                    <image class='item_arrow' src='/images/arrow_right.png'></image>
+                </view>
+            </view>
+        </form-button>
+
+        <view style="width:100%;margin-top:20rpx">
+            <form-button class='item item_bottom_border' catchtap='qrcodeClick' data-name='1'>
+                <view class='item_icon'>
+                    <image style='width:34rpx;height:26rpx;' src='/images/receive_qrcode.png' mode='aspectFit'></image>
+                </view>
+                <view class='item_content '>
+                    <text class='item_text'>收款二维码</text>
+                    <view class='flexR'>
+                        <view class='item_bubble' wx:if="{{false}}"></view>
+                        <image class='item_arrow' src='/images/arrow_right.png'></image>
+                    </view>
+                </view>
+            </form-button>
+            <form-button class='item item_bottom_border' catchtap='qrcodeClick' data-name='2'>
+                <view class='item_icon'>
+                    <image style='width:34rpx;height:26rpx;' src='/images/recommend_qrcode.png' mode='aspectFit'></image>
+                </view>
+                <view class='item_content '>
+                    <text class='item_text'>我的推荐二维码</text>
+                    <view class='flexR'>
+                        <view class='item_bubble' wx:if="{{false}}"></view>
+                        <image class='item_arrow' src='/images/arrow_right.png'></image>
+                    </view>
+                </view>
+            </form-button>
+        </view>
+        
+        <form-button class='item item_bottom_border' style="margin-top:20rpx;" catchtap='itemClick' data-name='settings'>
+            <view class='item_icon'>
+                <image style='width:32rpx;height:32rpx;' src='/images/settings.png' mode='aspectFit'></image>
+            </view>
+            <view class='item_content '>
+                <text class='item_text'>系统设置</text>
+                <view class='flexR'>
+                    <view class='item_bubble' wx:if="{{false}}"></view>
+                    <image class='item_arrow' src='/images/arrow_right.png'></image>
+                </view>
+            </view>
+        </form-button>
+    </scroll-view>
+    
+
+    <view class='remind' catchtap='ShowremindModel'>
+        <image src="../../images/client9.png" class='remindImg'></image>
+    </view>
+
+    <view class='remindModel' wx:if='{{Showremind}}' catchtap='closeremindModel' catchtouchmove="preventTouchMove">
+        <view class='remindcontent' catchtap='bubbling'>
+            <view class='title'>
+                新增事项提醒
+                <image src='../../images/close.png' class='remindclose' catchtap='closeremindModel'></image>
+            </view>
+            <view class='wenben'>
+                <textarea  placeholder="请输入提醒事项..."  maxlength='300' class='matter' bindinput='remindgetValue' value="{{remindObj.remindContent}}" />
+            </view>
+
+            <view class='remindDate '>
+                <text class='dateTime'>门店</text>
+                <view class='date'>
+                    <picker bindchange="bindshopChange" value="{{index}}" range="{{shopList}}" range-key="shopName">
+                        <view class="setstyle {{remindObj.shopName?'':'gray'}}">
+                            {{remindObj.shopName ? remindObj.shopName : '请选择' }}
+                            <image src='../../images/arrow_right.png' class='item_arrow position'></image>
+                        </view>
+                    </picker>
+                </view>
+            </view>
+
+            <view class='remindDate '>
+                <text class='dateTime'>日期</text>
+                <view class='date'>
+                    <picker mode="date" value="{{date}}" start="1998-09-01" end="2088-09-01" bindchange="remindDateChange">
+                        <view class="picker" class="{{remindObj.remindDate?'':'gray'}}">
+                            {{remindObj.remindDate ? remindObj.remindDate : '请选择' }}
+                            <image src='../../images/arrow_right.png' class='item_arrow'></image>
+                        </view>
+                    </picker>
+                </view>
+            </view>
+            <view class='remindDate bottomborder'>
+                <text class='dateTime'>时间</text>
+                <view class='date'>
+                    <picker mode="time" value="{{time}}" start="00:00" end="23:59" bindchange="remindTimeChange">
+                        <view class="picker" class="{{remindObj.remindTime?'':'gray'}}">
+                            {{remindObj.remindTime ? remindObj.remindTime : '请选择' }}
+                            <image src='../../images/arrow_right.png' class='item_arrow'></image>
+                        </view>
+                    </picker>
+                </view>
+            </view>
+            <view class='sure'>
+                <button class='sureQUe' catchtap='sureremind'>确定</button>
+            </view>
+
+        </view>
+
+    </view>
+
+    <view class="remindModel qrcodeModal" wx:if='{{showQrcode}}' catchtap='closeqrcodeModel'>
+        <view class="qrcodecontent">
+            <view class="content">
+                <view class="title" wx:if="{{qrcodeType==='1'}}">扫码支付</view>
+                <view class="title" wx:else>我的推荐二维码</view>
+                <image src='../../images/close.png' class='close' catchtap='closeqrcodeModel'></image>
+                <image class="qrcode" src="{{qrcodeUrl}}" mode="aspectFit|aspectFill|widthFix"></image>
+            </view>
+        </view>
+    </view>
+    </view>

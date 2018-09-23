@@ -1,0 +1,27 @@
+<view class='newFollowRecord'>
+  <view class='Followinfo'>
+    <text class='name'>{{name}}</text>
+    <text class='tell'>{{phone}}</text>
+  </view>
+  <view class='wenbenyu'>
+    <textarea placeholder="请输入沟通记录..." focus="{{focus}}" class='textimport' value='{{text}}' bindinput='textChange' maxlength='300' />
+  </view>
+  <view class='FollowDate'>
+    <view class='communication'> 下次沟通时间 </view>
+    <view class='date'>
+     <!-- <picker  mode="date" class='selectdate' value="{{date}}" start="2015-09-01" end="2017-09-01" bindchange="bindDateChange">
+        <view  class="nextTime" class='{{nexttime ? "nextTime" : "gray"}}'>
+          {{nexttime ? nexttime : '请选择'}}
+        </view>
+         <image src='../../../images/arrow_right.png' class='arrow_right'></image>
+      </picker> -->
+     <picker mode="multiSelector" value="{{dateTime1}}" class='selectdate' bindchange="changeDateTime1"                bindcolumnchange="changeDateTimeColumn1" range="{{dateTimeArray}}">
+           <view class="nextTime" class='{{nexttime ? "nextTime" : "gray"}}'>
+             {{nexttime ? nexttime : '请选择'}}
+           </view>
+          <image src='../../../images/arrow_right.png' class='arrow_right'></image>
+    </picker>
+    </view>
+  </view>
+  <view class='sureBottom sureFollow' catchtap='addNewRecord'>确定</view>
+</view>

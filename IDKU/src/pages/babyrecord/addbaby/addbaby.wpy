@@ -1,0 +1,273 @@
+<style scoped lang="less">
+  .addbaby{
+    width:100%;
+    padding:0rpx 20rpx;
+    padding-bottom:60rpx;
+    .placeClass{
+      font-size:28rpx;
+      color:#F23535;
+    }
+
+    .selectbabysex{
+      margin-top:40rpx;
+      .selectwith{
+        flex:1;
+        padding-left:170rpx;
+      }
+      .babyName{
+        width:130rpx;
+        font-size:30rpx;
+        color: #121212;
+        line-height:150rpx;
+        margin-right:40rpx;
+      }
+
+      .babysex{
+         margin-right:60rpx;
+
+        .babybox{
+          width:126rpx;
+          height:118rpx;
+        }
+        .grilbox{
+          width:132rpx;
+          height:116rpx;
+        }
+        .baysex{
+          text-align:center;
+          display: block;
+          font-size:28rpx;
+          color: #999999;
+        }
+        .activeGender{
+           color: #F23535;
+        }
+      }
+      .babychildrename{
+        width:100%;
+        height:98rpx;
+        .importName{
+          border-bottom: 2rpx solid #F23535;
+          width:288rpx;
+          display: block;
+          margin:0 auto;
+          font-size:40rpx;
+          text-align:center;
+          color: #F23535;
+        }
+      }
+    }
+    .babytitle{
+      font-size:30rpx;
+      color: #121212;
+      margin-top:50rpx;
+      .max{
+        color: #999999;
+        margin-left:20rpx;
+      }
+    }
+    .babydate{
+      width:370rpx;
+      margin:50rpx auto;
+      font-size:40rpx;
+      color: #F23535;
+      border-bottom:2rpx solid #F23535;
+      text-align:center;
+      position: relative;
+      .pickselect{
+        position:absolute;
+        width:310rpx;
+        height:54rpx;
+        top:0rpx;
+        left:0rpx;
+        z-index:11;
+        opacity: 0;
+
+      }
+    }
+    .interest{
+      margin-top:50rpx;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      .interestLsit{
+        width:160rpx;
+        height:60rpx;
+        font-size:28rpx;
+        background: #F4F4F4;
+        border-radius: 30rpx;
+        text-align:center;
+        line-height:60rpx;
+        margin-top:30rpx;
+      }
+      .selected{
+        color: white;
+      }
+    }
+    .sure{
+      display: block;
+      width:100%;
+      height:92rpx;
+      line-height:92rpx;
+      font-size:32rpx;
+      color:#fff;
+      text-align: center;
+      border-radius: 46rpx;
+      background: #F23535;
+      margin-top: 40rpx;
+    }
+  }
+</style>
+<template>
+
+    <view class="addbaby">
+       <view class="selectbabysex">
+         <view class="babyName">宝宝性别</view>
+         <view class="flexR selectwith">
+            <view class="babysex" @tap="babysex('male')">
+               <image src="{{gender=='male'?'/images/box.png' : '/images/boxun.png'}}" class="babybox"></image>
+               <text class="baysex {{gender=='male'?'activeGender':''}}">男孩</text>
+           </view>
+           <view class="babysex" @tap="babysex('female')">
+             <image src="{{gender=='female'?'/images/girl.png':'/images/girlun.png'}}" class="grilbox"></image>
+             <text class="baysex {{gender=='female'?'activeGender':''}}">女孩</text>
+         </view>
+         </view>
+       </view>
+       <view class="babytitle">宝宝生日</view>
+       <view class="babydate">
+         <view >{{date}}</view>
+        <picker mode="date" class='pickselect riqi' value="{{date}}" start="1930-09-01" end="{{endDate}}" @change="bindDateChange">
+          <view class="picker">
+            {{date}}
+          </view>
+        </picker>
+       </view>
+       <view class="babytitle">兴趣标签<text class="max">最多可以选择5个</text></view>
+       <view class="flexR interest">
+           <view class="interestLsit {{item.selected?'selected themeBackgroundColor':''}}" wx:for="{{tags}}" wx:for-index="i" wx:for-item="item" wx:key="baby_{{i}}" @tap.stop="clickTag({{i}})">{{item.name}}</view>
+       </view>
+       <button class="sure" @tap="addChildren">确认添加</button>
+    </view>
+
+</template>
+<script>
+  import wepy from 'wepy'
+  import {pRequest,pGetRequest} from "../../../utils/requestUtils";
+  const app =wepy.$instance
+
+  export default class addbaby extends wepy.page{
+    config={
+       navigationBarTitleText: '添加宝宝信息'
+    }
+    data={
+      date: '2018-09-01',
+      gender:'male',
+      childrenArr:[],
+      type:'',
+      babyName:'',
+      ind:0,
+      tags:[],
+      selectedTags:[],
+      addSingle:true,
+      childrenid:'',
+      chudate:'2018-09-01',
+      endDate:''
+    }
+    methods= {
+      bindDateChange (e) {
+        this.chudate = e.detail.value
+        this.date = (new Date(e.detail.value)).pattern('YYYY年MM月dd日')   
+      },
+      babysex (value) {
+        this.gender = value
+      },
+      bindReplaceInput (e) {
+        this.babyName = e.detail.value
+        console.log(this.babyName)
+      },
+      clickTag(i){
+        var item=this.tags[i]
+        if(!this.addTags(item)){
+          return
+        }
+        this.tags[i].selected=!this.tags[i].selected
+      },
+     // 添加孩子
+      addChildren () {
+        if(!app.isUseSaas()){
+          this.addBabyUseXb()
+          return
+        }
+      }
+    }
+
+    addTags(tag){
+      var index =this.selectedTags.findIndex((item)=>{return item.id==tag.id})
+      if(index>=0){//已选
+        this.selectedTags.splice(index, 1)
+      }else{//未选过
+        if(this.selectedTags.length<5){
+          this.selectedTags.push(tag)
+        }else{//不能再选择了
+          wx.showToast({
+               title: '兴趣最多只能选择五个',
+                icon: 'none',
+                duration: 2000  //持续的时间
+          })
+          return false
+        }
+      }
+      return true
+    }
+
+    onLoad(option){
+      this.endDate = new Date().pattern('YYYY-MM-dd')
+      this.getBabyTags()
+    }
+    
+    getBabyTags(){
+      pGetRequest('xb/front/unAuth/home/tagList?type=course').then((res)=>{
+        res.forEach((item)=>{
+          item.selected=false
+        })
+        this.tags=res
+        this.$apply()
+      })
+    }
+    addBabyUseXb(){
+      if(!this.selectedTags||this.selectedTags.length==0){
+        wx.showToast({
+          title:'请选择标签',
+          icon:'none'
+        })
+        return
+      }
+      
+      let params = {
+           birthday:this.chudate+' 00:00:00',
+           gender: this.gender,
+           tagIds: this.selectedTags.map((item)=>{
+               return item.id
+          },{})
+      }
+
+      pRequest('xb/front/auth/ucBaby/updateV1',params,{
+        Accept: 'application/json'
+      }).then((res)=>{
+          wx.showToast({
+            title: '添加成功',
+            icon: 'none',
+            duration: 1000  //持续的时间
+          })
+          var pages = getCurrentPages()
+          pages.forEach((item) => {
+            if (item.route == 'pages/babyrecord/babyrecord') {
+                item.getChildrenList()
+            }
+         })
+          wx.navigateBack()
+
+      })
+    }
+  }
+</script>

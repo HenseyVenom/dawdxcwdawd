@@ -1,0 +1,39 @@
+/* pages/bankCard/bankCardList/bankCardList.wxss */
+
+.bank_card_item{
+  height: 100rpx;
+  background-color: white;
+  border-bottom: 1px solid #EDEDED;
+  font-size: 32rpx;
+  color: #333333;
+  align-items: center;
+}
+.bank_icon{
+  margin-left: 30rpx;
+  width: 45rpx;
+  height: 45rpx;
+  margin-right: 21rpx;
+  flex-shrink: 0;
+}
+.bank_name{
+  flex-grow: 1
+}
+.back_number{
+  flex-shrink: 0;
+}
+.arrow_right{
+  width: 16rpx;
+  height: 25rpx;
+  margin-right: 30rpx;
+  margin-left: 22rpx;
+}
+.add_bank_card{
+  display: block;
+  height: 88rpx;
+  border-bottom: 1px solid #EDEDED;
+  line-height: 88rpx;
+  text-align: center;
+  font-size: 36rpx;
+  color: #333333;
+  background: white;
+}

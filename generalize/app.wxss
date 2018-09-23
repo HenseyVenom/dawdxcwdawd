@@ -1,0 +1,71 @@
+/**app.wxss**/
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 200rpx 0;
+  
+} 
+
+Page {
+  background-color: #f8f8f8;
+  height: 100%;
+   
+}
+view{
+  box-sizing: border-box;
+  color: #121212;
+}
+
+.nomore {
+  font-size: 30rpx;
+  color: #999;
+  padding: 10rpx;
+  margin-bottom: 20rpx;
+  display: block;
+  text-align: center;
+  height: 50rpx;
+  line-height: 50rpx;
+}
+
+.flexC {
+  display: flex;
+  flex-direction: column;
+}
+
+.flexR {
+  display: flex;
+  flex-direction: row;
+}
+
+.themeColor {
+  color: #f23535 !important;
+}
+
+.themeBackgroundColor {
+  background-color: #f23535 !important;
+}
+
+.themeBorder {
+  border-color: #f23535 !important;
+}
+.themeBorderLoading{
+  border-left-color: #f23535!important;
+  border-right-color: #f23535!important;
+}
+
+button::after {
+  border: none !important;
+}
+
+.sureBottom {
+  width: 625rpx;
+  height: 88rpx;
+  background-color: #f23535;
+  border-radius: 10rpx;
+  text-align: center;
+  color: #fff;
+  line-height: 88rpx;
+}

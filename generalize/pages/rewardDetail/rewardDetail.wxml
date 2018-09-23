@@ -1,0 +1,108 @@
+<view class='rewardPage'>
+<!-- 邀请好友注册奖励 -->
+  <view class='reward-items' wx:if='{{true}}'>
+    <view class='reward-top'>
+      <view>{{rewardDetail.type=='registerBackQB'?'邀请好友注册':(rewardDetail.type=='courseSignBackQB'?'推荐好友参加试听课':'推荐好友购买课程')}}奖励</view>
+      <view class='text-red'>+{{rewardDetail.amount}}</view>
+    </view>
+    <view class='reward-center'>
+      <view class='reward-item'>
+        <view class='text-gray'>好友</view>
+        <view>{{rewardDetail.nickName}}</view>
+      </view>
+      <view class='reward-item'>
+        <view class='text-gray'>注册时间</view>
+        <view>{{rewardDetail.registerTimeStr}}</view>
+      </view>
+    </view>
+    <view class='reward-center reward-bottom' wx:if="{{rewardDetail.type=='buyCourseBackQB'}}">
+      <view class='reward-item'>
+        <view class='text-gray'>购买课程</view>
+        <view>{{rewardDetail.courseName}}</view>
+      </view>
+    </view>
+    <view class='reward-center reward-bottom' wx:if="{{rewardDetail.type=='courseSignBackQB'}}">
+      <view class='reward-item'>
+        <view class='text-gray'>试听课程</view>
+        <view>{{rewardDetail.courseName}}</view>
+      </view>
+      <view class='reward-item'>
+        <view class='text-gray'>培训机构</view>
+        <view>{{rewardDetail.orgName}}</view>
+      </view>
+      <view class='reward-item reward-item3'>
+        <view class='text-gray'>所在门店</view>
+        <view>
+          <view>{{rewardDetail.shopName}}</view>
+          <view class='gray'>{{rewardDetail.address}}</view>
+        </view>
+      </view>
+      <view class='reward-item'>
+        <view class='text-gray'>试听时间</view>
+        <view>{{rewardDetail.sginTimeStr}}</view>
+      </view>
+    </view>
+  </view>
+<!-- 推荐好友购买课程奖励 -->
+  <view class='reward-items' wx:if='{{false}}'>
+    <view class='reward-top'>
+      <view>推荐好友购买课程奖励</view>
+      <view class='text-red'>+0.256</view>
+    </view>
+    <view class='reward-center'>
+      <view class='reward-item'>
+        <view class='text-gray'>昵称</view>
+        <view>糖糖妈</view>
+      </view>
+      <view class='reward-item'>
+        <view class='text-gray'>注册时间</view>
+        <view>2018年8月9日</view>
+      </view>
+    </view>
+    <view class='reward-center reward-bottom'>
+      <view class='reward-item'>
+        <view class='text-gray'>购买课程</view>
+        <view>金宝贝音乐课</view>
+      </view>
+    </view>
+  </view>
+<!-- 推荐好友参加试听课奖励 -->
+  <view class='reward-items' wx:if='{{false}}'>
+    <view class='reward-top'>
+      <view>推荐好友参加试听课奖励</view>
+      <view class='text-red'>+0.256</view>
+    </view>
+    <view class='reward-center'>
+      <view class='reward-item'>
+        <view class='text-gray'>好友</view>
+        <view>糖糖妈</view>
+      </view>
+      <view class='reward-item'>
+        <view class='text-gray'>注册时间</view>
+        <view>2018年8月9日</view>
+      </view>
+    </view>
+    <view class='reward-center reward-bottom'>
+      <view class='reward-item'>
+        <view class='text-gray'>试听课程</view>
+        <view>金宝贝音乐课</view>
+      </view>
+      <view class='reward-item'>
+        <view class='text-gray'>培训机构</view>
+        <view>金宝贝</view>
+      </view>
+      <view class='reward-item reward-item3'>
+        <view class='text-gray'>所在门店</view>
+        <view>
+          <view>Gymboree金宝贝(印象城中心)</view>
+          <view class='gray'>西湖区古墩路588号古墩印象城(沃尔玛)二楼</view>
+        </view>
+      </view>
+      <view class='reward-item'>
+        <view class='text-gray'>试听时间</view>
+        <view>2018年8月9日 17:08:15</view>
+      </view>
+    </view>
+  </view>
+
+</view>

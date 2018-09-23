@@ -1,0 +1,22 @@
+<template>
+  <web-view src='{{url}}'></web-view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import network from '../../../network'
+  const app=wepy.$instance
+
+    export default class Award extends wepy.page {
+      data = {
+        url: ''
+      }
+
+      onLoad(options) {
+        wx.setNavigationBarTitle({
+          title: '邀请有礼',
+        })
+        this.url=network.webUrl + '/activity/invitation?os=app_wxxcx&access_token=' + app.getAccessToken()
+      }
+    }
+</script>

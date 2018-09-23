@@ -1,0 +1,13 @@
+<!--pages/login/login.wxml-->
+<view class='viewContent'>
+   
+   <view class='loginApp'>登录培训机构贝壳管理</view>
+    <input value='{{username}}' bindinput='bindInputPhone' placeholder='请输入用户名' class='phone'></input>
+    <view class='verifybox'>
+    <input value="{{password}}" password bindinput='bindInputPassword' placeholder='请输入密码' class='verify'></input>
+    </view>  
+  <form-button open-type="getUserInfo" bindonGotUserInfo="onGotUserInfo" catchtap='login' class='submitlogin'>
+       登录
+  </form-button>
+
+</view>

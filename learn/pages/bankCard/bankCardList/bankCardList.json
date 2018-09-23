@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "银行卡绑定",
+  "usingComponents": {
+    "form-button": "../../../components/formButton/formButton"
+  }
+}

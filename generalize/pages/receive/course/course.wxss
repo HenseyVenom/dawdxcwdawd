@@ -1,0 +1,239 @@
+/* pages/receive/course/course.wxss */
+.top_banner {
+  position: relative;
+}
+
+.slide-image {
+  width: 100%;
+  height: 360rpx;
+}
+
+.top_swiper .wx-swiper-dots.wx-swiper-dots-horizontal {
+  margin-bottom: 2rpx;
+  right: 0rpx !important;
+  left: unset;
+  bottom: 10rpx;
+}
+
+.top_swiper .wx-swiper-dot {
+  display: inline-flex;
+  width: 10rpx;
+  height: 10rpx;
+  border-radius: 50%;
+  margin-left: 14rpx;
+  justify-content: space-between;
+  background-color: white;
+  
+}
+
+.top_swiper .wx-swiper-dot::before {
+  content: '';
+  flex-grow: 1;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 8rpx;
+}
+
+.top_swiper .wx-swiper-dot-active {
+  width: 26rpx;
+}
+
+
+
+.course_specification {
+  flex-wrap: wrap;
+}
+
+.course_specification .item {
+  width: 33%;
+  background-color: white;
+  margin-right: 1px;
+  justify-content: center;
+  align-items: center;
+  height: 80rpx;
+  font-size: 24rpx;
+  color: #222;
+  margin-bottom: 1px;
+}
+
+.course_specification .item text {
+  max-width: 70%;
+  max-height: 30rpx;
+  overflow: hidden;
+}
+
+.course_specification .item .icon {
+  width: 26rpx;
+  height: 26rpx;
+  margin-right: 10rpx;
+  margin-top: 4rpx;
+}
+
+.course_specification .item:nth-of-type(3n) {
+  margin-right: 0px;
+}
+
+.course_price_view {
+  background: white;
+  padding: 22rpx 30rpx 30rpx;
+  margin-top: 20rpx;
+}
+
+.course_price_view .course_name {
+  font-size: 30rpx;
+  color: #222;
+  font-weight: bold;
+}
+
+.course_price_view .price {
+  font-size: 36rpx;
+  color: #f15c65;
+  margin-top: 12rpx;
+  font-weight: bold;
+}
+.course_price_view .prices1{
+   font-size:28rpx;
+   color: #909090;
+    margin-left:20rpx;
+    text-decoration:line-through;
+}
+
+.course_price_view .discounts {
+  margin-top: 26rpx;
+  line-height: 30rpx;
+  font-size: 20rpx;
+  color: white;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.course_price_view .discounts text {
+  padding: 0 18rpx;
+  border-radius: 24rpx;
+  background: #f95c9f;
+  margin-right: 10rpx;
+  margin-bottom: 10rpx;
+}
+
+.course_institutions_wrapper {
+  background-color: white;
+  padding-left: 30rpx;
+}
+
+.course_institutions {
+  padding: 26rpx 30rpx 26rpx 0;
+  align-items: center;
+  border-bottom: 1px solid #f5f5f5;
+  background: white;
+}
+
+.course_institutions .title {
+  font-family: PingFangSC-Regular;
+  font-size: 30rpx;
+  color: #222;
+  letter-spacing: 0;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+  align-self: flex-start;
+  font-weight: bold;
+}
+
+.course_institutions .name {
+  /* min-height: 60rpx; */
+  font-family: PingFangSC-Regular;
+  font-size: 24rpx;
+  line-height: 34rpx;
+  color: #909090;
+  letter-spacing: 0;
+  margin-right: 20rpx;
+  flex-grow: 1;
+}
+.paydiscount{
+  background: #F95C9F;
+  border-radius: 15rpx;
+  height:30rpx;
+  padding:0rpx 18rpx;
+  font-size: 20rpx;
+  color: #FFFFFF;
+  display:inline;
+  
+ 
+}
+
+.course_institutions .teachers {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 50%;
+  background-color: darkgreen;
+  margin-right: 20rpx;
+}
+
+.course_institutions  .item_arrow {
+  width: 16rpx;
+  height: 25rpx;
+  flex-shrink: 0;
+}
+
+.course_detail {
+  margin-top: 20rpx;
+}
+
+.course_introduce {
+  background: white;
+  padding: 22rpx 15rpx;
+  font-size: 30rpx;
+  color: #222;
+  align-items: center;
+}
+
+.course_introduce .indicator {
+  width: 6rpx;
+  height: 30rpx;
+  background: #66a1fd;
+  border-radius: 100rpx;
+  margin-right: 16rpx;
+}
+
+.detail_web {
+  margin: 30rpx 30rpx 92rpx;
+  padding-bottom: 30rpx;
+  font-size: 28rpx;
+}
+
+rich-text .rich-img {
+  width: 100%;
+  height: auto;
+  margin: 10rpx 0;
+}
+.bottom{
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 92rpx;
+}
+.bottom .left{
+  width: 40%;
+  height: 100%;
+  background-color: white;
+  justify-content: center;
+  align-items: center;
+}
+.bottom .left .handle{
+  align-items: center;
+  font-size: 20rpx;
+  color: #909090;
+}
+.bottom .left .handle image{
+  width: 36rpx;
+  height: 40rpx;
+}
+
+.bottom .right{
+  width: 60%;
+  height: 100%;
+  background-color: #66A1FD;
+  font-size: 16px;
+  color: #FFFFFF;
+  line-height: 92rpx;
+  text-align: center;
+}

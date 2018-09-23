@@ -1,0 +1,181 @@
+<style scoped lang='less'>
+  .comment-page{
+    .text-orange{
+      color: #ffc412;
+    }
+    .commentArea{
+      background: #fff;
+      .name-scores{
+        .nameArea {
+          border-bottom: 1px solid #ededed;
+          padding: 25rpx 40rpx;
+          font-size: 30rpx;
+        }
+        .institution{
+          width:580rpx;
+          border-bottom:2rpx solid #F5F5F5;
+          position: relative;
+          margin:90rpx auto;
+          .dafen{
+            position: absolute;
+            left:170rpx;
+            font-size:28rpx;
+            width:240rpx;
+            text-align:center;
+            background: #fff;
+            top:-20rpx;
+
+          }
+        }
+        .scoreArea {
+          width:350rpx;
+          font-size: 30rpx;
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+         // border-bottom: 1px solid #ededed;
+          margin:80rpx auto;
+          .scoreItem {
+            width: 48rpx;
+            height:48rpx;
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAABMRJREFUaAXVmctvW0UUxms7j8qUQEODFCkJTuIXBFArgbpAaimpxAYJVghVRGVRRGGDEAjCBrGBNSu6AVX8BVUXLFhUKiBVCFRVlarWdpLGTkLTOm1itXk4ie3wO1Umclz7zth3rl2uNJrx3Jlzvm++M4879u3x6JmamooUCoVzmA/6/f4TkUjkLy9c+b0wKjYBf2Zra2uENFgqlc6S+7zw5QmBZDL5KoBHFWDK8VQq9bb6bTP3hAAAv64CcrxKnesq67Iy+nFQXa8WMoFA4Bhz4aJr1GUGvFBgvBp48clc+KrMt5WiVQVYeQY2NzcnQdZeC53P5zsYi8Wu1npfb71VBQD/uRP4bXBWVbCmALF/gNDJADLoNIooUKRdJB6PTzu1M31nTQFAfaoDL6BoF4DEF6YAde2sKLCwsPDk4uLiDOCe1jmU9xDIsyI9Fw6HsybtndpYUWBpaem0KXgBQ9u9xWJRFHP9uFZgYmKiEzASz731oEGFXHd390BPT8+DevpVtnWtAKP5AUbrAi8gRDGU+0jKbp6GFQBAYHJyMsTm9Bvl4QZB3GIuHGZ3nmuw/x4tAUKkhxCJ4igG0CgphjPJw+QdjTqu6LfM7yQpUZ53dnamBgcH8xVtd/18SGB6enovIxkhxUhRWiiQku/f1aOJP5gnJQZqhjxBnuS7IkFKtrW1JUKh0LxA8bEBneLlD5SfaCI2164glSV95kskEhmsDbi22BoDt/2w8ORTr0l8bhBS/g8h8U+THFpzA+Yp0tjDSZzJZPbn8/kLzIVD1jx4ayjNRD7CUWR2Zxmdm5t7Znl5+SJ+X/TWt2vrMyyvR1le02JpZyfu6+u7B6tRZJG1+LF8wPYv+9EbCryA3FFAIU6n073r6+t/EE6yUT1Oz3x7e/vrw8PDqXJQOwqoStkghCW/06qu1Tkjn2WxGa0EL7geUUCBZXcObWxsiBL9qq4VOeDvMqDHmLDXqvl/RAHVSOJsW4lbqq4F+SI+j9cCL3hqKqDAbt/z/I4Sz6q6ZuSMfI4BFPCXnfzVVEB14gokgSG5Jryn6rzOAX8fH2/qwAsOrQIKLMfqQ5xUL6OEcR/Vt96c5fw1wF8y6adVQBnB6HwzwIs/FL+p/OpyYwLsDS/ojNl6zwfU86a2jAmwDo+YGnXbDgLGg2VMgPg3NuqWAP3tK8DK8P8mwKg0jQCLhV0F5GYCowcshIapiV6u6p8yaWw6B5o2+gq06ZwzIlDPqqAAWMiNwsiIgIsJfI2+NxohY7oXGBEg/uvdA+QEe4pz1MFoNPoy5U8gkq2HCO1booBcEX7T1dUl/8D8DIgiqUD5DDfRYcrfk9YMiRgR0B7MZmdnu1dWVnQn0QKgfuro6Ph2aGjojhNAVrQ+Juh3tHkfZWtGAERLwWBwX39/vyPhmgYUiNXVVccVCEfnSS8xyh/rwItNuYkmtE5yNHmFfheUn8pcyK2trcndrOOjJYCTqgSo/5t0BDDvyDeDo5cqLyFyhX7HIfIWdq5XaSJV2jDSEmAkSuXGcXaT9B7OD5P+LH/XSJlJ/qtMdIicxu6u8CPUtP+5aeeAXL3zcX8WcHHI/ALoH3G00QhYXZ9sNrsvl8t9CfAx2ib5LngXpeTrrObzHxBgsMX8Lpo0AAAAAElFTkSuQmCC');
+            background-size: 100% 100%;
+            margin-right: 20rpx;
+            &.current {
+              background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAABTpJREFUaAXVWVtoHFUYnn9mNtlrrFqxEU0iNmm0WiqY3W7TaC6lpSDoS0XEog8Vqy+lKFrffPFFEHzSF6H43AeR4oMPQmxoNjuhFKG0m1LTWExTSyJlL91sZnaO31kzYbKbnTm7O7NtF5Zz+y/fd/7/nDNzhiSffquJRL/O2E9MksIq0TvhdHrGD1eyH0a5TYD/njG2W2Ls2bJpnkGd/PDlC4HC/v1DADxhAUYUBnOJxBtW28vSFwKmYXyxBcjTW/S13OV5WLPJ5CAZxhXMeo1tUpSx2MzMZMuobQa8j0C5fHor8NwnM83Pbb49qdbMUitWiwcO9Bil0nUQCNSzIxPtjWraH/XGG+33NAKGrn/iBJ6Dw7inUfAsAtnR0e1UKPwFgGGnWSSisipJ/SFNu+EkJzrmWQSoWDzpBp6DwvaqGIx9KgrQTc6TCLDh4Vhube0mnG1zc8jHEYVVSVV7Y9PTd0TknWQ8iUBB10/AiRB4DgZRCEqGcdIJmOhYyxFgR4505peXbyB9ukWdrsvdjXV09NCFC7kG9TaJtxyB/MrK+02A5yC2FQzjw01ommg0HQF29KhSWlzsW9P1X+H3uSZ886P6liLLCTyp/t2MPtdxJZAbGXmC6fqAwtgu5O4AZnsX9AaQyDtR72jW8SY9ojyAzKEvA7tzWOUZLPS5SCh0jSYnVzfJVjUqBNjoaLBQKvXjqK+AhMz/IHnJ2KNVOm1rApzJiPjulqF1YiA3J3d0ZCJTU0scCGXj8eMA+S3qEd7xsPwQoTsgeIpyQ0P89Ox5WIDbcYLEbRkh8eVVz+7Ix/pVOUr0ARzM+ujEL9N/KopyTKZ0Ohvr7DyMfLrklyfP7RItqKHQWDiVWqzsQtwBi8cfzzM2ifXwoucOPTQIwDdVRXktNDOzwM1unMSkaStSIDABgYyH/jw1hUW7GAgExi3w3PhGBCxPhZGR7nKpdJ4fVFbfg1AC6FKAaDSoadfseDYiYHXyA0INBsexOy1Yffe75Hu+pCgT1eA5rpoIWGCL+/b1GeXyeayJZ6y++1EC4DJSewzvDpe38l+XABdeTSZ36obxO0g8tZWy731E/yJFxp0uAWpSyA4qmEpdZ6o6UQmhfaA99bsK0SEn8ByGIwEu0JVKZfD6N4E1scLbbfkRZVVVPRxJpy+6+XNMIbtyIZl8GVeGF5FOwjp2/UbqAD+MQ2paRMc1ApYRZhhL7QDP/WGi5i2/bqU4AaIX3Ix5Nc5k+XlRW8IEYHC3qFEP5IQnqxECwkZbJmCavkSgfQSIfCDAWPsIMOYtgcrNhCRtbzk1BA1gt+tmBw8+IiIutgYMo32zv466mM0K+XxgCeA6RSiNxAg0eQbgyL6M56irIqlQLYNPsx4SaPAMAPBbeHY6Hu3r2xsNh/eg/XHDD4SCERB6rsnF47dxrfhk9SzVtPkVIWNfR3fs+IbOnbtnH+ffEPK6zj+1noKtkH2sTn2+a3bW9c7VlQBLJh/LGYbjkyhm1wCIH1B+GU2n/6kDqNJ9L5F4Gl9ovgLRd7Hb1E1hADOjqhqlVKroZK+uAUspZ5qOuwFA/8wU5aWYpn3kBp7b5DfRXZr2nqyqr0D3N8tPdcnJ4fqd39E6/lwJYCbqEdCQ568C+JuVdwZHN7WDkVTqEnQP4qXldRC5UiuBHoF14EoA+WpWGZ/HF/e3kZ8JzORU1VjDzYim/RLt7d0DEifw35R+8O362cp9DeDqPV8onMFsDMLBj5Genu/o7Nm1hpEKKOCaP5ovFj8D8GMANodrz7f4zaGT6n8qw7ZB6Md55AAAAABJRU5ErkJggg==");
+              background-size: 100% 100%;
+            }
+          }
+          .text-orange {
+            margin-left: 50rpx;
+          }
+        }
+      }
+      .textArea{
+        textarea {
+          padding: 25rpx 40rpx;
+          height: 200rpx;
+          font-size: 26rpx;
+          border: 1px solid #D8D8D8;
+           border-radius: 20px;
+           margin:0 auto;
+        }
+      }
+    }
+    .text-gray{
+      text-align: center;
+      font-size: 24rpx;
+      color: #cccccc;
+      margin-top: 30rpx
+    }
+    .submit-btn {
+      height: 92rpx;
+      line-height: 92rpx;
+      color: #fff;
+      font-size: 36rpx;
+      text-align: center;
+      background: #f23535;
+      margin:80rpx auto;
+      border-radius:46rpx;
+      width:670rpx;
+    }
+  }
+</style>
+<template>
+  <view class="comment-page">
+    <view class='commentArea bg-white'>
+      <view class='name-scores'>
+        <!-- <view class='nameArea'>
+          老师： <text wx:for="{{Evalution.classStaffList}}" wx:for-item="item" wx:for-index="index" wx:key="index" style="margin-left:5px;">{{item.staffName}}</text>
+
+        </view> -->
+        <view class="institution">
+           <view class="dafen">机构服务水平打分</view>
+        </view>
+        <view class='scoreArea'>
+          <view class="scoreItem {{score>=i?'current':''}}" wx:for='{{size}}' wx:for-item='item' wx:for-index='i' wx:key='i' @tap.stop='selectScore({{i}})'></view>
+        </view>
+      </view>
+      <view class='textArea'>
+        <textarea placeholder="留下你对机构的评价…" @input="bindTextAreaBlur" value='{{content}}' placeholder-style='font-size:24rpx'></textarea>
+      </view>
+    </view>
+    <!-- <view class='text-gray'>所做的评论都是匿名的哦！</view> -->
+    <view class='submit-btn' @tap.stop='submitComment'>提交</view>
+  </view>
+
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import {pRequest} from "../../utils/requestUtils";
+  const app = wepy.$instances;
+  export default class Comment extends wepy.page {
+    config = {
+      navigationBarTitleText: '评价'
+    }
+    data = {
+      size: 5,
+      score: -1,
+      Evalution:{},
+      content:'',
+      teacherArr:[],
+      
+    }
+    methods = {
+      selectScore (i) {
+        this.score = i
+        console.log(this.score)
+      },
+
+      submitComment () {
+        if((this.score + 1)<1){
+          wx.showToast({
+            title: '请输入评分',
+            icon: 'none',
+          })
+          return
+        }
+
+        if(!this.content){
+          wx.showToast({
+            title: '请输入评价内容',
+            icon: 'none',
+          })
+          return
+        }
+        this.Evalution.star  = this.score + 1
+        this.Evalution.content  = this.content 
+        pRequest('xb/front/auth/repayment/orderComments',this.Evalution).then(res=>{
+          wx.showToast({
+            title: '评价成功',
+            icon: 'success',
+            duration: 1000
+          })
+           var pages = getCurrentPages()
+            pages.forEach((item) => {
+              if (item.route == 'pages/orderDetail') {
+                console.log(item)
+                item.getOrderInfo()
+              }
+            })
+           wx.navigateBack()
+
+        })
+      },
+      bindTextAreaBlur(e){
+        this.content = e.detail.value
+      }
+    }
+    onLoad(option){
+      this.Evalution =JSON.parse(option.commobj)
+      console.log(this.Evalution)
+      // this.Evalution = commobj
+
+      // this.Evalution.classStaffList.map(item=>{
+      //   this.teacherArr.push(item.staffId)
+      // })
+
+    }
+  }
+</script>

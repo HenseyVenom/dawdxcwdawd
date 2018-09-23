@@ -1,0 +1,8 @@
+<!--pages/allocated/chooseCounselor/chooseCounselor.wxml-->
+<view class='button themeBackgroundColor' catchtap='clickSave'>保存</view>
+<view class='list flexC'>
+  <view class='item' wx:for="{{counselorList}}" wx:for-item="counselor" wx:for-index="i" wx:key="{{i}}" data-i="{{i}}" catchtap='cliclItem'>
+    <image class='selectImage' src='/images/gou.png' wx:if="{{i==selectPostion}}"></image>
+    <text style="margin-left:30rpx;line-height:90rpx;">{{counselor.personName}}</text>
+  </view>
+</view>

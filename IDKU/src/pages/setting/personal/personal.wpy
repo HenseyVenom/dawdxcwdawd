@@ -1,0 +1,376 @@
+<style scoped lang='less'>
+  .personal{
+    width:100%;
+    height:100%;
+      .arrow_right{
+        width:15rpx;
+        height:25rpx;
+        display: block;
+        position: relative;
+        top:38rpx;
+        margin-left:10rpx;
+      }
+      .firstimg{
+        top:58rpx;
+      }
+    .nickname{
+      height:100rpx;
+      padding:0rpx 30rpx 0rpx 40rpx;
+      border-bottom:1px solid #EEEEEE;
+      line-height:100rpx;
+      background: #fff;
+      .wenbenName{
+        font-size:28rpx;
+        color: #121212;
+        width:120rpx;
+      }
+
+      .wenshu{
+        flex:1;
+        padding:20rpx 0rpx;
+        line-height:60rpx;
+        margin-right:10rpx;
+        font-size:28rpx;
+        color:#909090;
+        text-align: right;
+        .selectTing{
+          text-align:right;
+          font-size:28rpx;
+          color: #909090;
+        }
+        .inputName{
+          text-align:right;
+          color:#222;
+          font-size:28rpx;
+          line-height:60rpx;
+
+        }
+        .userinfo-avatar{
+          width:100rpx;
+          height:100rpx;
+          border-radius:100%;
+          float: right;
+          overflow: hidden;
+
+        }
+
+
+      }
+      .eplist{
+         text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        
+      }
+
+    }
+    .headerImg{
+      height:140rpx;
+      line-height:140rpx;
+    }
+    .persoanshu{
+      background:#fff;
+      margin-top:20rpx;
+      padding:0rpx 50rpx 0rpx 40rpx;
+      .default{
+        font-size:28rpx;
+        color: #808080;
+        text-align:right;
+      }
+      .activescity{
+        color:#121212;
+
+      }
+    }
+    .borderbox{
+      border-bottom:1px solid #EEEEEE;
+      padding:0px;
+
+    }
+    .personupdate{
+      background: #F23535;
+      border-radius: 5px;
+      width:90%;
+      height:92rpx;
+      color:#fff;
+      font-size:32rpx;
+      margin-top:150rpx;
+
+    }
+  }
+
+</style>
+<template>
+  <view class="containerbg personal">
+    <view class="flexR nickname headerImg" style="border-bottom:1px solid #EEEEEE;" >
+      <text class="wenbenName">头像</text>
+      <view class="wenshu">
+        
+        <!--<input type="text" placeholder="设置您的昵称" class="inputName" value="{{parentObj.comFamilyMemberDTO.patriarchName}}" @input="setparent" data-name="patriarchName"/>-->
+        <view class="userinfo-avatar" wx:if="{{parentObj.avatars}}">
+          <image src="{{parentObj.avatars}}"    class="userinfo-avatar" @tap="uploadImg"></image>  
+        </view>
+         <view wx:if="{{!parentObj.avatars}}" class="userinfo-avatar"  @tap="uploadImg">
+              <open-data type="userAvatarUrl" ></open-data>
+          </view> 
+      </view>
+      <image src="/images/arrow_right.png" class="arrow_right firstimg"></image>
+    </view>
+    <view class="flexR nickname" style="border-bottom:1px solid #EEEEEE;" @tap="enterPersonName()">
+       <text class="wenbenName">昵称</text>
+        <view class="wenshu">
+          {{parentObj.nickName}}
+        </view>
+        <image src="/images/arrow_right.png" class="arrow_right"></image>
+    </view>
+    <view class="flexR nickname ">
+      <text class="wenbenName">角色</text>
+      <view class="wenshu">
+         <picker @change="selectgender" value="{{value}}" range="{{genderArr}}" range-key="name">
+          <view class="picker selectTing">
+            {{genderCount=='female'?'宝妈':'宝爸'}}
+          </view>
+        </picker>
+      </view>
+    </view>
+    <view class="flexR nickname" style="border-bottom:1px solid #EEEEEE;" @tap="enteraddress({{parentObj.receivingAddress}})">
+       <text class="wenbenName">收货地址</text>
+        <view class="wenshu eplist">
+          {{parentObj.receivingAddress?parentObj.receivingAddress:'' }}
+        </view>
+        <image src="/images/arrow_right.png" class="arrow_right"></image>
+    </view>
+    <!-- <button class="personupdate" @tap="sureCompent">完成</button> -->
+  </view>
+
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import {pRequest, pGetRequest} from "../../../utils/requestUtils";
+
+  const app = wepy.$instance
+  const qiniuUploader = require("../../../utils/qiniuUploader");
+  export default class personal extends wepy.page {
+    config = {
+      navigationBarTitleText: '我的资料'
+    }
+    data = {
+      region: [],
+      genderCount: '',
+      parentObj: {},
+      appellation: '',
+      cityId: '',
+      districtId: '',
+      userInfo: {},
+      genderArr: [{
+        name: '宝妈',
+        value: 'female'
+      }, {
+        name: '宝爸',
+        value: 'male'
+      }],
+      imageArr: [],
+      domain: '',
+      tokenqiniu: '',
+      headImg:'',
+
+    }
+    methods = {
+      enterPersonName() {
+        wx.navigateTo({
+          url: '/pages/setting/personal/personName?name=' + this.parentObj.nickName + '&sex=' + this.genderCount
+        })
+      },
+      enteraddress() {
+
+        if (!this.parentObj.receivingAddress) {
+          wx.navigateTo({
+            url: '/pages/setting/personal/address?type=3'
+          })
+        } else {
+          let parentObj = JSON.stringify(this.parentObj);
+          wx.navigateTo({
+            url: '/pages/setting/personal/selectAddress?obj=' + parentObj
+          })
+
+        }
+
+
+      },
+      uploadImg() {
+        var that = this
+        wx.chooseImage({
+          count: 1,
+          sizeType: ['original', 'compressed'],
+          sourceType: ['album', 'camera'],
+          success: function (res) {
+            that.imageArr = res.tempFilePaths
+            that.$apply()
+            that.uploadQiniu()
+          }
+        })
+      },
+
+      selectgender(e) {
+       // console.log(this.genderArr[e.detail.value].value)
+        //debugger
+        this.genderCount = this.genderArr[e.detail.value].value
+        pRequest('xb/front/auth/ucMember/updateNickNameAndSex?nickName='+this.parentObj.nickName+'&sex='+this.genderCount,{
+        
+        }).then(res=>{
+          console.log(res)
+        })
+
+      },
+
+      sureCompent() {
+        console.log(this.parentObj)
+        if (!this.parentObj.comFamilyMemberDTO.patriarchNickName) {
+          wx.showToast({
+            title: '家长昵称不能为空',
+            icon: 'none',
+            duration: 2000
+          })
+          return
+        }
+        if (this.region.length <= 0) {
+          wx.showToast({
+            title: '请选择城市',
+            icon: 'none',
+            duration: 2000
+          })
+          return
+        }
+        if (!this.parentObj.comFamilyMemberDTO.address) {
+          wx.showToast({
+            title: '请填写详细地址',
+            icon: 'none',
+            duration: 2000
+          })
+          return
+        }
+        pRequest('com/family/update', {
+          provinceId: this.appellation,
+          cityId: this.cityId,
+          districtId: this.districtId,
+          province: this.region[0],
+          city: this.region[1],
+          district: this.region[2],
+          familyMembers: [
+            this.parentObj.comFamilyMemberDTO
+          ],
+          entityState: 4,
+          id: this.parentObj.comFamilyMemberDTO.parentId,
+          address: this.parentObj.comFamilyMemberDTO.address
+        })
+          .then((res) => {
+            this.getperson()
+          }).catch((res) => {
+        })
+
+      },
+      setparent(e) {
+        this.parentObj.comFamilyMemberDTO[e.currentTarget.dataset.name] = e.detail.value
+
+      }
+    }
+
+    saveAvatar(img){
+      pRequest('xb/front/auth/ucMember/updateAvatars?imgUrl='+img).then((res)=>{
+        this.parentObj.avatars=img
+        this.$apply()
+      })
+    }
+
+    //上传到七牛
+    uploadQiniu() {
+      console.log('image:',this.imageArr[0])
+      var fileName=this.imageArr[0].split('//')[1]
+       pGetRequest('xb/front/auth/td/qiniu?filename='+fileName+'&isPrivate=false',{}).then(res=>{
+         console.log(res)
+          let that = this
+         that.domain = res.domain+'/'
+         that.tokenqiniu = res.token
+        // debugger
+         qiniuUploader.upload(that.imageArr[0], (res) => {
+           console.log(res)
+              that.headImg = 'http://p5mbint1y.bkt.clouddn.com/'+res.key
+              this.GetAvatars()
+         }, (error) => {
+		         console.log('error: ' + error);
+         }, {
+            region: 'ECN',
+            domain: that.domain, // // bucket 域名，下载资源时用到。如果设置，会在 success 
+            uptoken: that.tokenqiniu, // 由其他程序生成七牛 uptoken
+    
+        }, (res) => {
+          console.log('上传进度', res.progress)
+          console.log('已经上传的数据长度', res.totalBytesSent)
+          console.log('预期需要上传的数据总长度', res.totalBytesExpectedToSend)
+        });
+      })
+    }
+
+    getinfo() {
+      pGetRequest('xb/front/auth/ucMember/info', {}).then(res => {
+        this.parentObj = res
+        this.genderCount = res.sex
+        this.$apply()
+      })
+    }
+
+    getperson() {
+      pRequest('stu/myHome/getInfo', {})
+        .then((res) => {
+          this.parentObj = res
+          this.genderCount = res.comFamilyMemberDTO.gender
+          if (res.comFamilyMemberDTO.province != '') {
+            this.region = [res.comFamilyMemberDTO.province, res.comFamilyMemberDTO.city, res.comFamilyMemberDTO.district]
+          } else {
+            this.region = []
+          }
+          this.$apply()
+        }).catch((res) => {
+      })
+    }
+
+    getqiniuToken() {
+      let url = 'xb/front/auth/td/qiniu'
+      pGetRequest(url, {
+        'Authorization': 'Bearar' + app.getAccessToken()
+      }).then(res => {
+        console.log(res)
+      })
+    }
+
+    onLoad() {
+      this.getinfo()
+      let that = this
+      wx.getUserInfo({
+        success: function (res) {
+          that.userInfo = res.userInfo;
+          that.$apply()
+        },
+        fail: function (res) {
+          // debugger
+        }
+      })
+    }
+
+    
+   GetAvatars(){
+     pRequest('xb/front/auth/ucMember/updateAvatars?imgUrl='+this.headImg,{}).then(res=>{
+        this.parentObj.avatars = res.avatars
+            wx.showToast({
+            title: '头像修改成功',
+            icon: 'none',
+            duration: 2000
+          })
+        this.$apply()
+       
+     })
+   } 
+  }
+
+</script>

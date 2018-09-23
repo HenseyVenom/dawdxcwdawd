@@ -1,0 +1,47 @@
+<!-- index.wxml -->
+<!-- <view class="container">
+  <view class="userinfo">
+    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
+    <block wx:else>
+      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+    </block>
+  </view>
+  <view class="usermotto">
+    <text class="user-motto">{{motto}}</text>
+  </view>
+</view> -->
+<!--pages/wallet/wallet.wxml-->
+<view class='page-top'>
+  <view class="userinfo themeBackgroundColor">
+    <block>
+      <view style='margin-top:62rpx;'>
+        <image class='shell' src='../../images/shell.png' />
+        <text class='shell_text'>{{wallet.creditAvailableAmount}}</text>
+      </view>
+      <text class='frozen_shell'>冻结：{{wallet.creditFrozenAmount}}个</text>
+      <form-button class='withdraw' catchtap='itemClick' data-name='withdraw' data-path='bankCard'>提现</form-button>
+    </block>
+    <view class='circle1'></view>
+    <view class='circle2'></view>
+    <view class='circle3'></view>
+    <view class='circle4'></view>
+  </view>
+</view>
+  <form-button class='item' catchtap='itemClick'  data-name='awardRecord'>
+    <text class='listitem'>收支明细</text>
+    <image class='item_arrow' src='/images/arrow_right.png' mode='aspectFit'></image>
+  </form-button>
+
+  <form-button class='item' catchtap='itemClick' data-name='bankCardManage' data-path='bankCard'>
+    <text class='listitem'>银行卡管理</text>
+    <image class='item_arrow' src='/images/arrow_right.png' mode='aspectFit'></image>
+  </form-button>
+
+
+
+
+<!-- <form-button class='item' button-name='invite' open-type='share'>
+  <text>注册邀请</text>
+  <text class='item_right_text themeColor'>+200贝壳</text>
+</form-button> -->

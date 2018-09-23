@@ -1,0 +1,356 @@
+<style scoped lang='less'>
+  .viewContent {
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    padding: 0rpx 40rpx;
+  }
+
+  .loginApp {
+    font-size: 32rpx;
+    padding-top: 90rpx;
+  }
+
+  .viewContent .phone {
+    height: 90rpx;
+    line-height: 90rpx;
+    border-bottom: 2rpx solid #E9E9E9;
+    font-size: 30rpx;
+    margin-top: 40rpx;
+
+  }
+
+  .verifybox {
+    height: 90rpx;
+    line-height: 90rpx;
+    border-bottom: 2rpx solid #E9E9E9;
+    font-size: 30rpx;
+    margin-top: 40rpx;
+    position: relative;
+    align-items: center;
+  }
+
+  .verify {
+    height: 90rpx;
+    line-height: 90rpx;
+    width: 60%;
+  }
+
+  .verify_button {
+    flex-shrink: 0;
+    margin-right: 15rpx;
+    font-size: 24rpx;
+    height: 55rpx;
+    line-height: 55rpx;
+    padding: 0 22rpx;
+    background-color: white;
+    /*& {*/
+    /*disabled {*/
+    /*color: #cccccc;*/
+    /*}*/
+    /*}*/
+  }
+
+  .verify_button_disabled {
+    color: #cccccc;
+  }
+
+  .submitlogin {
+    width: 100%;
+    height: 94rpx;
+    line-height: 94rpx;
+    text-align: center;
+    background: #F23535;
+    border-radius: 5rpx;
+    color: #fff;
+    display: block;
+    font-size: 36rpx;
+    margin-top: 74rpx;
+  }
+</style>
+<template>
+
+  <view class='viewContent'>
+    <view class='loginApp'>登录商户专属小程序</view>
+    <input value='{{phoneNumber}}' bindinput='bindInputPhone' placeholder='手机号' class='phone' type="number"></input>
+    <view class='verifybox flexR'>
+      <input value="{{verifyCode}}" bindinput='bindInputPassword' placeholder='验证码' class='verify'
+             type="number"></input>
+      <button class="verify_button {{timeCount>0?'verify_button_disabled':'themeColor'}}" @tap.stop="sendVerifyCode"
+              disabled="{{timeCount>0}}">
+        {{timeCount>0?(timeCount+'s重发验证码'):'发送验证码'}}
+      </button>
+    </view>
+    <button class='submitlogin themeBackgroundColor themeShadow' @tap.stop='login'>登录</button>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import {pRequest, pGetRequest} from '../../utils/requestUtils'
+  import formButton from '../../components/formButton'
+  import {organId} from '../../appConfig'
+
+  const app = wepy.$instance
+  const TIME_COUNT = 60
+  export default class Login extends wepy.page {
+    data = {
+      logo: '',
+      phoneNumber: '',
+      timeCount: 0,
+      verifyCode: '',
+      timer: null,
+      businessId: '405020833435286260',
+      tenantId: '405100270020722688',
+      terminalType: 1,
+      accountKind: 1,
+      needBack: false,
+      openId: '',
+    }
+    components = {
+      formButton
+    }
+
+    onLoad(options) {
+      this.needBack = options.needBack
+      if (app.isLogin()) {
+        // return
+        wx.switchTab({
+          url: '/pages/index',
+        })
+      } else {
+        this.loginFromWx()
+      }
+    }
+
+    methods = {
+      bindInputPhone: function (e) {
+        this.phoneNumber = e.detail.value
+      },
+      bindInputPassword(e) {
+        this.verifyCode = e.detail.value
+      },
+      sendVerifyCode: function (e) {
+        if (!this.verify(1)) return
+        if (app.globalData.isUseSaas) {
+          this.sendVerifyCodeFromZX()
+        } else {
+          this.sendVerifyCodeFormXB()
+        }
+      },
+      login: function (e) {
+        if (!this.verify(2)) return
+        wx.showLoading({
+          title: '登录中...',
+        })
+        if (app.globalData.isUseSaas) {
+          this.loginZX()
+        } else {
+          this.loginResultXb(this.loginXB())
+          // this.loginXB()
+        }
+      },
+
+    }
+
+    verify(type) {
+      if (this.phoneNumber == null || this.phoneNumber == '') {
+        wx.showToast({
+          title: '请填写电话号',
+          icon: 'none'
+        })
+        return false
+      }
+      if (type == 1) {
+        return true
+      }
+      if (!this.verifyCode || this.verifyCode == '') {
+        wx.showToast({
+          title: '请填写验证码',
+          icon: 'none'
+        })
+        return false
+      }
+      return true
+    }
+
+    countDown() {
+      this.timeCount = TIME_COUNT
+      if (this.timer) return
+      this.timer = setInterval(() => {
+        // console.log('timeCount:', this.timeCount)
+        if (this.timeCount > 0 && this.timeCount <= TIME_COUNT) {
+          this.timeCount--
+          this.$apply()
+        } else {
+          clearInterval(this.timer)
+          this.timeCount = 0;
+          this.timer = null;
+          this.$apply()
+        }
+      }, 1000)
+    }
+
+    loginSuccess(token) {
+      app.saveToken(token)
+      app.savePhone()
+      this.getInfo()
+    }
+
+    getInfo() {
+      pRequest('stu/myHome/getInfo', {})
+        .then((res) => {
+          wx.hideLoading()
+          this.info = res
+          app.saveParentId(res.comFamilyMemberDTO.parentId)
+          if (this.needBack) {
+            wx.navigateBack({})
+          } else {
+            wx.switchTab({
+              url: '/pages/index',
+            })
+          }
+        }).catch((res) => {
+      })
+    }
+
+    sendVerifyCodeFormXB() {
+      pRequest('xb/front/unAuth/send/sms/' + this.phoneNumber + app.getClientParame(true), {
+        msgType: 1,
+        phone: this.phoneNumber,
+      }).then((res) => {
+        wx.showToast({
+          title: '验证码已发送请注意查收',
+          icon: 'none'
+        })
+        this.countDown()
+      }).catch((err) => {
+      })
+    }
+
+    sendVerifyCodeFromZX() {
+      pRequest('getSmsMsg', {
+        msgType: 1,
+        phone: this.phoneNumber,
+      }).then((res) => {
+        wx.showToast({
+          title: '验证码已发送请注意查收',
+          icon: 'none'
+        })
+        this.countDown()
+      }).catch((err) => {
+      })
+    }
+
+    loginFromWx() {
+      wx.showLoading({
+        title: '请稍等',
+        mask: true
+      })
+      app.loginWixin((code, userInfo) => {
+        if (app.isUseSaas()) {
+          this.loginWxFormZx(code)
+        } else {
+          this.loginWxFormXB(code)
+        }
+      }, (cancel) => {
+        wx.hideLoading({})
+      })
+    }
+
+    //验证验证码
+    loginXB() {
+      return pGetRequest('xb/front/unAuth/sms/check/' + this.phoneNumber + '/code/' + this.verifyCode + app.getClientParame(true)).then((res) => {
+        //登录或注册
+        var param = {
+          mobile: this.phoneNumber,
+          registerType: 'web',
+        }
+        if (this.openId) {
+          param.openid = this.openId
+        }
+        app.savePhone(this.phoneNumber)
+        return pRequest('xb/front/unAuth/register' + app.getClientParame(true), param)
+      })
+    }
+
+    //微信授权
+    loginWxFormXB(code) {
+      // organId
+      pGetRequest('xb/front/unAuth/WxCode/check/' + code + app.getClientParame(true) + '&organizationId=' + organId).then((res) => {
+        this.openId = res.openid
+        wx.hideLoading()
+        if (res.access_token) {
+          this.loginResultXb(Promise.resolve((res)))
+        }
+      }).catch((err) => {
+        if (err) {
+          wx.hideLoading()
+        }
+      })
+    }
+
+    loginResultXb(pro) {
+      pro.then((res) => {
+        app.saveAccessToken(res.access_token, res.token_type)
+        this.getUserData()
+      }).catch((res) => {
+        if (res) {
+          wx.hideLoading()
+        }
+        console.log('error:', res)
+      })
+    }
+
+    loginZX() {
+      pRequest('stu/loginForCode', {
+        smsCode: this.verifyCode,
+        loginName: this.phoneNumber,
+        businessId: this.businessId,
+        tenantId: this.tenantId,
+        accountKind: this.accountKind,
+        terminalType: this.terminalType,
+        openId: this.openId
+      }).then((res) => {
+        // debugger
+        this.loginSuccess(res.token)
+        wx.switchTab({
+          url: '/pages/index',
+        })
+      }).catch((res) => {
+        wx.hideLoading()
+        console.log('error')
+      })
+    }
+
+    loginWxFormZx(code) {
+      pRequest('stu/wxCodeLogin', {
+        appId: 'zxMXxPruU6Zf24hmyX',
+        appName: 'jiazhang-mini',
+        wxCode: code,
+        tenantId: this.data.tenantId,
+      }).then((res) => {
+        if (res.token) {
+          this.loginSuccess(res.token)
+        }
+      }).catch(() => {
+        wx.hideLoading()
+      })
+    }
+
+    getUserData() {
+      return pGetRequest('xb/front/auth/ucMember/info').then((res) => {
+        if (!this.phoneNumber) {
+          if (res.mobile) {
+            app.savePhone(res.mobile)
+          }
+        }
+        app.saveShareQuery('shortUrl=' + res.shortUrl)
+        wx.switchTab({
+          url: '/pages/index',
+        })
+      })
+    }
+
+  }
+</script>

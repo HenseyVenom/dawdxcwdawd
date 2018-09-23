@@ -1,0 +1,283 @@
+<style scoped lang='less'>
+
+  .courseCard {
+    margin: 40rpx;
+    background-color: white;
+    border-radius: 10rpx;
+    box-shadow: 0 0 8rpx 0 rgba(193, 193, 193, 0.50);
+    padding: 30rpx 0;
+    .courseImage {
+      width: 140rpx;
+      height: 140rpx;
+      margin: 0 30rpx;
+      border-radius: 10rpx;
+      flex-shrink: 0;
+      background-color: aquamarine;
+    }
+    .courseRight {
+      flex-grow: 1;
+      justify-content: space-between;
+      .grayText {
+        color: #888888;
+        font-size: 24rpx;
+        padding-right: 10rpx;
+        border-right: 1px solid #888888;
+        margin-right: 10rpx;
+        line-height: 24rpx;
+        &:last-of-type {
+          border-right: 0;
+        }
+      }
+      .courseName {
+        font-size: 30rpx;
+        color: #121212;
+      }
+      .coursePrice {
+        font-size: 34rpx;
+      }
+    }
+  }
+  .inputFrame {
+    margin: 0px 40rpx;
+    border-bottom: 1px solid #E9E9E9;
+    padding: 24rpx 0;
+    font-size: 28rpx;
+    align-items: center;
+    color: #121212;
+    background-color: white;
+    &:first-of-type {
+      margin-top: 62rpx;
+    }
+    text {
+      flex-shrink: 0;
+    }
+    .selectDateText{
+      flex-grow: 1;
+      text-align: right;
+    }
+    .inputName{
+      flex-grow: 1;
+      text-align: right;
+    }
+  }
+  .babyListTitle{
+    margin: 60rpx 40rpx 40rpx;
+    font-weight: bold;
+    color: #121212;
+    font-size: 30rpx;
+  }
+  .babyList{
+    margin: 0 40rpx;
+    flex-wrap: wrap;
+    .babyCard{
+      width: 210rpx;
+      height: 200rpx;
+      align-items: center;
+      background: #FFFFFF;
+      box-shadow: 0 0 8rpx 0 rgba(193,193,193,0.50);
+      border-radius: 10rpx;
+      margin-right: 18rpx;
+      margin-bottom: 18rpx;
+      &:nth-of-type(3n){
+        margin-right: 0;
+      }
+      .avatar{
+        width: 100rpx;
+        height: 100rpx;
+        border-radius: 50%;
+        margin-top: 30rpx;
+      }
+      .defultborder{
+        border-radius: 1%;
+      }
+      .name{
+        font-size: 28rpx;
+        color: #121212;
+        margin-top: 10rpx;
+      }
+    }
+    .babyCardEmpty{
+      justify-content: center;
+      .add{
+        font-size: 50rpx;
+        color: #D8D8D8;
+        font-weight: bold;
+      }
+    }
+    .selcetedBorder{
+      border-width: 1px;
+      border-style: solid;
+    }
+  }
+  .submitButton{
+    font-size: 32rpx;
+    color: white;
+    line-height: 92rpx;
+    text-align: center;
+    margin: 156rpx 40rpx 40rpx;
+    border-radius: 200rpx;
+  }
+
+</style>
+<template>
+  <view class="courseCard flexR">
+    <image class="courseImage" src="{{courseDetail.imageUrl}}"></image>
+    <view class="courseRight flexC">
+      <view class="flexR">
+        <text class="grayText" wx:if="{{courseDetail.tag}}">{{courseDetail.tag?courseDetail.tag:''}}
+        </text>
+        <text class="grayText" wx:if="{{courseDetail.ageTime}}">{{courseDetail.ageTime}}岁</text>
+        <text class="grayText" wx:if="{{courseDetail.isOpenRegistration}}">免费试听</text>
+      </view>
+      <text class="courseName">{{courseDetail.courseName}}</text>
+      <text class="coursePrice themeColor">¥{{courseDetail.packagePrice}}</text>
+    </view>
+  </view>
+  <view class="inputFrame flexR">
+    <text>上课时间</text>
+    <dateTimePicker class="selectDateText" @onDateChange.user="onDateSelect">
+      <text>{{courseTime?courseTime:'请选择上课时间'}}</text>
+    </dateTimePicker>
+  </view>
+  <view class="inputFrame flexR">
+    <text>家长姓名</text>
+    <input class="inputName" value="{{inputName}}" placeholder="请输入家长姓名" bindinput="changeInputName" type="text"/>
+  </view>
+  <view class="inputFrame flexR">
+    <text>联系电话</text>
+    <input class="inputName" value="{{inputPhone}}" placeholder="请输入联系电话" bindinput="changeInputPhone" type="number"/>
+  </view>
+  <view class="babyListTitle">选择参加试听课的宝宝</view>
+  <view class="babyList flexR">
+    <view class="babyCard flexC {{childSelectPosition==i?'selcetedBorder themeBorder':''}}" wx:for="{{childrens}}" wx:for-index="i" wx:key="baby_{{i}}" wx:for-item="child" @tap.stop="selectChild({{i}})">
+      <image class="avatar {{child.headUrl?'':'defultborder'}}" src="{{child.headUrl?child.headUrl:(child.gender=='male'?'/images/box.png':'/images/girl.png')}}"></image>
+      <text class="name">{{child.nickname}}</text>
+    </view>
+    <view class="babyCard babyCardEmpty flexC" @tap.stop="addChild">
+      <text class="add">+</text>
+    </view>
+  </view>
+  <view class="submitButton themeBackgroundColor" @tap.stop="confirmBooking">
+    确定预约
+  </view>
+</template>
+<!--预约试听课-->
+<script>
+  import wepy from 'wepy'
+  import {pGetRequest,pRequest} from "../utils/requestUtils";
+  import dateTimePicker from '../components/dateTimePicker'
+
+  export default class Booking extends wepy.page {
+    configs={
+      navigationBarTitleText:'预约试听课'
+    }
+    components = {
+      dateTimePicker
+    }
+    data = {
+      courseDetail: {},
+      courseTime:'',
+      inputName:'',
+      inputPhone:'',
+      childSelectPosition:-1,
+      childrens:[],
+    }
+    onLoad(options){
+      this.courseDetail=options
+    }
+    onShow(){
+      this.getUserInfo()
+    }
+    methods={
+      onDateSelect(date){
+        this.courseTime=date
+      },
+      changeInputName(e){
+        var reg=/^[\u2E80-\u9FFF]+$/;
+        // if(!reg.test(e.detail.value)){
+        //   wx.showToast({
+        //     title:'请输入汉字',
+        //     icon:'none'
+        //   })
+        //   return
+        // }
+        this.inputName=e.detail.value
+      },
+      changeInputPhone(e){
+        this.inputPhone=e.detail.value
+      },
+      selectChild(i){
+        this.childSelectPosition = i
+        // this.childrens[i].isSelecte=!this.childrens[i].isSelecte
+      },
+      addChild(){
+        if(this.childrens&&this.childrens.length>=3){
+          wx.showToast({
+            title:'最多可以添加三个宝宝',
+            icon:'none'
+          })
+          return
+        }
+        wx.navigateTo({
+          url:'/pages/babyrecord/addbaby/addbaby'
+        })
+      },
+      confirmBooking(){
+        if(!this.inputName){
+          wx.showToast({
+            title:'请输入家长名',icon:'none'
+          })
+          return
+        }
+        if(!this.inputPhone){
+          wx.showToast({
+            title:'请输入电话号',icon:'none'
+          })
+          return
+        }
+        this.bookingCourse()
+      }
+    }
+    getUserInfo(){
+      wx.showLoading()
+      pGetRequest('xb/front/auth/ucBaby/indexAjax').then((res)=>{
+        wx.hideLoading()
+        // this.childrens=res.content
+        if(this.childrens&&this.childrens.length>0){
+          this.childSelectPosition = 0
+        }
+        this.$apply()
+      }).catch((err)=>{
+        if(err){
+          console.log('err:',err)
+          wx.hideLoading()
+        }
+      })
+    }
+    bookingCourse(){
+      wx.showLoading({
+        title:'提交中'
+      })
+      pRequest('xb/front/auth/ucAuditions/create',{
+        babyIDs: [this.childrens[this.childSelectPosition].id],
+        courseId: this.courseDetail.courseId,
+        userName: this.inputName,
+        userPhone: this.inputPhone
+      }).then((res)=>{
+        wx.showToast({
+          title:'预约成功',icon:'none',
+          success:()=>{
+            setTimeout(function () {
+              wx.navigateBack({})
+            },2000)
+          }
+        })
+      }).catch((err)=>{
+        if(err){
+          console.log('err:',err)
+        }
+      })
+
+    }
+  }
+</script>

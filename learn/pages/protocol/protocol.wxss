@@ -1,0 +1,20 @@
+/* pages/protocol/protocol.wxss */
+.protocol_body {
+  width: 670rpx;
+  height: 100%;
+  line-height: 1.7143;
+  color: #666;
+  text-align: justify;
+  font-size: 27rpx;
+  margin: 0 auto;
+}
+
+.h2 {
+  margin: 10rpx 0;
+  color: #333;
+  font-size: 30rpx;
+}
+
+.content ul {
+    list-style: decimal;
+}

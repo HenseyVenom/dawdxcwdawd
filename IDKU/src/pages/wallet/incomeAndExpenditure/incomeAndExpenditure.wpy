@@ -1,0 +1,298 @@
+<style scoped lang='less'>
+  /* pages/wallet/incomeAndExpenditure/incomeAndExpenditure.wxss */
+  Page{
+    display: flex;
+    flex-direction: column;
+  }
+  .top_filter{
+    flex-shrink: 0;
+    flex-direction: column;
+    display: flex;
+    width: 100%;
+    padding: 28rpx 27rpx 40rpx;
+    border-bottom: 1px solid #EDEDED;
+  }
+  .top_filter_date{
+    height: 34rpx;
+    line-height: 34rpx;
+    font-size: 32rpx;
+    color: #333333;
+    align-items: center;
+  }
+  .top_filter_date_image{
+    width: 34rpx;
+    height: 34rpx;
+    margin-left: 20rpx;
+  }
+  .top_filter_info{
+    font-size: 28rpx;
+    color: #666666;
+    margin-top: 20rpx;
+  }
+  .top_filter_layout{
+    margin-top: 20rpx;
+    display: flex;
+    flex-direction: row;
+  }
+  .top_filter_button{
+    height: 50rpx;
+    font-size: 26rpx;
+    color: #999999;
+    line-height: 50rpx;
+    padding-left: 20rpx;
+    padding-right: 20rpx;
+    border-radius: 10rpx;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #999999;
+    margin-right: 20rpx;
+  }
+  .top_filter_button_select{
+    border-color: #ce212c;
+    color: #ce212c;
+  }
+
+  .record_list{
+    flex-grow: 1;
+    overflow-y: overlay;
+  }
+  .record_list_item{
+    align-items: center;
+    padding: 32rpx 32rpx 28rpx 28rpx;
+    background-color: white;
+    border-bottom: 1px solid #EDEDED;
+  }
+  .item_left{
+    flex-shrink: 0;
+    flex-grow: 1;
+  }
+
+  .item_right{
+    width: 220rpx;
+    text-align: right;
+    font-size: 48rpx;
+  }
+  .big_font{
+    font-size: 36rpx;
+  }
+  .little_font{
+    font-size: 36rpx;
+  }
+  .expenditure_color{
+    color: #666666
+  }
+  .emptyView{
+    width: 100%;
+    height: 500rpx;
+    display: block;
+    margin-top: 150rpx;
+  }
+
+</style>
+<template>
+  <!--pages/wallet/incomeAndExpenditure/incomeAndExpenditure.wxml-->
+  <view class='top_filter'>
+    <view class='top_filter_date flexR'>
+      <text>{{showMonthText}}</text>
+      <picker class="selecticon" mode="multiSelector" bindchange="bindMultiPickerChange" value="{{multiIndex}}" range="{{multiArrayDate}}">
+        <view class="picker">
+          <image src='/images/calendar_icon.png' class='top_filter_date_image'></image>
+        </view>
+      </picker>
+      <!-- <image class='top_filter_date_image' src='/images/calendar_icon.png'></image> -->
+    </view>
+    <view class='top_filter_info'>
+      <text>收入：{{monthIncome}}</text>
+      <text style='margin-left:30rpx;'>支出：{{monthOutlay}}</text>
+    </view>
+    <view class='top_filter_layout'>
+      <view class="top_filter_button {{item.value==sourceType?'top_filter_button_select':''}}" wx:for="{{tablist}}" wx:for-index="i" wx:key="filter_{{i}}" data-val="{{item.value}}" catchtap='switchTab'>{{item.name}}</view>
+    </view>
+  </view>
+  <scroll-view class='record_list'>
+    <view>
+      <view class='record_list_item flexR' wx:for="{{personList}}" wx:for-index="i" wx:for-item="item" wx:key="record_{{i}}">
+        <view class='item_left flexC'>
+          <text style="font-size:28rpx;color:{{i<3?'#333333':'#666666'}}"> </text>
+          <view style="font-size:28rpx;color:{{i<3?'#333333':'#666666'}}">
+            <text>{{item.rewardType}}</text>
+            <text wx:if="{{item.nickName}}"> - {{item.nickName}}</text>
+            <text wx:if="{{item.mobile != null && item.mobile}}">({{ item.mobile}})</text>
+          </view>
+          <text style='font-size:24rpx;color:#999999'>{{item.sourceType}}</text>
+        </view>
+        <view class='item_right'>
+          <text class="{{item.amountType=='outlay'?'expenditure_color':'themeColor'}} {{item.amount>1000000000000000?'little_font':'big_font'}}">{{item.amountType=='outlay'?'-':'+'}}{{item.amount}}</text>
+          <text style='font-size:28rpx;color:#999999;display:block' >{{item.createAtStr}}</text>
+        </view>
+      </view>
+    </view>
+    <emptyView class='emptyView' text='还没有收支记录！' wx:if="{{personList.length==0}}"></emptyView>
+
+  </scroll-view>
+
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import emptyView from '../../../components/emptyView'
+    import { pRequest } from "../../../utils/requestUtils.js"
+    import utils from '../../../utils/util.js'
+    const app = wepy.$instance
+    export default class IncomeAndExpenditure extends wepy.page {
+      config = {
+        "enablePullDownRefresh": true,
+        "navigationBarTitleText": "收支明细",
+      }
+      data = {
+        tablist: [{
+          name: '全部',
+          value: ''
+        },
+          {
+            name: '邀请好友奖励',
+            value: 'inviteFriends'
+          },
+          {
+            name: '预约试听课',
+            value: 'bookCourse'
+          },
+          {
+            name: '购买课程',
+            value: 'buyCourse'
+          }
+        ],
+        multiArrayDate: [[], []],
+        multiIndex: [118, 7],
+        yearMonth: '',
+        sourceType: '',
+        personList: [],
+        monthIncome: 0,
+        monthOutlay: 0,
+        currentDate: '',
+        showMonthText: '本月',
+        pO: {
+          page: 0,
+          size: 20
+        },
+        isLoading: false
+      }
+      components={
+        emptyView
+      }
+      onLoad (options) {
+        this.currentDate = new Date()
+        this.yearMonth = new Date().pattern('YYYY-MM') + '-01'
+        let yearArr = this.data.multiArrayDate[0]
+        let MonthArr = this.data.multiArrayDate[1]
+        for (let i = 2018; i < 2100; i++) {
+          yearArr.push(i + '年')
+        }
+        for (var j = 1; j < 13; j++) {
+          if (j < 10) {
+            let num = '0' + j
+            MonthArr.push(j + '月')
+          } else {
+            MonthArr.push(j + '月')
+          }
+        }
+        this.multiArrayDate = [yearArr, MonthArr]
+        this.getPersionList()
+      }
+      //选择日期的下表
+      bindMultiPickerChange (e) {
+        var year = this.multiArrayDate[0][e.detail.value[0]];
+        year = year.substring(0, year.length - 1)
+        var month = this.multiArrayDate[1][e.detail.value[1]];
+        month = month.substring(0, month.length - 1)
+        if (month < 9) {
+          month = '0' + month
+        }
+        this.setShowMonthText(year, month)
+        this.yearMonth = year + '-' + month + '-01'
+        this.onPullDownRefresh()
+      }
+      // tab切换
+      switchTab (e) {
+        this.sourceType = e.currentTarget.dataset.val
+        this.onPullDownRefresh()
+      }
+      setShowMonthText(year, month) {
+        var showMonthText
+        if (year === this.currentDate.getFullYear()) {
+          if (month === (this.currentDate.getMonth() + 1)) {
+            showMonthText = '本月'
+          } else {
+            showMonthText = month + '月'
+          }
+        } else {
+          showMonthText = year + '年' + month + '月'
+        }
+        this.showMonthText = showMonthText
+      }
+      onPullDownRefresh () {
+        if (this.isLoading) {
+          return
+        }
+        this.pO.page = 0
+        this.getPersionList()
+      }
+      onReachBottom () {
+        if (this.isLoading) {
+          return
+        }
+        if (this.pO.totalPage === this.pO.page) {
+          wx.showToast({
+            title: '没有更多了',
+            icon: 'none'
+          })
+          return
+        }
+        this.pO.page = this.pO.page + 1
+        this.getPersionList()
+      }
+      getPersionList () {
+        this.isLoading = true
+        wx.showLoading({
+          title: '加载中...'
+        })
+        // console.log(app.getPhone());
+        // debugger
+        var url = 'xb/front/unAuth/myBalanceInOutList?phone=' + app.getPhone() + '&nowDate=' + this.yearMonth + "&clientId=orgSmallProgram&clientSecret=orgSmallProgram&page=" + this.pO.page + '&size=' + this.pO.size
+        if (this.sourceType) {
+          url += ('&sourceType=' + this.sourceType)
+        }
+        pRequest(url).then((res) => {
+          this.loadingFinish()
+          if (this.pO.page === 0) {
+            this.personList = createList(res.finPopularityInOutLogList.content)
+          } else {
+            this.personList = this.personList.concat(createList(res.finPopularityInOutLogList.content))
+          }
+          this.pO.totalPage = res.finPopularityInOutLogList.totalPages
+          this.pO.page = res.finPopularityInOutLogList.number
+          this.monthIncome = res.amountIncome ? res.amountIncome : 0
+          this.monthOutlay = res.amountOutlay ? res.amountOutlay : 0
+          this.$apply()
+        }).catch((err) => {
+          this.loadingFinish()
+        })
+      }
+      loadingFinish () {
+        wx.stopPullDownRefresh()
+        this.isLoading = false
+        wx.hideLoading()
+        if (this.isLoadingMore) {
+          this.isLoadingMore = false
+        }
+      }
+    }
+    function createList(list) {
+      if (!list)
+        return []
+      list.forEach((item) => {
+        item.createAt = new Date(item.createAt).pattern("YYYY年MM月dd日")
+      })
+      return list
+    }
+</script>

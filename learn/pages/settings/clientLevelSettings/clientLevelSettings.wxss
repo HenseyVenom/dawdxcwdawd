@@ -1,0 +1,97 @@
+.clientLevelSettings{
+ box-sizing: border-box;
+}
+.clientLevelSettings .grade{
+  height:90rpx;
+  display:flex;
+  line-height:90rpx;
+  background:#FFF;
+  padding:0rpx 31rpx;
+  font-size:32rpx;
+  color:#333;
+  border-bottom:1rpx solid #ededed;
+}
+.clientLevelSettings .grade .wen{
+  font-size:32rpx;
+  color:#333;
+  display:block;
+  flex:1
+}
+.clientLevelSettings .grade .imgs{
+  width:150rpx;
+  height:90rpx;
+  text-align: right;
+}
+.clientLevelSettings .grade .imgs .edtor{
+  width:27rpx;
+  height:27rpx;
+}
+.clientLevelSettings .grade .imgs .delect{
+  width: 23rpx;
+	height: 28rpx;
+}
+.clientLevelSettings .addgrade{
+  position:fixed;
+  bottom:0px;
+  left:0px;
+  height:88rpx;
+  font-size:36rpx;
+  color: #ff9c0f;
+  text-align:center;
+  background-color: #ffffff;
+	border-top: solid 1px #ededed;
+  width:100%;
+  line-height:88rpx;
+
+}
+.clientLevelSettings .Mark{
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,.7);
+  position:fixed;
+  top:0px;
+  left:0px;
+}
+.clientLevelSettings .Mark .addAndEdtor{
+  width:540rpx;
+  height:422rpx;
+  position:absolute;
+  left:50%;
+  top:200rpx;
+  margin-left:-270rpx;
+  background:#fff;
+  border-radius: 10px;
+  padding:0rpx 56rpx;
+  
+}
+.clientLevelSettings .Mark .addAndEdtor .title{
+  width:100%;
+  display:inline-block;
+  text-align:center;
+  font-size: 30rpx;
+  padding-top:33rpx;
+}
+.clientLevelSettings .Mark .addAndEdtor .gradeMane{
+  height: 100rpx;
+	background-color: #f5f5f5;
+	border-radius: 4px;
+  margin-top:46rpx;
+}
+.clientLevelSettings .Mark .addAndEdtor .gradeMane input{
+  text-align:center;
+  font-size:32rpx;
+  padding-top:25rpx;
+}
+.sysName{
+  text-align: center;
+  margin-top: 20rpx;
+  font-size: 30rpx;
+}
+.clientLevelSettings .Mark .addAndEdtor .sure{
+  height: 80rpx;
+	background-color: #f23535;
+	border-radius: 6rpx;
+  margin-top:30rpx;
+  color:#fff;
+  font-size: 34rpx;
+}

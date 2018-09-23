@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "提现",
+  "usingComponents": {
+    "form-button": "../../../components/formButton/formButton",
+    "modal": "../../../components/modal/modal"
+  }
+}

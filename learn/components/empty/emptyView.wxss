@@ -1,0 +1,22 @@
+/* component/empty/emptyView.wxss */
+.emptyView{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; 
+}
+.empty_content{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.emptyIcon{
+  width: 137rpx;
+  height: 137rpx;
+}
+.emptyText{
+  font-size: 30rpx;
+  color: #cccccc;
+  margin-top: 23rpx;
+}

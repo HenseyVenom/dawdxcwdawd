@@ -1,0 +1,38 @@
+<!--pages/bankCard/withdraw.wxml-->
+
+<view class='withdraw_result'>
+  <image class='wallet_icon' src='/images/shell_wallet.png'></image>
+  <text class='withdrwa_money'>{{(withdrawMoney)}}元</text>
+  <text class='withdraw_tax'>兑换{{exCount}}贝壳,扣除个税（{{tax}}元）</text>
+</view>
+<view class='widthdraw_item'>
+  <text class='title'>持有贝壳</text>
+  <text class='content'>{{showShellCount}}</text>
+</view>
+<view class='widthdraw_item'>
+  <text class='title'>当前兑换价格</text>
+  <text class='content'>1贝壳={{ratio}}元</text>
+</view>
+<view class='widthdraw_item'>
+  <text class='title'>输入兑换个数</text>
+  <input class='input' placeholder='请输入' bindinput='exCountChange' value='{{exCount}}' type="digit"></input>
+</view>
+<view class='widthdraw_item' style='margin-top:20rpx;' catchtap='selectBankCard'>
+  <text class='title'>选择银行卡</text>
+  <text class='content' style='margin-right: 20rpx;'>{{bankCard.name}}</text>
+  <image class='item_arrow' src='/images/arrow_right.png'></image>
+</view>
+<text class='hint_text'>*提现金额通过银行转账到您的账户</text>
+<form-button class="withdraw_button {{exCount>0 && bankCard.name ? 'themeBackgroundColor' : 'disabledGrayBackground'}}" catchtap='withdraw'>提现</form-button>
+<modal showModal="{{showModal}}" bindclickOk="closeModal">
+  <view class='modal_content flexC'>
+    <image class='modal_image' src='/images/shell_wallet.png'></image>
+    <text class='modal_text'>提现申请已提交，审核中请耐心等待</text>
+  </view>
+</modal>
+<modal showModal="{{showBindingModal}}" bindclickOk="bindBankCard" buttonText="绑定银行卡">
+  <view class='modal_content flexC'>
+    <image class='modal_image' src='/images/bank_wallet.png'></image>
+    <text class='modal_text'>您还未绑定银行卡，马上绑定银行卡</text>
+  </view>
+</modal>

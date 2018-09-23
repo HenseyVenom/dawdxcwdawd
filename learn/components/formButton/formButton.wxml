@@ -1,0 +1,6 @@
+<!--component/formButton/formButton.wxml-->
+<slot class='content'></slot>
+<form bindsubmit="bindSubmit" report-submit>
+  <button formType="submit" open-type='{{openType}}' bindgetuserinfo="{{bindgetuserinfo}}"  class='formButton' data-name='{{buttonName}}'>
+  </button>
+</form>

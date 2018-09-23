@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "银行卡管理",
+  "usingComponents": {
+    "form-button": "../../../components/formButton/formButton"
+  }
+}

@@ -1,0 +1,22 @@
+<!--pages/userManage/dealRecord/dealRecord.wxml-->
+<scroll-view scroll-y class='dealPage' >
+  <view class='dealList'>
+    <view class='dealItem bg-white' wx:for='{{tradingRecord}}' wx:key="unique" wx:for-index="idx">
+      <view class='left'>
+        <view class='gray'>时间：{{item.createDate}}</view>
+        <view class=''>课程：{{item.courseName}}</view>
+        <view class=''>门店：{{item.shopName}}</view>
+        <view class=''>编号：{{item.orderCode}}</view>
+      </view>  
+      <view class='right'>
+        <view class='text-red'>￥{{item.money}}</view>
+        <view class='bg-gray'>{{item.payWay}}</view>
+      </view>
+    </view>
+    <emptyView class="emptyView" height="500rpx;" text="还没有交易记录" wx:if="{{tradingRecord.length==0}}"></emptyView>
+  </view>
+
+  <!-- <form-button class='fixedBottom bg-white' catchtap='addDealFun'>
+    <view>添加交易记录</view>
+  </form-button> -->
+</scroll-view>

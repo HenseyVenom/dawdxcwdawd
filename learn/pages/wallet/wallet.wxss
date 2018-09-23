@@ -1,0 +1,109 @@
+/* pages/wallet/wallet.wxss */
+.walletbj{
+  height: 360rpx;
+  width: 100%;
+  position: absolute;
+}
+.userinfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 360rpx;
+  width: 100%;
+  position: relative;
+}
+
+.circle1{
+  width: 73rpx;
+  height: 73rpx;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.08);
+  position: fixed;
+  top: 97rpx;
+  left: 30rpx;
+  z-index: 1;
+}
+.circle2{
+  width: 34rpx;
+  height: 34rpx;
+  border-radius: 50%;
+	background-color: rgba(255, 255, 255, 0.08);
+   position: fixed;
+   top: 79rpx;
+  left: 96rpx;
+  z-index: 2;
+}
+
+.circle3{
+  width: 136rpx;
+  height: 136rpx;
+  border-radius: 50%;
+	background-color: rgba(255, 255, 255, 0.08);
+	 position: fixed;
+  top: 57rpx;
+  right:26rpx;
+  z-index: 2;
+}
+
+.circle4{
+  width:63rpx;
+  height: 63rpx;
+  border-radius: 50%;
+	background-color: rgba(255, 255, 255, 0.08);
+	 position: fixed;
+  top: 51rpx;
+  right: -26rpx;
+  z-index: 3;
+}
+.shell{
+  width: 47rpx;
+  height: 39rpx;
+}
+.shell_text{
+  font-size: 48rpx;
+  color: white;
+  margin-left: 18rpx;
+}
+.frozen_shell{
+  font-size: 30rpx;
+  color: #cccccc;
+  margin-top: 31rpx;
+}
+.withdraw{
+  width: 335rpx;
+  height: 88rpx;
+  font-size: 36rpx;
+  color: white;
+  line-height: 88rpx;
+  text-align: center;
+  background-color: #ff9c0f;
+	border-radius: 10rpx;
+  margin-top: 52rpx;
+}
+.item{
+  height: 90rpx;
+  border-bottom: 1px solid #EDEDED;
+  line-height: 90rpx;
+  font-size: 32rpx;
+  color: #333333;
+  padding-left: 27rpx;
+  background: white;
+  display: block;
+}
+
+.item_arrow{
+  width: 16rpx;
+  height: 90rpx;
+  margin-right: 30rpx;
+  float: right;
+}
+
+.item_right_text{
+  height: 90rpx;
+  line-height: 90rpx;
+  margin-right: 30rpx;
+  float: right;
+  color: #cccccc;
+  font-size: 30rpx;
+  font-weight: bold;
+}

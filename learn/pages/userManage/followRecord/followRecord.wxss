@@ -1,0 +1,85 @@
+.followRecord{
+  box-sizing:border-box;
+}
+.followRecord .followContentList{
+  padding-bottom:90rpx;
+}
+.followRecord .Record{
+  padding:32rpx 32rpx 20rpx 29rpx;
+  background: #fff;
+  margin-top:10rpx;
+  min-height:160rpx;
+  position:relative;
+}
+.followRecord .Record .wenzi{
+  font-size:28rpx;
+  color:#999;
+}
+.followRecord .Record .wenzi .date{
+  color:#333;
+}
+.followRecord .Record .ramks{
+  color:#ccc;
+  font-size:28rpx;
+  position:absolute;
+  bottom:20rpx;
+  right:32rpx;
+  
+}
+.followRecord .Record .ramks .name{
+  margin:0px 5px;
+}
+.followRecord .Record .ramks .qi{
+  width:22rpx;
+  height:23rpx;
+}
+.followRecord .fixedBottom{
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  padding: 25rpx 0;
+  border-top: solid 1px #ededed;
+  background:#fff;
+}
+.followRecord .fixedBottom view{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ff9c0f;
+  font-size: 36rpx;
+}
+.followRecord .RecordList{
+  border-left:1px solid #ccc;
+  margin-left:31rpx;
+  position: relative;
+}
+.followRecord .RecordList .dian{
+  position: absolute;
+  left:-16rpx;
+  top:36rpx;
+  width: 18px;
+	height: 18px;
+
+}
+.RecordContent{
+  padding:19rpx;
+  margin-left:20rpx;
+  padding-right:30rpx;
+  box-sizing:border-box;
+}
+.RecordContent .Recordate{
+  height:80rpx;
+  line-height:80rpx;
+  padding: 6rpx 10rpx 0rpx 15rpx;
+  font-size:24rpx;
+  border-bottom:1px solid #ededed;
+  background:#fff; 
+}
+.RecordContent .jilu{
+  font-size: 26rpx;
+  padding: 26rpx 10rpx 10rpx 15rpx;
+  background:#fff;
+  padding-bottom:38rpx;
+}

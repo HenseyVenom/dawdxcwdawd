@@ -1,0 +1,24 @@
+<view class='clientLevelSettings'>
+    <view class='grade' wx:for='{{defaultgardeList.list}}'  wx:key="index" wx:for-index="index" wx:for-item="lists">
+        <text class='wen'>{{lists.gradeName ? lists.gradeName : lists.sysGradeName}}</text>
+        <view class='imgs'>
+           <view  data-grade = "{{lists}}" bindtap='addGardeModel' style='width:50%;display:inline-block;text-align:center'>
+             <image src='../../../images/editor.png' class='edtor' ></image>  
+           </view>
+           <!-- <view  data-delect = "{{lists}}" bindtap='delectGrade' style='width:50%;display:inline-block;text-align:center'>
+             <image src='../../../images/delect.png' class='delect'  ></image> 
+           </view> -->
+        </view>
+    </view>
+    <!-- <view class='addgrade' bindtap='addGardeModel'>新增等级</view> -->
+    <view class='Mark' wx:if="{{gradeModel}}" catchtap='closeModel'>
+      <view class='addAndEdtor' catchtap='close'>
+        <text class='title'>新增等级</text>  
+        <view class='gradeMane'>
+            <input placeholder="请输入" bindinput="bindgrade" value='{{gradeObj.gradeName}}' />
+        </view>
+        <view class='sysName'>系统等级：{{gradeObj.sysGradeName}}</view>
+         <button class='sure'  bindtap='sureTap'>确定</button>
+      </view>
+    </view>
+</view>

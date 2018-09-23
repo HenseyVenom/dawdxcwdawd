@@ -1,0 +1,7 @@
+{
+  "component": true,
+  "usingComponents": {
+    "form-button": "../../../components/formButton/formButton",
+    "emptyView": "../../../components/empty/emptyView"
+  }
+}

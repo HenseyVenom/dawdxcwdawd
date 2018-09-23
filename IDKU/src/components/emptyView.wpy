@@ -1,0 +1,50 @@
+<style scoped lang='less'>
+  .emptyView{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .empty_content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .emptyIcon{
+    width: 480rpx;
+    height: 260rpx;
+  }
+  .emptyText{
+    font-size: 30rpx;
+    color: #cccccc;
+    margin-top: 23rpx;
+  }
+</style>
+<template>
+  <view class='emptyView' style="height:{{height}}">
+    <view class='empty_content'>
+      <image class='emptyIcon' src="/images/img_nodata.png" mode='aspectFit'></image>
+      <text class='emptyText'>{{text}}</text>
+    </view>
+  </view>
+
+</template>
+
+<script>
+    import wepy from 'wepy'
+
+    export default class EmptyView extends wepy.component {
+      props={
+        text:{
+          type: String,
+          value: '暂时还没有相关课程哦！',
+        },
+        height:{
+          type: String,
+          value: '100%',
+        }
+      }
+      data = {}
+    }
+</script>

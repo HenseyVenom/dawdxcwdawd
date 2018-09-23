@@ -1,0 +1,91 @@
+<style scoped lang='less'>
+  Page{
+    background-color: white;
+  }
+  .shareTitle {
+    font-size: 34rpx;
+    color: #222;
+    margin-top: 204rpx;
+    margin-bottom: 64rpx;
+    text-align: center;
+  }
+
+  .content_frame {
+    margin: 0 40rpx 104rpx;
+    background: #f4f4f4;
+    border: 2rpx solid #d8d8d8;
+    border-radius: 10rpx;
+    padding: 40rpx 28rpx;
+    text-align: center;
+    font-size: 30rpx;
+    color: #222222;
+  }
+
+  .copyButton{
+    display: block;
+    margin: 0 40rpx;
+    border-radius: 200rpx;
+    text-align: center;
+    height: 92rpx;
+    line-height: 92rpx;
+    color: white;
+    font-size: 32rpx;
+  }
+</style>
+<template>
+  <view class='shareTitle'>复制以下信息分享至微信中</view>
+  <view class='content_frame'>{{shareInfo.name}}，点击 {{shareInfo.url}} 领取。</view>
+  <view class='copyButton themeBackgroundColor' @tap.stop='copyShare'>复制</view>
+
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import network from '../../network'
+    const app=wepy.$instance
+
+    export default class Share extends wepy.page {
+      data = {
+        id: '',
+        shareInfo: {
+          name: '',
+          url: '',
+        },
+        type: 0,
+        shareType: [
+          {
+            name: '报班找学贝，1亿报班补贴大放送',
+            url: network.webUrl + '/popularizeRed',
+          },
+          {
+            name: '特价来袭，直击底价，瓜分1亿课程补贴',
+            url: network.webUrl + '/course/detail',
+          },
+          {
+            name: '特价来袭，直击底价，瓜分1亿课程补贴',
+            url: network.webUrl + '/activity/detail',
+          }
+        ],
+      }
+      onLoad(options) {
+        this.id=options.id ? options.id : ''
+        this.type=options.type
+        let shareInfo = this.shareType[options.type]
+        if (options.type != 0) {
+          shareInfo.url += ('?id=' + options.id + '&' + app.getShareQuery())
+        } else {
+          shareInfo.url += ('?' + app.getShareQuery())
+        }
+        this.shareInfo=shareInfo
+      }
+      methods={
+        copyShare() {
+          wx.setClipboardData({
+            data: this.shareInfo.name + ',点击' + this.shareInfo.url + '领取'
+          })
+        }
+      }
+
+
+    }
+</script>

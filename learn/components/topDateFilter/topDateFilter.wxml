@@ -1,0 +1,4 @@
+<!--components/topDateFilter/topDateFilter.wxml-->
+<view class='flexR filterView'>
+  <view class="filter {{filterSelectPostion==i?'themeBackgroundColor':''}}" style="color:{{filterSelectPostion==i?'#ffffff':''}}" wx:for="{{filterDate}}" wx:for-item="filter" wx:for-index="i" data-i="{{i}}" catchtap='changeFilter' wx:key="filter_{{i}}">{{filter}}</view>
+</view>

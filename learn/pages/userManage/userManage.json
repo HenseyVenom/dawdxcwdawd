@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "用户管理",
+  "usingComponents": {
+    "form-button": "../../components/formButton/formButton"
+  }
+}

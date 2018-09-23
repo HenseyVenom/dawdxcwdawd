@@ -1,0 +1,6 @@
+<view class='Mark'>
+   <view class='viewContent'>
+     <view class='markTitle'>{{showMarkhint.title}}</view>
+     <view class='Marksure'>{{showMarkhint.button}}</view>
+   </view>
+</view>

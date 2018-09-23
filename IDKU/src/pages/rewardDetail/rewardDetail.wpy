@@ -1,0 +1,131 @@
+<style scoped lang='less'>
+  .rewardPage{
+    background-color: #F4F4F4;
+    height: 100vh;
+  }
+  /* pages/rewardDetail/rewardDetail.wxss */
+  .rewardPage .reward-items .reward-top{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff;
+    padding: 27rpx 40rpx;
+    font-size: 32rpx;
+    margin-bottom: 20rpx;
+  }
+  .text-red{
+    color: #F23535;
+  }
+  .rewardPage .reward-items  .reward-center{
+    background: #fff;
+    padding: 30rpx 40rpx;
+    font-size: 30rpx;
+    margin-bottom: 20rpx;
+  }
+  .reward-center .reward-item{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  .reward-item3{
+    align-items:flex-start !important;
+  }
+  .reward-item3 .gray{
+    font-size: 24rpx;
+    color: #888888;
+  }
+  .reward-center .reward-item view{
+    line-height: 50rpx;
+  }
+  .reward-center .reward-item .text-gray{
+    color:  #888888;
+    width: 25%;
+  }
+</style>
+<template>
+  <view class='rewardPage'>
+    <!-- 邀请好友注册奖励 -->
+    <view class='reward-items' wx:if='{{true}}'>
+      <view class='reward-top'>
+        <view>{{rewardDetail.type=='inviteRegister'?'邀请好友注册':(rewardDetail.type=='inviteSign'?'推荐好友参加试听课':'推荐好友购买课程')}}奖励</view>
+        <view class='text-red'>+{{rewardDetail.amount}}</view>
+      </view>
+      <view class='reward-center'>
+        <view class='reward-item'>
+          <view class='text-gray'>好友</view>
+          <view>{{rewardDetail.nickName}}</view>
+        </view>
+        <view class='reward-item'>
+          <view class='text-gray'>注册时间</view>
+          <view>{{rewardDetail.registerTimeStr}}</view>
+        </view>
+      </view>
+      <view class='reward-center reward-bottom' wx:if="{{rewardDetail.type=='inviteBuyCourse'}}">
+        <view class='reward-item'>
+          <view class='text-gray'>购买课程</view>
+          <view>{{rewardDetail.courseName}}</view>
+        </view>
+      </view>
+      <view class='reward-center reward-bottom' wx:if="{{rewardDetail.type=='inviteSign'}}">
+        <view class='reward-item'>
+          <view class='text-gray'>试听课程</view>
+          <view>{{rewardDetail.courseName}}</view>
+        </view>
+        <view class='reward-item'>
+          <view class='text-gray'>培训机构</view>
+          <view>{{rewardDetail.orgName}}</view>
+        </view>
+        <view class='reward-item reward-item3'>
+          <view class='text-gray'>所在门店</view>
+          <view>
+            <view>{{rewardDetail.shopName}}</view>
+            <view class='gray'>{{rewardDetail.address}}</view>
+          </view>
+        </view>
+        <view class='reward-item'>
+          <view class='text-gray'>试听时间</view>
+          <view>{{rewardDetail.sginTimeStr}}</view>
+        </view>
+      </view>
+    </view>
+
+  </view>
+
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import {pRequest} from "../../utils/requestUtils";
+
+    export default class RewardDetail extends wepy.page {
+      config={
+        navigationBarTitleText: "奖励详情",
+      }
+      data = {
+        id: "",
+        sourceType: 'inviteSign',
+        rewardDetail: {}
+      }
+      onLoad (options) {
+        this.id=options.id
+        this.sourceType=options.sourceType
+        this.getRewardDetail()
+      }
+      getRewardDetail() {
+        wx.showLoading({})
+        pRequest('xb/front/unAuth/myBalanceIntegralDetail?id=' + this.id + '&clientId=orgSmallProgram&clientSecret=orgSmallProgram&sourceType=' + this.sourceType).then((res) => {
+          wx.hideLoading()
+          res.createAt = new Date(res.createAt).pattern("YYYY年MM月dd日")
+          if (res.sginTime) {
+            res.sginTime = new Date(res.sginTime).pattern("YYYY年MM月dd日 HH:mm:ss")
+          }
+          this.rewardDetail=res
+          this.$apply()
+        }).catch((err) => {
+          if(err){
+            wx.hideLoading()
+          }
+        })
+      }
+    }
+</script>

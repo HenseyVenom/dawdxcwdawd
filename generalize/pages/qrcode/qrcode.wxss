@@ -1,0 +1,46 @@
+.qrcode {
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  padding: 0rpx 40rpx;
+  align-items: center;
+}
+
+.qrcode .userinfo {
+  width: 100%;
+  display: flex;
+  padding-top: 76rpx;
+}
+
+.userinfo-avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 10rpx;
+  display: block;
+  margin-right: 8rpx;
+}
+
+.userinfo-nickname {
+  display: block;
+  font-size: 34rpx;
+  color: #121212;
+  padding-top: 10rpx;
+}
+
+.userinfo-tell {
+  color: #b9b9b9;
+  font-size: 30rpx;
+  margin-top: 15rpx;
+}
+
+.shareBtn {
+  background: #f23535;
+  border-radius: 10rpx;
+  color: #fff;
+  height: 94rpx;
+  line-height: 94rpx;
+  font-size: 36rpx;
+  display: block;
+  margin-top: 80rpx;
+  width: 100%;
+}

@@ -1,0 +1,7 @@
+{
+  "enablePullDownRefresh": false,
+  "usingComponents": {
+    "form-button": "../../components/formButton/formButton"
+  }
+ 
+}

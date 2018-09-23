@@ -1,0 +1,75 @@
+<view class='myShell'>
+  <view class='flexR'>
+    贝壳
+    <image src='/images/answer.png' class='answer'></image>
+  </view>
+  <text class='underLine deposit' catchtap="entertixin">提现</text>
+  <view class='myglod'>{{accountInfo.creditAvailableAmount}}</view>
+  <view class='withdraw' wx:if="{{accountInfo.creditFrozenAmount>0}}">提现中: {{accountInfo.creditFrozenAmount}}</view>
+</view>
+<view class='menu_item' catchtap='bankCardManage'>
+  <image class='menu_icon' src='/images/card.png'></image>
+  <text class='menu_title'>银行卡管理</text>
+  <image src='/images/arrows.png' class='arrows'></image>
+</view>
+<view class='myAward'>
+  <view class='divide_title'>
+    我的奖励
+    <navigator url="/pages/awardRecord/awardRecord?totalCount={{totalAmount}}&inviteCount={{inviteCount}}&awardCount={{amount}}">
+      <text class='my_award_title'>奖励明细</text>
+    </navigator>
+  </view>
+  <view class='card'>
+    <view class='card_item'>
+      <text class='misson_title'>本月产生奖励(贝壳)</text>
+      <text class='awardNum'>{{amount}}</text>
+    </view>
+    <view class='card_item secondborder'>
+      <text class='misson_title'>本月邀请(人)</text>
+      <text class='awardNum'>{{inviteCount}}</text>
+    </view>
+  </view>
+</view>
+<view class='title_background'>
+  <text class='title'>淘贝壳</text>
+</view>
+<view class='activebei'>
+  <navigator hover-class="none" class='mission_item' url="/pages/invite/award/award">
+    <image class='mission_icon' src='/images/user.png'></image>
+    <text class='misson_title'>邀用户</text>
+    <image class='arrows jianright' src='/images/arrows.png'></image>
+  </navigator>
+  <navigator hover-class="none" url="/pages/organization/list/list">
+    <view class='mission_item'>
+      <image class='mission_icon' src='/images/gift.png'></image>
+      <text class='misson_title'>向好友推荐培训机构优惠活动</text>
+      <image class='arrows jianright' src='/images/arrows.png'></image>
+    </view>
+  </navigator>
+  <navigator hover-class="none" url="/pages/course/list/list">
+    <view class='mission_item'  style='border-color:transparent'>
+      <image class='mission_icon' src='/images/discounts.png'></image>
+      <text class='misson_title'>向好友推荐特价课</text>
+      <image class='arrows jianright' src='/images/arrows.png'></image>
+    </view>
+  </navigator>
+</view>
+<view class='activebei' style='margin-top:20rpx'>
+  <form-button class='mission_item' catchtap='inviteUser' >
+    <view class='mission_item' style='border-color:transparent'>
+      <image class='mission_icon' src='/images/qrcode.png'></image>
+      <text class='misson_title'>我的推广二维码</text>
+      <image class='arrows jianright' src='/images/arrows.png'></image>
+    </view>
+  </form-button>
+</view>
+<form-button catchtap='exit' wx:if="{{false}}">退出登录
+</form-button>
+<view hidden="{{showdot}}">
+  <pop-up showMarkhint="{{showMarkhint}}"></pop-up>
+</view>
+<modal showModal="{{showBindingModal}}" bindclickOk="bindBankCard" buttonText="绑定银行卡">
+  <view class='modal_content flexC'>
+    <text class='modal_text'>您还未绑定银行卡，马上绑定银行卡</text>
+  </view>
+</modal>

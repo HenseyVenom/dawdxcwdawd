@@ -1,0 +1,224 @@
+<style scoped lang='less'>
+  .courseRecord-page{
+    height: 100%;
+    background: #f5f5f5;
+    .flex-between{
+      display: flex;
+      justify-content: space-between;
+    }
+    .text-orange{
+      color: #ff962e;
+    }
+    .text-red{
+      color: #f23535;
+    }
+    .courseRecord-list{
+      .record-item{
+        padding: 30rpx;
+        padding-bottom: 0rpx;
+        align-items: flex-start;
+        background: #fff;
+        .flex-left{
+          flex:1;
+          .step-icon{
+            display: block;
+            width: 14rpx;
+            height: 14rpx;
+            background: #f23535;
+            border-radius: 50%;
+            border: 5rpx solid #fe8f9c;
+            margin-right: 15rpx;
+            position: relative;
+            top: 6rpx;
+          }
+        }
+        .flex-right{
+          padding-bottom: 30rpx;
+          font-size: 24rpx;
+          flex: 13;
+          border-bottom: 1rpx solid #ededed;
+          .record-top{
+            align-items: center;
+            .left{
+              .time{
+                font-size: 24rpx;
+              }
+              .name{
+                font-size: 28rpx;
+                margin: 8rpx 0;
+              }
+              .teacher{
+                font-size: 22rpx;
+                color: #666666;
+              }
+            }
+            .right{
+              font-size: 24rpx;
+            }
+          }
+          .record-text{
+            font-size: 24rpx;
+            margin: 10rpx 0;
+          }
+          .record-imgs{
+            width: 500rpx;
+            image{
+              width: 143rpx;
+              height: 107rpx;
+              background: #eee;
+              margin: 0 10rpx 10rpx 0;
+            }
+          }
+        }
+        .courserLabel{
+          width:100%;
+          display: flex;
+          .courserLabelLsit{
+            padding:5rpx 20rpx;
+            margin-left:10rpx;
+            color:#fff;
+            border-radius:20rpx;
+          }
+          .firstContent{
+            background-color: #79b4fc;
+          }
+          .secondContent{
+            background-color: #ff9a42;
+          }
+          .thirdContent{
+            background-color: #ff665e;
+          }
+
+        }
+      }
+    }
+  }
+</style>
+<template>
+  <view class="courseRecord-page">
+    <view class="courseRecord-list">
+      <view class="record-item flex-between" wx:for="{{recordList}}" wx:for-index="idx" wx:key="i">
+        <view class="flex-left">
+          <text class="step-icon"></text>
+        </view>
+        <view class="flex-right">
+          <view class="record-top flex-between">
+            <view class="left">
+              <view class="time text-red">{{item.startDate}} {{weekDay[item.weekDay]}} {{item.startTime}}-{{item.endTime}}</view>
+              <view class="name">{{item.className}}</view>
+              <view class="teacher" >教练：<text wx:for="{{item.classStaffList}}" wx:for-item="items"  wx:for-index="ind" wx:key="ind" style="margin-right:7rpx;">{{items.staffName}}</text></view>
+            </view>
+
+            <view class="right">
+              <view class="text-orange" wx:if="{{item.isParentEvaluate===0}}" @tap.stop="toComment({{item}})">点评老师>></view>
+              <view class="text-red" wx:if="{{item.isParentEvaluate===1}}">已点评</view>
+            </view>
+          </view>
+          <view class="record-text">
+            {{item.evaluate}}
+          </view>
+          <view class="record-imgs" v-if="item.sharCoachEvaluateDTO != null">
+            <image src="{{images}}" wx:for="{{item.sharCoachEvaluateDTO.imageUrl}}"   wx:for-item="images" wx:for-index="i" wx:key="i"></image>
+          </view>
+          <view class="courserLabel" v-if="item.sharCoachEvaluateDTO != null">
+             <view  class="courserLabelLsit {{labelLists.firstContent?'firstContent':(labelLists.secondContent?'secondContent':'thirdContent')}}" wx:for="{{item.sharCoachEvaluateDTO.labelList}}"   wx:for-item="labelLists" wx:for-index="labelindex" wx:key="labelindex">
+                <text wx:if="labelLists.firstContent" >{{labelLists.firstContent}}</text>
+               <text wx:if="labelLists.secondContent">{{labelLists.secondContent}}</text>
+               <text wx:if="labelLists.thirdContent">{{labelLists.thirdContent}}</text>
+
+             </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import {pRequest} from "../../utils/requestUtils";
+  const app = wepy.$instance
+  export default class CourseRecord extends wepy.page {
+    config = {
+      navigationBarTitleText: '上课记录'
+    }
+    data = {
+      weekDay: {
+        '1': '周一',
+        '2': '周二',
+        '3': '周三',
+        '4': '周四',
+        '5': '周五',
+        '6': '周六',
+        '7': '周日',
+        '0': '周日',
+      },
+      recordList: [
+      ],
+      page:{
+        pageSize:10,
+        pageNum:1
+      },
+      recordPage:{
+
+      }
+    }
+    methods = {
+      toComment (item) {
+        wx.navigateTo({
+          url: '/pages/courseRecord/comment?item=' + JSON.stringify(item)
+        })
+      }
+    }
+    getCourseRecord(){
+      pRequest('stu/myHome/selectEvaluateForFamily',{
+        page:this.page,
+        shopId:app.globalData.shopId
+      }).then(res=>{
+        this.recordList = this.recordList.concat(this.createList(res.list))
+        this.recordPage = res.page
+        this.$apply()
+      })
+    }
+    onLoad () {
+      this.getCourseRecord()
+    }
+    createList(list) {
+      return list.map((item)=>{
+        return {
+          courseRecordId:item.id,
+          studentId:item.id,
+          className:item.className,
+          startDate:new Date(item.startDate).pattern('YYYY-MM-dd'),
+          startTime:new Date(item.startDate).pattern('hh:mm'),
+          endTime:new Date(item.startDate).pattern('hh:mm'),
+          weekDay:item.weekDay,
+          classStaffList:item.classStaffList,
+          isParentEvaluate:item.isParentEvaluate,
+          evaluate:item.sharCoachEvaluateDTO == null ? '' : item.sharCoachEvaluateDTO.evaluate,
+          sharCoachEvaluateDTO:{
+            imageUrl: (item.sharCoachEvaluateDTO !=null && item.sharCoachEvaluateDTO.imageUrl != '') ? item.sharCoachEvaluateDTO.imageUrl.split(','):[],
+            labelList:(item.sharCoachEvaluateDTO !=null && item.sharCoachEvaluateDTO.text != '') ? JSON.parse(item.sharCoachEvaluateDTO.text):[]
+          },
+
+
+
+
+        }
+      })
+    }
+    onPullDownRefresh() {
+      this.recordList=[]
+      this.page.pageNum = 1
+      this.getCourseRecord()
+    }
+    onReachBottom() {
+      if(this.recordPage.totalPage <= this.page.pageNum){
+        return
+      }
+      this.page.pageNum++
+      this.getCourseRecord()
+    }
+  }
+</script>

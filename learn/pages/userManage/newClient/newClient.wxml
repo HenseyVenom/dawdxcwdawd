@@ -1,0 +1,101 @@
+<view class='addClientPage'>
+  <form>
+    <view class='parentInfo'>
+      <view class='flex-between bg-white addItem'>
+        <text class='left'>家长姓名</text>
+        <input class='right' placeholder="请输入" placeholder-class="phcolor" bindinput='bindInput' value='{{parentName}}' data-name='parentName'></input>
+      </view>
+      <view class='flex-between bg-white addItem'>
+        <text class='left'>家长性别</text>
+        <view class='right'>
+          <picker value='{{index}}' range="{{array}}" range-key="label" bindchange="bindPGenderChange" data-index='{{i}}' placegolder='请选择'>
+            <view class='{{array[index]? "":""}}'>{{array[index] ? array[index].label : '男'}}
+              <image src='../../../images/arrow_right.png'></image>
+            </view>
+          </picker>
+        </view>
+      </view>
+      <view class='flex-between bg-white addItem'>
+        <text class='left'>联系方式</text>
+        <input class='right' placeholder="请输入" placeholder-class="phcolor" bindinput='bindInput' value='{{phone}}' data-name='phone'></input>
+      </view>
+      <view class='flex-between bg-white addItem'>
+        <text class='left'>等级</text>
+        <view class='right'>
+          <picker value='{{index}}' range="{{levelArr}}" range-key='name' data-index='{{i}}' bindchange="updateGrade">
+            <view class='{{gradeName? "":"gray"}}'>{{gradeName?gradeName:'请选择'}}
+              <image src='../../../images/arrow_right.png'></image>
+            </view>
+          </picker>
+        </view>
+      </view>
+      <view class='flex-between bg-white addItem'>
+        <text class='left'>来源</text>
+        <view class='right'>
+          <picker value='{{index}}' range="{{sourceArr}}" range-key='name' data-index='{{i}}' bindchange="updateSource">
+            <view class='{{sourceName? "":"gray"}}'>{{sourceName?sourceName:'请选择'}}
+              <image src='../../../images/arrow_right.png'></image>
+            </view>
+          </picker>
+        </view>
+      </view>
+      <!-- <view class='flex-between bg-white addItem'>
+        <text class='left'>顾问</text>
+        <view class='right'>
+          <picker value='{{index}}' range="{{consultArr}}" range-key='personName' data-index='{{i}}' bindchange="updateCounselor">
+            <view class='{{counselorName? "":"gray"}}'>{{counselorName?counselorName:'请选择'}}
+              <image src='../../../images/arrow_right.png'></image>
+            </view>
+          </picker>
+        </view>
+      </view> -->
+      <view class='flex-between bg-white addItem' wx:if="{{true}}">
+        <text class='left'>门店</text>
+        <view class='right'>
+          <picker value='{{index}}' range="{{shopList}}" range-key='shopName' data-index='{{i}}' bindchange="updateShop">
+            <view class='{{shopName? "":"gray"}}'>{{shopName ? shopName:'请选择'}}
+              <image src='../../../images/arrow_right.png'></image>
+            </view>
+          </picker>
+        </view>
+      </view>
+    </view>
+    <!-- 孩子 -->
+    <view class='childInfo' wx:for='{{childArr}}' wx:for-index='i' wx:key='i' wx:for-item="item" >
+      <view class='flex-between bg-white addItem'>
+        <text class='left'>孩子昵称</text>
+        <input class='right' placeholder="请输入" placeholder-class="phcolor" name='item.name' bindinput='bindListInput' value='{{item.name}}' data-name='name' data-i='{{i}}'></input>
+      </view>
+      <view class='flex-between bg-white addItem'>
+        <text class='left'>出生日期</text>
+        <view class='right'>
+          <picker mode="date" value="{{item.age}}" start="2000-01-01" end="{{endTime}}" bindchange="bindDateChange" data-index='{{i}}'>
+            <view class='{{item.age? "":"gray"}}'>{{item.age?item.age:'请选择'}}
+              <image src='../../../images/arrow_right.png'></image>
+            </view>
+          </picker>
+        </view>
+      </view>
+      <view class='flex-between bg-white addItem'>
+        <text class='left'>性别</text>
+        <view class='right'>
+          <picker value='{{sex[item.gender]}}' range="{{array}}" range-key="label" bindchange="bindGenderChange" data-index='{{i}}' name='item.gender'>
+            <view class='{{sex[item.gender]? "":"gray"}}'>{{sex[item.gender]?sex[item.gender]:'请选择'}}
+              <image src='../../../images/arrow_right.png'></image>
+            </view>
+          </picker>
+        </view>
+      </view>
+    </view>
+    <form-button class='addChildBtn' catchtap='addChild' wx:if="{{childArr.length<3}}">
+      <text>+</text> 添加孩子
+    </form-button>
+    <form-button class='submitBtn' catchtap='submitForm'>
+      确定
+    </form-button>
+    <!-- <view >
+      <button formType="submit">确定</button>
+    </view> -->
+  </form>
+
+</view>

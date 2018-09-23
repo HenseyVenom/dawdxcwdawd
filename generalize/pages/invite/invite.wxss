@@ -1,0 +1,152 @@
+/* pages/invite/invite.wxss */
+Page{
+  background-color: #F23535!important;
+}
+.invite_top_area{
+  position: relative;
+}
+.image_top{
+  width: 750rpx;
+  height: 442rpx;
+}
+.ticket{
+  position: relative;
+}
+.image4{
+  width: 670rpx;
+  height: 70rpx;
+  margin: 0 auto;
+  display: block;
+}
+.image5{
+  width: 667rpx;
+  height: 242rpx;
+  margin: -44rpx auto 0;
+  display: block;
+}
+.ticket_content{
+  width: 594rpx;
+  height: 172rpx;
+  margin: -220rpx auto 0;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+}
+.image6{
+  width: 594rpx;
+  height: 172rpx;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+}
+.favourable_name{
+  z-index: 2;
+  font-size: 41rpx;
+  color: #ffffff;
+  font-weight: bold;
+
+}
+
+.favourable_hint{
+  z-index: 3;
+  font-size: 24rpx;
+  color: #ffffff;
+  margin-top: 24rpx;
+}
+.phone_input{
+  width: 670rpx;
+	height: 88rpx;
+	background-color: #c82c2c;
+	border-radius: 10px;
+  margin: 0 auto;
+  align-items: center;
+}
+.phone_input image{
+  width: 33rpx;
+  height: 38rpx;
+  margin-left: 24rpx;
+}
+.phone_input input{
+  flex-grow: 1;
+  font-size: 28rpx;
+  color: #ffffff;
+  margin-left: 20rpx;
+  margin-right: 20rpx;
+}
+
+.verify_button{
+  color: #fffc00;
+  font-size:28rpx;
+  margin-right: 31rpx;
+  flex-shrink: 0;
+}
+
+.agree{
+  font-size: 24rpx;
+  color: #ffffff;
+  margin-left: 44rpx;
+  margin-top: 51rpx;
+}
+
+.submit_buttom{
+  width: 670rpx;
+	height: 88rpx;
+	background-color: #fffc00;
+	border-radius: 10rpx;
+  line-height: 88rpx;
+  text-align: center;
+  font-size: 36rpx;
+  color: #f23535;
+  margin: 60rpx auto 0;
+  display: block;
+}
+.advantage_title{
+  /* width: 621rpx; */
+  font-size: 30rpx;
+	color: #ffffff;
+  align-items: center;
+  position: relative;
+  margin: 92rpx auto 0;
+  line-height: 30rpx;
+}
+.advantage_title text{
+  z-index: 1;
+}
+.advantage_title .title_line{
+  position: absolute;
+  top: 13rpx;
+  left: 0;
+  right: 0;
+  height: 4rpx;
+  z-index: 0;
+  align-items: center
+}
+.advantage_title .title_line image{
+  width: 621rpx;
+  height: 4rpx;
+}
+.advantage_item{
+  width: 663rpx;
+  margin: 20rpx auto 0;
+  background: #c82c2c;
+  border-radius: 10rpx;
+}
+
+.advantage_item .first{
+  font-size: 30rpx;
+  color: #ffffff;
+  margin-top: 32rpx;
+  margin-left: 34rpx;
+}
+.advantage_item .senond{
+  font-size: 24rpx;
+  color: #ffffff;
+  opacity: 0.5;
+  margin-top: 31rpx;
+  margin-left: 35rpx;
+  margin-right: 44rpx;
+  margin-bottom: 35rpx;
+}

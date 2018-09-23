@@ -1,0 +1,10 @@
+<view class='boundStore'>
+   <view class='Store'>
+    <text class='label'>门店名称</text>
+    <view class='storeName' bindtap='enterChooseStore'>
+      <text>龙湖天街一号店</text>
+      <image src='../../../images/arrow_right.png' class='arrow_right'></image>
+    </view>
+   </view>
+   <view class='sureBottom sureStore'>确定</view>
+ </view>

@@ -1,0 +1,24 @@
+<!--pages/bankCard/withdrawRecord/withdrawRecord.wxml-->
+<view class='record_item' wx:for="{{recordList}}" wx:for-index="i" wx:key="{{i}}">
+  <view class='top'>
+    <text style='float:right;fons-size:28rpx;'>{{item.auditTimeStr}}</text>
+    <text class="{{item.auditState=='pass'?'themeColor':'failColor'}}" style='font-weight: bold'>{{item.auditState=='await'?'待审核':(item.auditState=='pass'?'提现成功':'提现失败')}}</text>
+  </view>
+  <view class='middle flexC'>
+    <view class='flexR'>
+      <text class='middle_left'>贝壳数：</text>
+      <text style='fons-size:28rpx;flex-shark:0;color:#999999'>{{item.bkCount}}</text>
+    </view>
+    <view class='flexR'>
+      <text class='middle_left'>个税：</text>
+      <text style='fons-size:28rpx;flex-shark:0;color:#999999'>{{item.individualIncomeTax}}元</text>
+    </view>
+    <view class='flexR'>
+      <text class='middle_left'>提现金额：</text>
+      <text style='fons-size:28rpx;flex-shark:0;color:#999999'>{{item.realityMoney}}元</text>
+    </view>
+  </view>
+  <view class='bottom flexR' wx:if="{{item.auditState=='failure'}}"> {{item.remarks}}
+  </view>
+</view>
+<empty-view class='emptyView' wx:if="{{recordList.length==0}}" text="当前还没有提现记录！"></empty-view>

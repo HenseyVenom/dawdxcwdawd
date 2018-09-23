@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "form-button": "../../components/formButton/formButton"
+  },
+  "navigationBarTitleText": "贝壳提现"
+}

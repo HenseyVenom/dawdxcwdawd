@@ -1,0 +1,231 @@
+<style scoped lang='less'>
+  .activityList{
+    .activity{
+      width: 100%;
+      background: #FFFFFF;
+      border: 0 solid #979797;
+      border-radius: 10rpx;
+      margin-bottom: 40rpx;
+      box-shadow: 0 0 12rpx 0 rgba(213,213,213,0.50);
+      position: relative;
+      .activityImage{
+        width: 100%;
+        height: 300rpx;
+        border-top-left-radius: 10rpx;
+        border-top-right-radius: 10rpx;
+        background-color: #F8F8F8;
+      }
+      .activityName{
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
+        font-size: 30rpx;
+        color: #121212;
+        margin: 22rpx 40rpx 0;
+      }
+      .activityInfo{
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
+        opacity: 0.5;
+        font-size: 24rpx;
+        color: #121212;
+        margin: 4rpx 40rpx 32rpx;
+      }
+      .countDown{
+        position: absolute;
+        right: 20rpx;
+        top: 20rpx;
+        font-size: 29rpx;
+        color: white;
+        padding: 0 16rpx;
+        line-height: 50rpx;
+        border-radius: 25rpx;
+      }
+    }
+  }
+
+</style>
+<template>
+  <view class="activityList flexC">
+    <view  class="activity flexC" wx:for="{{activityList}}" wx:for-index="i" wx:for-item="activity" wx:key="activity_{{i}}" @tap="toActiDetail({{activity}})">
+      <image class="activityImage" src="{{activity.imageBg}}"></image>
+      <text class="activityName">{{activity.activityName}}</text>
+      <text class="activityInfo">{{activity.activityBrief}}</text>
+      <text class="countDown themeBackgroundColor">进行中，剩余{{activity.lastDay}}天</text>
+    </view>
+    <emptyView wx:if="{{!activityList||activityList.length==0}}" :height.sync="emptyHeight">
+    </emptyView>
+  </view>
+
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import {pRequest,pGetRequest} from "../utils/requestUtils";
+  import emptyView from './emptyView'
+  import { connect } from 'wepy-redux'
+  const app=wepy.$instance
+  @connect({
+    shopId (state) {
+      return state.counter.shopId
+    }
+  })
+
+  export default class ActivityList extends wepy.component {
+    props={
+    }
+    components={
+      emptyView
+    }
+    data = {
+      activityList:[],
+      emptyHeight:'560rpx',
+      page:app.isUseSaas()?{
+        pageNum:1,
+        pageSize:10,
+        addPage(){
+          this.pageNum++
+        },
+        refreshPage(){
+          this.pageNum==1
+        }
+      }:{
+        page:0,
+        size:10,
+        addPage(){
+          this.page++
+        },
+        refreshPage(){
+          this.page==1
+        }
+      },
+      isloading:false
+    }
+    methods={
+
+      toActiDetail (e) {
+        let activity = e
+        this.$emit('toActivityDetail', activity)
+      }
+    }
+    watch={
+      shopId(newVal){
+        // if(newVal){
+        //   this.isLoading=false
+        //   this.refresh()
+        // }
+      }
+    }
+    refresh(){
+      if(this.isLoading){
+        return
+      }
+      this.page.refreshPage()
+      this.getPageList()
+    }
+    loadmore(){
+      console.log('loadmore')
+      if(this.isLoading){
+        return
+      }
+      if(this.isNoMore()){
+        return
+      }
+      this.page.addPage()
+      this.getPageList()
+    }
+    isNoMore(){
+      var isNoMore=false
+      var needShowLoadMore=true
+      if (app.isUseSaas()) {
+        if(this.page.pageCount == this.page.pageNo){
+          isNoMore=true
+          needShowLoadMore=this.page.pageCount>0
+        }
+      }else{
+        if(this.page.page >= (this.page.pageTotal-1)){
+          isNoMore = true
+          needShowLoadMore=this.page.pageTotal>0
+        }
+      }
+      if(isNoMore&&needShowLoadMore){
+        if (this.page.pageTotal != 0 || this.page.pageCount != 0) {
+          wx.showToast({
+            title: '没有更多了',
+            icon: 'none'
+          })
+        }
+      }
+      return isNoMore
+    }
+    getPageList(){
+      if(this.shopId==0)return
+      this.isLoading=true
+      if (app.isUseSaas()) {
+        pRequest("stu/home/shopActivityList", {
+          page: {
+            pageSize: 10,
+            pageNum: 1,
+          },
+          businessId: app.globalData.organizationId,
+          shopId: app.globalData.shopId,
+        }).then((res) => {
+          wx.stopPullDownRefresh()
+          this.isLoading=false
+          this.activityList = convertActivityList(res.list)
+          this.$apply()
+        }).catch((err)=>{
+          wx.stopPullDownRefresh()
+          this.isLoading=false
+        })
+      } else {
+        pGetRequest('xb/front/unAuth/organShop/activityList?page='+this.page.page+"&size="+this.page.size+"&shop_id="+this.shopId).then((res)=>{
+          wx.stopPullDownRefresh()
+          this.isLoading=false
+          console.log("res:",res)
+          this.page.pageTotal=res.totalPages
+          this.page.page=res.number
+          if(res.number==0){
+            this.activityList=convertActivityListFromXB(res.content)
+          }else{
+            this.activityList=this.activityList.concat(convertActivityListFromXB(res.content))
+          }
+          this.$apply()
+        }).catch((err)=>{
+          wx.stopPullDownRefresh()
+          this.isLoading=false
+        })
+      }
+    }
+  }
+  function convertActivityList(list){
+    list.forEach((item)=>{
+      var endDateTime=new Date(item.endTime.replace(/\-/g, "/")).getTime()
+      var nowDateTime=new Date().getTime()
+      if(endDateTime>nowDateTime){
+        item.lastDay=((endDateTime-nowDateTime)/(3600*24*1000)).toFixed(0)
+      }else{
+        item.lastDay=0
+      }
+    })
+    return list
+  }
+
+  function convertActivityListFromXB(list) {
+    if(!list){
+      return []
+    }
+    list.forEach((item)=>{
+      var endDateTime=new Date(item.endTime.replace(/\-/g, "/")).getTime()
+      var nowDateTime=new Date().getTime()
+      if(endDateTime>nowDateTime){
+        item.lastDay=((endDateTime-nowDateTime)/(3600*24*1000)).toFixed(0)
+      }else{
+        item.lastDay=0
+      }
+    })
+    return list
+  }
+</script>
+

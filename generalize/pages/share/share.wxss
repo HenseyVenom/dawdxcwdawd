@@ -1,0 +1,33 @@
+/* pages/share/share.wxss */
+Page{
+  background-color: white;
+}
+.shareTitle {
+  font-size: 34rpx;
+  color: #222;
+  margin-top: 204rpx;
+  margin-bottom: 64rpx;
+  text-align: center;
+}
+
+.content_frame {
+  margin: 0 40rpx 104rpx;
+  background: #f4f4f4;
+  border: 2rpx solid #d8d8d8;
+  border-radius: 10rpx;
+  padding: 40rpx 28rpx;
+  text-align: center;
+  font-size: 30rpx;
+  color: #222222;
+}
+
+.copyButton{
+  display: block;
+  margin: 0 40rpx;
+  border-radius: 200rpx;
+  text-align: center;
+  height: 92rpx;
+  line-height: 92rpx;
+  color: white;
+  font-size: 32rpx;
+}

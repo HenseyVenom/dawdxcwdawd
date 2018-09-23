@@ -1,0 +1,6 @@
+/* components/pageList/pageList.wxss */
+@import '../../app.wxss';
+.list{
+  width: 100%;
+  height: 100%;
+}

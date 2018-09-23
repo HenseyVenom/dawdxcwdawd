@@ -1,0 +1,206 @@
+<style scoped lang='less'>
+  .news-page{
+    color: #222;
+    height: 100%;
+    background: #F5F5F5;
+    .news-list{
+      .news-item{
+        background: #fff;
+        padding: 40rpx 0 0 40rpx;
+        &.gray{
+          color: #909090;
+          .news-top{
+            text.gray{
+              color: #909090 !important;
+            }
+          }
+        }
+        .news-area{
+          border-bottom: 1px solid #F5F5F5;
+          padding-bottom: 40rpx;
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+          image{
+            width: 80rpx;
+            height: 80rpx;
+            margin-right: 20rpx;
+          }
+          .right{
+            width: 580rpx;
+            .news-top{
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              view{
+                font-size: 32rpx;
+              }
+              text{
+                font-size: 28rpx;
+                color: #E55525;
+              }
+            }
+            .news-content{
+              font-size: 24rpx;
+              color: #909090;
+              margin-top: 10rpx;
+            }
+          }
+        }
+      }
+    }
+  }
+</style>
+<template>
+  <view class="news-page">
+    <view class="news-list">
+      <view class="news-item {{item.status==='un_read'?'':'gray'}}" wx:for="{{news}}" wx:key="i" @tap="ready({{item.status}},{{item.id}},{{index}})">
+        <view class="news-area">
+          <image wx:if="{{item.status==='un_read'}}" src="/images/news_red.png"></image>
+          <image wx:else src="/images/news_gray.png"></image>
+          <view class="right">
+            <view class="news-top">
+              <view>{{item.subject}}</view>
+              <text class="{{item.status===1?'':'gray'}}">{{item.dataDiffText}}</text>
+            </view>
+            <view class="news-content">{{item.content}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+    <emptyView wx:if="{{!news||news.length==0}}" :height.sync="emptyHeight"></emptyView>
+  </view>
+
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import emptyView from '../components/emptyView'
+ import {pRequest,pGetRequest} from "../utils/requestUtils";
+  export default class News extends wepy.page {
+    config = {
+      navigationBarTitleText: '消息',
+       enablePullDownRefresh:true
+    }
+    components={
+      emptyView
+    }
+    data = {
+      news:[],
+      totalpage:0,
+      page:{
+        page:0,
+        size:10,
+        addPage(){
+          this.page++
+        },
+        refreshPage(){
+          this.page==1
+        }
+      },
+      emptyHeight:'100vh',
+      isloading:false
+    }
+    methods = {
+      ready(stuts,id,index){
+        console.log(index)
+        if(stuts==='read'){
+          return
+        }
+        pRequest('xb/front/auth/message/read/'+id,{
+        }).then(res=>{
+            this.news[index].status = 'read'
+            this.$apply()
+        })
+
+      }
+    }
+    onLoad(){
+     this.getmessage()
+    }
+
+    onPullDownRefresh() {
+       // this.news=[]
+       // this.page.page = 0
+       // this.getmessage()
+      if(this.isLoading){
+        return
+      }
+      this.page.refreshPage()
+      this.getmessage()
+    }
+    onReachBottom(event) {
+      // this.page.page++
+      // console.log(this.totalpage)
+      // console.log(this.page.page)
+      // if(this.totalpage <= this.page.page){
+      // //  debugger
+      //  wx.showToast({
+      //     title: '没有更多了',
+      //      icon: 'none'
+      //   })
+      //   return;
+      // }
+      this.getmessage()
+      if(this.isLoading){
+        return
+      }
+      if(this.isNoMore()){
+        return
+      }
+      this.page.addPage()
+      this.getmessage()
+    }
+    isNoMore(){
+      var isNoMore=false
+      var needShowLoadMore=true
+      if (app.isUseSaas()) {
+        if(this.page.pageCount == this.page.pageNo){
+          isNoMore=true
+          needShowLoadMore=this.page.pageCount>0
+        }
+      }else{
+        if(this.page.page >= (this.page.pageTotal-1)){
+          isNoMore = true
+          needShowLoadMore=this.page.pageTotal>0
+        }
+      }
+      if(isNoMore&&needShowLoadMore){
+        if (this.page.pageTotal != 0 || this.page.pageCount != 0) {
+          wx.showToast({
+            title: '没有更多了',
+            icon: 'none'
+          })
+        }
+      }
+      return isNoMore
+    }
+    getmessage(){
+       wx.showLoading({
+        title: '加载中',
+      })
+      this.isLoading=true
+      pGetRequest('/front/auth/message/list?page='+this.page.page+'&size='+this.page.size,{}).then(res=>{
+        wx.hideLoading()
+        wx.stopPullDownRefresh()
+        this.isLoading=false
+        this.page.pageTotal=res.totalPages
+        this.page.page=res.numbervb
+        if(res.number==0){
+          this.news = res.content
+        }else{
+          this.news = this.news.concat(res.content)
+        }
+        this.totalpage = res.totalPages
+        this.$apply()
+      }).catch((err)=>{
+        wx.stopPullDownRefresh()
+        this.isLoading=false
+        if(err){
+          wx.hideLoading()
+        }
+      })
+    }
+
+  }
+</script>

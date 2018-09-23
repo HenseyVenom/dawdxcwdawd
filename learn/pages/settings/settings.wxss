@@ -1,0 +1,34 @@
+.Settings{
+  height:auto;
+}
+ .Settings .settinglist{
+    height:90rpx;
+    background:#fff;
+    border-bottom:1rpx solid #ededed; 
+    line-height:90rpx;
+    padding:0rpx 26rpx;
+    position:relative;
+}
+.Settings .settinglist .settingtitle{
+  font-size:32rpx;
+  color:#333;
+}
+.Settings .settinglist .item_arrow{
+    width:16rpx;
+    height:25rpx;
+    display:block;
+    float:right;
+    margin-top:38rpx;
+
+}
+.Settings .out{
+  width: 625rpx;
+	height: 88rpx;
+	background-color: #ffffff;
+	border-radius: 10rpx;
+	border: solid 1px #ededed;
+  line-height:88rpx;
+  text-align:center;
+  margin:48rpx auto;
+  color: #f23535;
+}

@@ -1,0 +1,351 @@
+<style scoped lang='less'>
+  .awardRecord{
+    width:100%;
+    height: 100vh;
+  }
+  .awardShell{
+    width:100%;
+    padding:0rpx 40rpx;
+    background:#fff;
+
+  }
+  .shellList{
+    height:90rpx;
+    line-height:90rpx;
+    display:flex;
+    border-bottom:2rpx solid #E5E5E5;
+  }
+  .awardShell .shell-title{
+    font-size:32rpx;
+    color: #121212;
+    flex-grow: 1;
+  }
+  .awardShell  .shell-num{
+    color: #F23535;
+  }
+  .thisMonth{
+    padding:0px 20px 10rpx;
+    background-color: #F4F4F4;
+  }
+  .thisMonth .selectdate{
+    font-size:40rpx;
+    margin-top:52rpx;
+  }
+  .thisMonth .selectdate .selecticon{
+    display: inline-block;
+  }
+  .thisMonth .selectdate .date{
+    width:44rpx;
+    height: 44rpx;
+    position:relative;
+    top:9rpx;
+  }
+  .thisMonth  .inviter{
+    color: #888888;
+    font-size:24rpx;
+  }
+  .thisMonth .viewtab{
+    font-size:26rpx;
+    color: #353535;
+    display: flex
+  }
+  .thisMonth .viewtab text{
+    padding:12rpx 15rpx;
+    display: block;
+    margin-right:20rpx;
+    margin-top:20rpx;
+  }
+  .thisMonth .viewtab .checked{
+    border: 1px solid #F23535;
+    border-radius: 6rpx;
+    color:#F23535;
+  }
+  .thisMonth .viewtab .default{
+    border: 1px solid #B9B9B9;
+    border-radius: 6rpx;
+  }
+  .awardPerson{
+    padding:0px 40rpx;
+    margin-top:20rpx;
+    background:#fff;
+  }
+  .awardPersonLsit{
+    display: flex;
+    padding:28rpx 0rpx;
+    border-bottom:2rpx solid #E5E5E5;
+  }
+  .awardPersonLsit:last-of-type{
+    border-bottom:0;
+  }
+  .awardPersonLsit .personLeft{
+    width:80rpx;
+    height:80rpx;
+    border-radius: 6rpx;
+    background:#ccc;
+    margin-right:9rpx;
+  }
+  .awardPersonLsit .personRight{
+    flex:1;
+  }
+  .awardPersonLsit .personRight .personIntroduce{
+    display: flex;
+    font-size:30rpx;
+    color:#000;
+  }
+  .awardPersonLsit .personRight .personIntroduce .personName{
+    flex:1;
+  }
+  .awardPersonLsit .personRight .personIntroduce .listbottm{
+    color:#888;
+    font-size:28rpx;
+  }
+  .awardPersonLsit .personRight .personIntroduce .persondate{
+    color: #B2B2B2;
+    font-size:24rpx;
+
+  }
+  .emptyView{
+    width: 100%;
+    height: 500rpx;
+  }
+</style>
+<template>
+  <view class='awardRecord flexC'>
+    <view class='awardShell'>
+      <view class='shellList'>
+        <text class='shell-title'>本月奖励贝壳数</text>
+        <text class='shell-num'>{{awardCount}}</text>
+      </view>
+      <view class='shellList'>
+        <text class='shell-title'>本月邀请人数</text>
+        <text class='shell-num'>{{inviteCount}}</text>
+      </view>
+      <view class='shellList' style='border-bottom:0;'>
+        <text class='shell-title'>累计获得奖励贝壳数</text>
+        <text class='shell-num'>{{totalAmount}}</text>
+      </view>
+    </view>
+    <view class='thisMonth'>
+      <view class='selectdate'>
+        {{showMonthText}}
+        <picker class="selecticon" mode="multiSelector" bindchange="bindMultiPickerChange" value="{{multiIndex}}" range="{{multiArrayDate}}">
+          <view class="picker">
+            <image src='/images/date.png' class='date'></image>
+          </view>
+        </picker>
+      </view>
+      <text class='inviter'>产生奖励{{monthAwardCount}}贝壳   邀请{{monthInviteCount}}人</text>
+      <view class='viewtab'>
+
+        <text class="{{item.value==sourceType?'checked':'default'}}" wx:for="{{tablist}}" wx:for-index="index" wx:for-item="item" wx:key="index_{{index}}" @tap.stop='switchTab({{item.value}})'>{{item.name}}</text>
+      </view>
+    </view>
+    <view class='awardPerson'>
+      <view class='awardPersonLsit' wx:for="{{personList}}" wx:for-index="i" wx:key="{{i}}" @tap.stop='showAwardDetail({{i}})'>
+        <image class='personLeft' src="{{item.avatars||'/images/img_mhead.png'}}"></image>
+        <view class='personRight'>
+          <view class='personIntroduce'>
+            <text class='personName'>{{item.nickName}} ({{item.mobile}})</text>
+            <text class='personNum'>{{item.amountType=='income'?'+':'-'}}{{item.amount}}</text>
+          </view>
+          <view class='personIntroduce'>
+            <text class='personName listbottm'>【{{item.rewardType}}】</text>
+            <text class='personNum persondate'>{{item.createAt}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+    <emptyView class='emptyView' text='还没有邀请记录哦！' wx:if="{{personList.length==0}}"></emptyView>
+  </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import {pGetRequest,pRequest} from "../../utils/requestUtils";
+    import network from '../../network'
+    import emptyView from '../../components/emptyView'
+    const app=wepy.$instance
+
+    export default class AwardRecord extends wepy.page {
+      config={
+        enablePullDownRefresh: true,
+        navigationBarTitleText: "我的奖励",
+      }
+      components={
+        emptyView
+      }
+      data = {
+        tablist: [
+          {
+            name: '全部',
+            value: 'inviteFriends',
+          },
+          {
+            name: '预约试听课',
+            value: 'inviteSign',
+          },
+          {
+            name: '购买课程',
+            value: 'inviteBuyCourse',
+          },
+           {
+            name: '注册',
+            value: 'inviteRegister',
+          }
+        ],
+        multiArrayDate: [
+          [],
+          []
+        ],
+        multiIndex: [118, 7],
+        yearMonth: '',
+        sourceType: 'inviteFriends',
+        personList: [],
+        totalAmount:0,
+        totalCount: 0,
+        inviteCount: 0,
+        awardCount: 0,
+        monthAwardCount: 0,
+        monthInviteCount: 0,
+        currentDate: '',
+        showMonthText: '本月',
+        pO: {
+          page: 0,
+          size: 20
+        },
+        isLoading: false,
+      }
+      methods={
+        //选择日期的下表
+        bindMultiPickerChange: function(e) {
+          var year = this.multiArrayDate[0][e.detail.value[0]];
+          year = year.substring(0, year.length - 1)
+          var month = this.multiArrayDate[1][e.detail.value[1]];
+          month = month.substring(0, month.length - 1)
+          if (month < 9) {
+            month = '0' + month
+          }
+          this.setShowMonthText(year, month)
+          this.yearMonth= year + '-' + month + '-01'
+          this.onPullDownRefresh()
+        },
+        //tab切换
+        switchTab: function(val) {
+          this.sourceType= val
+          this.onPullDownRefresh()
+        },
+        showAwardDetail: function(i) {
+          wx.navigateTo({
+            url: '/pages/rewardDetail/rewardDetail?id=' + this.personList[i].id + "&sourceType=" + this.personList[i].type,
+          })
+        },
+      }
+
+      setShowMonthText(year, month) {
+        var showMonthText;
+        if (year == this.currentDate.getFullYear()) {
+          if (month == (this.currentDate.getMonth() + 1)) {
+            showMonthText = '本月'
+          } else {
+            showMonthText = month + '月'
+          }
+        } else {
+          showMonthText = year + '年' + month + '月'
+        }
+        this.showMonthText=showMonthText
+      }
+
+      onLoad(options) {
+        this.currentDate=new Date()
+        this.yearMonth=this.currentDate.pattern("YYYY-MM")+ '-01'
+        let yearArr = this.multiArrayDate[0]
+        let MonthArr = this.multiArrayDate[1]
+        for (let i = 2015; i <= this.currentDate.getFullYear(); i++) {
+          yearArr.push(i + '年')
+        };
+        for (var j = 1; j < 13; j++) {
+          if (j < 10) {
+            let num = '0' + j
+            MonthArr.push(j + '月')
+          } else {
+            MonthArr.push(j + '月')
+          }
+        }
+        this.multiArrayDate= [yearArr, MonthArr]
+        this.multiIndex=[yearArr.length-1, this.currentDate.getMonth()],
+        this.getPersionList()
+        this.getNumber()
+      }
+      //获取本月产生奖励和本月邀请人数
+      getNumber() {
+        pRequest("xb/front/unAuth/myBalanceIntegralStat?phone=" + app.getPhone() + "&clientId=orgSmallProgram&clientSecret=orgSmallProgram").then((res) => {
+          this.inviteCount=res.inviteCount ? res.inviteCount : 0
+          this.awardCount=res.amount ? res.amount : 0
+          this.totalAmount=res.totalAmount ? res.totalAmount : 0
+          this.$apply()
+        }).catch((err) => {})
+      }
+      onPullDownRefresh() {
+        if (this.isLoading) {
+          return
+        }
+        this.pO.page=0
+        this.getPersionList()
+      }
+      /**
+       * 页面上拉触底事件的处理函数
+       */
+      onReachBottom() {
+        if (this.isLoading) {
+          return
+        }
+        if (this.pO.totalPage == this.pO.page) {
+          wx.showToast({
+            title: '没有更多了',
+            icon: 'none'
+          })
+          return
+        }
+        this.pO.page=this.pO.page + 1
+        this.getPersionList()
+      }
+      getPersionList() {
+        this.isLoading = true
+        wx.showLoading({
+          title: '加载中...',
+        })
+        var url = 'front/unAuth/myBalanceInOut?phone=' + app.getPhone() + '&nowDate=' + this.yearMonth + "&clientId=orgSmallProgram&clientSecret=orgSmallProgram&page=" + this.pO.page + '&size=' + this.pO.size
+        if (this.sourceType) {
+          url += ('&sourceType=' + this.sourceType)
+        }
+        pRequest(url).then((res) => {
+          this.loadingFinish()
+          if (this.pO.page == 0) {
+            this.personList=createList(res.finPopularityInOutLogList.content)
+          } else {
+            this.personList=this.personList.concat(createList(res.finPopularityInOutLogList.content))
+          }
+          this.pO.totalPage=res.finPopularityInOutLogList.totalPages
+          this.pO.page=res.finPopularityInOutLogList.number
+          this.monthInviteCount= res.inviteCount ? res.inviteCount : 0
+          this.monthAwardCount= res.amount ? res.amount : 0
+          this.$apply()
+        }).catch((err) => {
+          this.loadingFinish()
+        })
+      }
+      loadingFinish() {
+        wx.stopPullDownRefresh()
+        this.isLoading = false
+        wx.hideLoading()
+        if (this.isLoadingMore) {
+          this.isLoadingMore= false
+        }
+      }
+    }
+    function createList(list) {
+      if (!list)
+        return []
+      return list
+    }
+</script>

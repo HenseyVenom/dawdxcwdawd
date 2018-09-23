@@ -1,0 +1,19 @@
+<!-- <scroll-view class='organPage'> -->
+  <view class='organList'>
+    <view class='organItem' wx:for="{{list}}" wx:for-index="i" wx:key="{{i}}" >
+      <form-button class='flex-start' catchtap='enteroraganFun' data-i='{{i}}'>
+        <view class='left'>
+          <image src='{{item.image}}'></image>
+        </view>
+        <view class='right'>
+          <view class='title'>{{item.activityName}}</view>
+          <view class='address'>
+            <view><image src='/images/ic_location.png'></image> {{item.shopName}}</view> 
+            <!-- <text><text style='color:#cdcdcd'>|</text> {{item.distan}}</text> -->
+          </view>
+        </view>
+      </form-button>
+    </view>
+    <empty-view class='emptyView' text="暂时没有优惠活动" wx:if="{{list.length==0}}"></empty-view>
+  </view>
+<!-- </scroll-view> -->

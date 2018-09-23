@@ -1,0 +1,230 @@
+<style scoped lang="less" >
+  .bankcard{
+    padding-top:40rpx;
+    .banktab{
+      width:100%;
+      padding:0rpx 120rpx;
+      /*background: #fff;*/
+      padding:40rpx 0rpx 54rpx 0rpx;
+      .banklist{
+        width:50%;
+        text-align:center;
+        font-size:28rpx;
+        color:#909090;
+        .heng{
+          border: 2rpx solid #F95E9F;
+          display: block;
+          width:40rpx;
+          margin:0 auto;
+          margin-top:10rpx;
+        }
+        .default{
+          border: 2rpx solid #fff;
+        }
+
+      }
+      .activebank{
+        color:#121212;
+      }
+
+    }
+    .cardPage{
+      background-color: #fff;
+      padding-bottom:60rpx;
+      .repaymentcard{
+        width:700rpx;
+        height:300rpx;
+        marign:0 auto;
+        background-image: linear-gradient(90deg, #F36565 0%, #F23535 97%);
+        box-shadow: 0 5px 8px 0 rgba(55,204,252,0.20);
+        border-radius: 8rpx;
+
+      }
+    }
+    /* pages/bankCard/bankCardUnbinding/bankCardUnbinding.wxss */
+    .bank_card{
+      width: 670rpx;
+      height: 300rpx;
+      margin: 0 auto 0;
+      background: linear-gradient(to right,rgb(243,97,97),rgb(242,56,56));
+      border-radius: 10rpx;
+      position: relative;
+      overflow: hidden;
+      .card_title{
+        margin-top: 47rpx;
+        margin-left: 41rpx;
+
+      }
+      .card_company{
+        width: 90rpx;
+        height: 90rpx;
+        background: white;
+        border-radius: 50%;
+        align-items: center;
+        justify-content: center;
+        .card_icon{
+          width: 60rpx;
+          height: 60rpx;
+          border-radius: 50%;
+        }
+      }
+      .card_text{
+        justify-content: center;
+        color: white;
+        margin-left: 30rpx;
+      }
+      .card_number{
+        margin-left:161rpx;
+        margin-top: 57rpx;
+        font-size: 36rpx;
+        color: white;
+      }
+      .alpha_icon{
+        width: 270rpx;
+        height: 270rpx;
+        opacity: 0.1;
+        position: absolute;
+        right: -30rpx;
+        bottom: -49rpx;
+      }
+      .change{
+        background: #fff;
+        width:100rpx;
+        height:40rpx;
+        border-radius:20rpx;
+        font-size:24rpx;
+        color: #F23535;
+        text-align:center;
+        line-height:40rpx;
+        position: absolute;
+        right:40rpx;
+        top:60rpx;
+      }
+    }
+  }
+</style>
+<template>
+  <view class="bankcard">
+    <!--<view class="flexR banktab">-->
+       <!--<view class="banklist {{tabcount==index?'activebank':''}}" @tap="chageTab({{index}})" wx:for="{{bankList}}"  wx:key="index" wx:for-index="index" >-->
+            <!--{{item}}-->
+           <!--<text class="heng {{tabcount==index?'':'default'}}" ></text>-->
+       <!--</view>-->
+    <!--</view>-->
+    <view class="cardPage">
+      <view class='bank_card flexC' wx:for="{{bankArr}}" wx:for-index="index"  wx:key="index" >
+        <view class='card_title flexR'>
+          <view class='card_company flexR'>
+            <image class='card_icon' src='{{bankimgUrl}}'></image>
+          </view>
+          <view class='card_text flexC'>
+            <text style='font-size:36rpx;'>{{item.bankName}}</text>
+            <text style='font-size:24rpx;margin-top:20rpx'>储蓄卡</text>
+          </view>
+        </view>
+        <view class='card_number'>{{item.cardNumber}}</view>
+        <!--<view class="change" wx:if="{{tabcount==0}}">更换</view>-->
+      </view>
+    </view>
+  </view>
+
+</template>
+<script>
+  import wepy from  'wepy'
+  import {pRequest,pGetRequest} from '../../../utils/requestUtils'
+  export default class bankcard extends wepy.page{
+    config={
+      navigationBarTitleText:'银行卡管理'
+    }
+    data={
+       bankList:['还款银行卡','支付银行卡'],
+       tabcount:0,
+       bankArr:[],
+       cardlist: [
+      {
+        name: '北京银行',
+        imgUrl: 'beijing'
+      },
+      {
+        name: '工商银行',
+        imgUrl: 'gongshang'
+      },
+      {
+        name: '光大银行',
+        imgUrl: 'guangda'
+      },
+      {
+        name: '广发银行',
+        imgUrl: 'guangfa'
+      },
+      {
+        name: '华夏银行',
+        imgUrl: 'huaxia'
+      },
+      {
+        name: '建设银行',
+        imgUrl: 'jianshe'
+      },
+      {
+        name: '交通银行',
+        imgUrl: 'jiaotong'
+      },
+      {
+        name: '民生银行',
+        imgUrl: 'minsheng'
+      },
+      {
+        name: '农业银行',
+        imgUrl: 'nongye'
+      },
+      {
+        name: '平安银行',
+        imgUrl: 'pinan'
+      },
+      {
+        name: '浦发银行',
+        imgUrl: 'pufa'
+      },
+      {
+        name: '兴业银行',
+        imgUrl: 'xingye'
+      },
+      {
+        name: '招商银行',
+        imgUrl: 'zhaoshao'
+      },
+      {
+        name: '中国银行',
+        imgUrl: 'zhongguo'
+      },
+      {
+        name: '中信银行',
+        imgUrl: 'zhongxin'
+      },
+    ],
+     bankimgUrl:''
+    }
+    methods={
+      chageTab(index){
+        this.tabcount = index
+      }
+    }
+    onLoad(){
+     this.getbank()
+     
+    }
+    getbank(){
+       pGetRequest('/front/auth/bankcard/list',{}).then(res=>{
+         console.log(res)
+         this.bankArr = res
+         this.cardlist.map(item=>{
+           if(item.name == res[0].bankName){
+             debugger
+             this.bankimgUrl = '/images/img/'+item.imgUrl+'.png'
+           }
+         })
+         this.$apply()
+       })
+    }
+  }
+</script>

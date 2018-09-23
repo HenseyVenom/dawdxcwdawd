@@ -1,0 +1,100 @@
+/* pages/bankCard/withdraw.wxss */
+Page{
+  display: flex;
+  flex-direction: column;
+}
+.widthdraw_item{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  height: 90rpx;
+  border-bottom: 1px solid #EDEDED;
+  align-items: center;
+  font-size: 32rpx;
+  color: #333333;
+  background: white;
+}
+.title{
+  width: 50%;
+  margin-left: 38rpx;
+}
+.content{
+  width: 50%;
+  font-size: 30rpx;
+  text-align: right;
+  margin-right: 30rpx;
+}
+.input{
+  flex-grow: 1;
+  text-align: right;
+  margin-right: 30rpx;
+}
+.hint_text{
+  color: #666666;
+  font-size: 25rpx;
+  margin-left: 20rpx;
+  margin-top: 40rpx;
+}
+.withdraw_result{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 430rpx;
+  background: white;
+}
+.withdrwa_money{
+  font-size: 72rpx;
+  font-weight: bold;
+  color: #333333;
+}
+.withdraw_tax{
+  font-size: 24rpx;
+  color: #999999;
+  margin-top: 34rpx;
+}
+
+.withdraw_button{
+  width: 625rpx;
+  height: 88rpx;
+  line-height: 88rpx;
+  text-align: center;
+  font-size: 36rpx;
+  margin-top: 99rpx;
+  color: white;
+  border-radius: 10rpx;
+  margin: 99rpx auto 0;
+  background: #ccc;
+}
+
+.wallet_icon{
+  width: 121rpx;
+  height: 104rpx;
+}
+
+.item_arrow{
+  width: 16rpx;
+  height: 25rpx;
+  margin-right: 30rpx;
+}
+
+.modal_content{
+  width: 100%;
+  align-items: center;
+}
+.modal_image{
+  width: 160rpx;
+  height: 137rpx;
+}
+.modal_text{
+  font-size: 30rpx;
+  color: #333333;
+  margin-top: 37rpx;
+  margin-bottom: 57rpx;
+}
+.themeBackgroundColor{
+  background:#f23535;
+}
+.disabledGrayBackground{
+  background: #d8d8d8;
+}

@@ -1,0 +1,557 @@
+<template>
+  <view class='top_banner'>
+    <swiper indicator-dots="true" autoplay="true" interval="5000" duration="500" class='top_swiper'>
+      <swiper-item wx:for="{{courseDetail.classBanner}}" wx:for-index="i" wx:for-item='item' wx:key="{{i}}">
+        <image src="{{item.image}}" class="slide-image" mode='aspectFill' wx:if="{{!item.video}}" />
+        <video src='{{item.video}}' class='slide-image' wx:else></video>
+      </swiper-item>
+    </swiper>
+  </view>
+  <view class="course_brief flexC">
+    <view class="content flexR">
+      <text class="grayText" wx:if="{{courseDetail.tags[0]}}">{{courseDetail.tags[0]?courseDetail.tags[0].name:''}}</text>
+      <text class="grayText" wx:if="{{courseDetail.ageTime}}">{{courseDetail.ageTime}}岁</text>
+      <text class="grayText" wx:if="{{courseDetail.isOpenRegistration}}">免费试听</text>
+    </view>
+    <text class="content course_name">{{courseDetail.courseName}}</text>
+    <text class="content price themeColor">¥{{courseDetail.purchaseMode=='special'?courseDetail.activityPrice:courseDetail.packagePrice}}<text class="originalPrice" wx:if="{{courseDetail.purchaseMode=='special'}}">￥{{courseDetail.packagePrice}}</text></text>
+    <view class="content tag flexR">
+      <view class="item" wx:if="{{courseDetail.packageHour}}">{{courseDetail.packageHour}}课时</view>
+      <view class="item" wx:if="{{courseDetail.duration}}">{{courseDetail.duration}}分钟</view>
+      <view class="item" wx:if="{{courseDetail.classTime}}">{{courseDetail.classTime}}</view>
+    </view>
+  </view>
+  <view class='course_institutions_wrapper' style='border-top:20rpx solid #F5F5F5;'>
+    <view class='course_institutions flexC'>
+      <text class='title'>培训机构</text>
+    </view>
+  </view>
+  <view class='course_institutions_wrapper'>
+    <view class='course_institutions flexC'>
+      <text class='name'>{{shopInfo.shopName}}</text>
+      <view class='flexR address'>
+        <text class='name addressText'  style='margin-top:0'>{{shopInfo.address}}</text>
+        <image class='item_arrow' ></image>
+      </view>
+    </view>
+  </view>
+  <view class='course_institutions_wrapper'>
+    <view class='course_institutions flexR' style='border-bottom:0;' @tap.stop="phoneFun({{shopInfo.telephone}})">
+      <image class="phoneIcon" src="/images/phone.png"></image>
+      <text class='name'>{{shopInfo.telephone}}</text>
+    </view>
+  </view>
+
+  <view class='course_detail'>
+    <view class='course_introduce flexR'>
+      <text>课程介绍</text>
+    </view>
+    <view class='detail_web'>
+      <rich-text nodes="{{courseDetail.classIntro}}"></rich-text>
+    </view>
+  </view>
+  <view style="height:92rpx;width:100%"></view>
+
+  <view class='bottom flexR' wx:if="{{true}}">
+    <view class='left flexR'>
+      <view class='handle flexC' @tap.stop='phoneFun({{shopInfo.telephone}})'>
+        <image src='/images/img_shop_phone.png'></image>
+        <text>电话咨询</text>
+      </view>
+      <view class='handle flexC' style='margin-left:54rpx;' @tap.stop="checkCourse({{courseId}},{{courseDetail}})">
+        <image src="{{courseDetail.isOpenRegistration?'/images/img_stk_grey.png':'/images/img_stk_grey_disable.png'}}"></image>
+        <text class="{{courseDetail.isOpenRegistration?'':'disabled'}}">预约试听</text>
+      </view>
+    </view>
+    <buyCourseButton class='right themeBackgroundColor' @click.user='buyCourse'>
+      购买课程
+    </buyCourseButton>
+    <wepyModal :showModal.sync="showModal">
+      <view class="modalContent flexC">
+        <text class="modalTitle">请选择预约类型</text>
+        <text class="chooseButton" @tap.stop="booking({{courseId}},{{courseDetail}})">试听课</text>
+        <text class="chooseButton" @tap.stop="bookCourse">正式课</text>
+        <text class="close" @tap.stop="closeModal">×</text>
+      </view>
+    </wepyModal>
+  </view>
+
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import {pRequest,pGetRequest} from "../utils/requestUtils";
+    import formButton from '../components/formButton'
+    import wepyModal from '../components/modal'
+    const app = wepy.$instance
+
+    export default class CourseDetail extends wepy.page {
+      components={
+        buyCourseButton:formButton,
+        wepyModal
+      }
+      data = {
+        packageId: '',
+        courseDetail: {},
+        showModal:false,
+        shopInfo:{},
+        courseId:''
+      }
+
+      onLoad(options) {
+        // console.log(options);
+        // debugger
+        if(app.isUseSaas()) {
+          this.packageId = options.id
+          this.getCourseDetail()
+          this.shopInfo = app.getShopInfo()
+        } else {
+          this.courseId=options.id
+          this.getCourseDetailFormXB()
+        }
+      }
+      methods = {
+        phoneFun: function (phone) {
+          wx.makePhoneCall({
+            phoneNumber: phone
+          })
+        },
+        checkCourse: function (courseId,courseDetail) {
+          if(app.isUseSaas()){
+            this.getCoursePackage()
+          }else{
+            this.methods.booking(courseId,courseDetail)
+          }
+        },
+        buyCourse() {
+          if(app.isUseSaas()){
+          }else{
+            // "special".equals(ucShopCourseBizPojo.getPurchaseMode()
+            wx.navigateTo({
+              url: '/pages/buyCourse?courseId='+this.courseId+getQueryParam(this.courseDetail,['imageUrl','ageTime','courseName','packagePrice','activityPrice','isOpenRegistration','purchaseMode'])+"&tag="+this.courseDetail.tags[0].name
+            })
+          }
+        },
+        closeModal(){
+          this.showModal=false
+        },
+        //预约试听课
+        booking(courseId,courseDetail){
+          if(!courseDetail.isOpenRegistration){
+            return
+          }
+          if(app.isUseSaas()){
+            wx.navigateTo({
+              url: '/pages/booking?packageId='+this.packageId+'&imageUrl='+this.courseDetail.imgUrl+"&ageTime="+this.courseDetail.ageTime+"&courseName="+this.courseDetail.courseName+"&price="+this.courseDetail.packagePrice+"&courseId="+this.courseDetail.id
+            })
+            this.showModal=false
+          }else{
+            wx.navigateTo({
+              url: '/pages/booking?courseId='+courseId+getQueryParam(courseDetail,['imageUrl','ageTime','courseName','packagePrice','activityPrice','isOpenRegistration','imageUrl'])+"&tag="+courseDetail.tags[0].name
+            })
+          }
+        },
+        //预约正式课
+        bookCourse(){
+          if (app.isUseSaas()) {
+            wx.navigateTo({
+              url: '/pages/reserveCourse?packageId=' + this.packageId + '&imageUrl=' + this.courseDetail.imgUrl + "&ageTime=" + this.courseDetail.ageTime + "&courseName=" + this.courseDetail.courseName + "&price=" + this.courseDetail.packagePrice + "&courseId=" + this.courseDetail.id
+            })
+            this.showModal = false
+          } else {
+            wx.navigateTo({
+              url:'/pages/buyCourse?courseId='+this.courseId
+            })
+          }
+        }
+      }
+
+      getCourseDetail() {
+        wx.showLoading({
+          title: '加载中...',
+        })
+        pRequest('stu/home/findPackage',{
+          packageId:this.packageId
+        }).then((res) => {
+          wx.hideLoading()
+          res.ageTime=ageTime(res)
+          this.courseDetail = res
+          this.courseDetail.classBanner = JSON.parse(res.allBanner)
+          this.courseDetail.classIntro = res.content.replace(/\<img/gi, '<img style="width: 100%;height: auto;" ')
+          this.$apply()
+        }).catch((err) => {
+        })
+      }
+      getCourseDetailFormXB(){
+        wx.showLoading({
+          title:'加载中'
+        })
+        pGetRequest('xb/front/unAuth/organShop/shopCourse/view/'+this.courseId).then((res)=>{
+          wx.hideLoading()
+          this.courseDetail.classBanner=JSON.parse(res.classBanner)
+          this.courseDetail.tags=res.tags;
+          this.courseDetail.imageUrl=res.logoUrl;
+          this.courseDetail.ageTime=res.ageStart+'-'+res.ageEnd;
+          this.courseDetail.isOpenRegistration=res.isOpenRegistration;
+          this.courseDetail.courseName=res.name;
+          this.courseDetail.packagePrice=res.price;
+          this.courseDetail.activityPrice=res.activityPrice;
+          this.courseDetail.packageHour=res.classHour;
+          this.courseDetail.duration=res.classLong;
+          this.courseDetail.classTime=res.classTime;
+          this.courseDetail.purchaseMode=res.purchaseMode
+          this.courseDetail.classIntro=res.classIntro.replace(/\<img/gi, '<img style="width: 100%;height: auto;" ')
+          this.shopInfo.shopName=res.shopName
+          this.shopInfo.address=res.city+res.area+res.address
+          this.shopInfo.telephone=res.telephone
+          this.$apply()
+        }).catch((err)=>{
+          if(err){
+            wx.hideLoading()
+          }
+        })
+      }
+      getCoursePackage(){
+        wx.showLoading({
+          title:''
+        })
+        pRequest('stu/myHome/package',{
+          id:this.packageId
+        }).then((res)=>{
+          wx.hideLoading()
+          if(res.list.length>0){//买过
+            this.showModal=true
+            this.$apply()
+          }else{//没买过
+            this.methods.booking()
+          }
+        }).catch((err)=>{
+          if(err){
+            wx.hideLoading()
+          }
+        })
+      }
+
+    }
+    function getQueryParam(obj,keyArray) {
+      var queryParam=''
+      for(var k in obj){
+        if(keyArray.contains(k)){
+          queryParam=queryParam+'&'+k+'='+obj[k]
+        }
+      }
+      return queryParam
+    }
+    function ageTime(item) {
+      var minMonth=item.minAge
+      var maxMonth=item.maxAge
+      if(minMonth==0&&maxMonth==0){
+        return''
+      }else{
+        var minAge= (minMonth/12).toFixed(0)
+        var maxAge=(maxMonth/12).toFixed(0)
+        if(minAge==0&&maxAge==0){
+          return"0-1"
+        }else{
+          return minAge+'-'+maxAge
+        }
+      }
+    }
+</script>
+<style scoped lang='less'>
+  .modalContent{
+    border-radius: 10rpx;
+    width: 550rpx;
+    align-items: center;
+    position: relative;
+    padding-bottom: 96rpx;
+    .modalTitle{
+      font-size: 34rpx;
+      color: #030303;
+      margin-top: 56rpx;
+    }
+    .chooseButton{
+      padding: 0 144rpx;
+      font-size: 36rpx;
+      line-height: 96rpx;
+      color: #121212;
+      border: 1px solid #121212;
+      border-radius: 48rpx;
+      margin-top: 60rpx;
+    }
+    .close{
+      position: absolute;
+      top: 0;
+      right: 0;
+      color: #121212;
+      padding: 0 24rpx;
+      font-size: 60rpx;
+    }
+  }
+  .top_banner {
+    position: relative;
+    margin-top: 10rpx;
+  }
+
+  .slide-image {
+    width: 100%;
+    height: 300rpx;
+  }
+  .top_swiper{
+    height: 300rpx;
+  }
+
+  .top_swiper .wx-swiper-dots.wx-swiper-dots-horizontal {
+    margin-bottom: 2rpx;
+    right: 0rpx !important;
+    left: unset;
+    bottom: 10rpx;
+  }
+
+  .top_swiper .wx-swiper-dot {
+    display: inline-flex;
+    width: 10rpx;
+    height: 10rpx;
+    border-radius: 50%;
+    margin-left: 14rpx;
+    justify-content: space-between;
+    background-color: white;
+  }
+
+  .top_swiper .wx-swiper-dot::before {
+    content: '';
+    flex-grow: 1;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 8rpx;
+  }
+
+  .top_swiper .wx-swiper-dot-active {
+    width: 26rpx;
+  }
+  .course_brief{
+    padding: 38rpx 0rpx 42rpx;
+    width: 100%;
+    background-color: white;
+    .content{
+      margin-left: 40rpx;
+      margin-right: 40rpx;
+      .grayText{
+        color: #888888;
+        font-size: 24rpx;
+        padding-right: 10rpx;
+        border-right: 1px solid #888888;
+        margin-right: 10rpx;
+        line-height: 24rpx;
+        &:last-of-type{
+          border-right: 0;
+        }
+      }
+      .originalPrice{
+        text-decoration: line-through;
+        margin-left: 20rpx;
+        font-size: 28rpx;
+        color: #909090;
+      }
+    }
+    .course_name {
+      font-size: 30rpx;
+      color: #222;
+      font-weight: bold;
+      margin-top: 18rpx;
+    }
+    .price {
+      font-size: 40rpx;
+      margin-top: 22rpx;
+      font-weight: bold;
+    }
+    .tag{
+      flex-wrap: wrap;
+      margin-top: 30rpx;
+      .item{
+        padding: 0 30rpx;
+        border-radius: 24rpx;
+        background-color: #F4F4F4;
+        margin-right: 20rpx;
+        margin-bottom: 20rpx;
+        color: #121212;
+        font-size: 24rpx;
+        line-height: 48rpx;
+      }
+    }
+  }
+
+
+
+  .course_specification {
+    flex-wrap: wrap;
+  }
+
+  .course_specification .item {
+    width: 33%;
+    background-color: white;
+    margin-right: 1px;
+    justify-content: center;
+    align-items: center;
+    height: 80rpx;
+    font-size: 24rpx;
+    color: #222;
+    margin-bottom: 1px;
+  }
+
+  .course_specification .item text {
+    max-width: 70%;
+    max-height: 30rpx;
+    overflow: hidden;
+  }
+
+  .course_specification .item .icon {
+    width: 26rpx;
+    height: 26rpx;
+    margin-right: 10rpx;
+    margin-top: 4rpx;
+  }
+
+  .course_specification .item:nth-of-type(3n) {
+    margin-right: 0px;
+  }
+
+  .course_price_view {
+    background: white;
+    padding: 22rpx 30rpx 30rpx;
+    margin-top: 20rpx;
+  }
+
+  .course_price_view .discounts {
+    margin-top: 26rpx;
+    line-height: 30rpx;
+    font-size: 20rpx;
+    color: white;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .course_price_view .discounts text {
+    padding: 0 18rpx;
+    border-radius: 24rpx;
+    background: #f95c9f;
+    margin-right: 10rpx;
+    margin-bottom: 10rpx;
+  }
+
+  .course_institutions_wrapper {
+    background-color: white;
+  }
+
+  .course_institutions {
+    margin-left: 46rpx;
+    margin-right: 46rpx;
+    padding: 36rpx 0rpx 20rpx;
+    border-bottom: 1px solid #f5f5f5;
+    background: white;
+    .title{
+      font-family: PingFangSC-Regular;
+      font-size: 34rpx;
+      color: #222;
+      letter-spacing: 0;
+      flex-shrink: 0;
+      align-self: flex-start;
+      font-weight: bold;
+    }
+    .name {
+      /* min-height: 60rpx; */
+      font-family: PingFangSC-Regular;
+      font-size: 30rpx;
+      line-height: 34rpx;
+      color: #222222;
+      letter-spacing: 0;
+      margin-right: 20rpx;
+      flex-grow: 1;
+    }
+    .address{
+      margin-right: 20rpx;
+      margin-top: 16rpx;
+    }
+    .addressText{
+      font-size: 24rpx;
+      color: #888888;
+    }
+    .item_arrow {
+      width: 16rpx;
+      height: 20rpx;
+      flex-shrink: 0;
+    }
+    .phoneIcon{
+      width: 34rpx;
+      height: 34rpx;
+      margin-right: 16rpx;
+    }
+  }
+
+  .course_detail {
+    border-top:20rpx solid #F5F5F5;
+  }
+
+  .course_introduce {
+    background: white;
+    padding: 36rpx 46rpx;
+    font-size: 34rpx;
+    color: #222;
+    align-items: center;
+  }
+
+  .course_introduce .indicator {
+    width: 6rpx;
+    height: 30rpx;
+    background: #66a1fd;
+    border-radius: 100rpx;
+    margin-right: 16rpx;
+  }
+
+  .detail_web {
+    margin: 30rpx 30rpx 0rpx;
+    padding-bottom: 30rpx;
+    font-size: 28rpx;
+  }
+
+  rich-text .rich-img {
+    width: 100%;
+    height: auto;
+    margin: 10rpx 0;
+  }
+  .bottom{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 92rpx;
+  }
+  .bottom .left{
+    width: 40%;
+    height: 100%;
+    background-color: white;
+    justify-content: center;
+    align-items: center;
+  }
+  .bottom .left .handle{
+    align-items: center;
+    font-size: 20rpx;
+    color: #909090;
+    .disabled{
+      color: #B9B9B9;
+    }
+  }
+  .bottom .left .handle image{
+    width: 36rpx;
+    height: 40rpx;
+  }
+
+  .bottom .right{
+    width: 60%;
+    height: 100%;
+    background-color: #66A1FD;
+    font-size: 16px;
+    color: #FFFFFF;
+    line-height: 92rpx;
+    text-align: center;
+  }
+</style>

@@ -1,0 +1,28 @@
+<!-- <scroll-view class='coursePage' > -->
+  <view class='courseList'>
+    <view class='courseItem' wx:for="{{list}}" wx:for-index="i" wx:key="{{i}}" >
+      <form-button class='flex-start'  catchtap='enterDeatil' data-i='{{i}}'>
+        <view class='left'>
+          <image src='{{item.logoUrl}}'></image>
+        </view>
+        <view class='right'>
+          <view class='courseName text-gray'>{{item.courseTagName}} <text style='color:#cdcdcd'>|</text> {{item.ageStart}}-{{item.ageEnd}}周岁</view>
+          <view class='flex-start'>
+            <text class='bg-pink'>特价</text>
+            <text style='overflow: hidden;width:300rpx;text-overflow: ellipsis;white-space: nowrap;'>{{item.name}}</text>
+          </view>
+          <view class='price'>
+            <text class='font-14 text-pink'>￥</text>
+            <text class='font-20 text-pink'>{{item.activityPrice}}</text>
+            <text class='delete-line'>￥{{item.price}}</text>
+          </view>
+          <view class='address flex-between'>
+            <view><image src='/images/ic_location.png'></image> {{item.shopName}}</view> 
+            <text wx:if="{{item.distan}}"><text style='color:#cdcdcd'>|</text> {{item.distan}}</text>
+          </view> 
+        </view>
+      </form-button>
+    </view>
+    <empty-view class='emptyView' text="暂时没有特价课" wx:if="{{list.length==0}}"></empty-view>
+  </view>
+<!-- </scroll-view> -->

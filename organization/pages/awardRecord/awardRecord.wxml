@@ -1,0 +1,46 @@
+<view class='awardRecord flexC'>
+  <view class='awardShell'>
+    <view class='shellList'>
+      <text class='shell-title'>本月奖励贝壳数</text>
+      <text class='shell-num'>{{inviteObj.amount}}</text>
+    </view>
+    <view class='shellList'>
+      <text class='shell-title'>本月邀请人数</text>
+      <text class='shell-num'>{{inviteObj.inviteCount}}</text>
+    </view>
+    <view class='shellList' style='border-bottom:0;'>
+      <text class='shell-title'>累计获得奖励贝壳数</text>
+      <text class='shell-num'>{{inviteObj.totalAmount}}</text>
+    </view>
+  </view>
+  <view class='thisMonth'>
+    <view class='selectdate'>
+      {{showMonthText}}
+      <picker class="selecticon" mode="multiSelector" bindchange="bindMultiPickerChange" value="{{multiIndex}}" range="{{multiArrayDate}}">
+        <view class="picker">
+          <image src='/images/date.png' class='date'></image>
+        </view>
+      </picker>
+    </view>
+    <text class='inviter'>产生奖励{{selectawardcount}}贝壳   邀请{{inviteCount}}人</text>
+    <view class='viewtab'>
+      <text class='{{item.value==sourceType?"checked":"default"}}' wx:for="{{tablist}}" wx:for-index="index" wx:for-item="item" wx:key="index" catchtap='switchTab' data-index="{{item.value}}">{{item.name}}</text>
+    </view>
+  </view>
+  <view class='awardPerson'>
+    <view class='awardPersonLsit' wx:for="{{personList}}"  wx:for-index="index" wx:key="index"  data-i='{{index}}' catchtap='enterDetail'>
+      <image class='personLeft' src='{{item.avatars}}'></image>
+      <view class='personRight'>
+        <view class='personIntroduce'>
+          <text class='personName'>{{item.nickName}}</text>
+          <text class='personNum'>+{{item.amount}}</text>
+        </view>
+        <view class='personIntroduce'>
+          <text class='personName listbottm'>{{item.rewardType}}</text>
+          <text class='personNum persondate'>{{item.createAtStr}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+  <empty-view class='emptyView' text='还没有邀请记录哦！' wx:if="{{personList.length==0}}"></empty-view>
+</view>

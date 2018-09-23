@@ -1,0 +1,22 @@
+/* component/formButton/formButton.wxss */
+form-button{
+  position: relative;
+}
+button{
+  text-align:unset;
+  line-height:1.5;
+  padding:0;
+  background-color: transparent!important;
+  overflow: unset;
+}
+.formButton{
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0;
+}
+.content{
+  width: 100%;
+}

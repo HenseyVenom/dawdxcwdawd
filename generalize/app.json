@@ -1,0 +1,33 @@
+{
+  "pages": [
+    "pages/login/login",
+    "pages/index/index",
+    "pages/webDownload/webDownload",
+    "pages/qrcode/qrcode",
+    "pages/awardRecord/awardRecord",
+    "pages/logs/logs",
+    "pages/course/detail/detail",
+    "pages/course/list/list",
+    "pages/organization/detail/detail",
+    "pages/organization/list/list",
+    "pages/bankCard/bankCardManage/bankCardManage",
+    "pages/bankCard/bankCardList/bankCardList",
+    "pages/bankCard/bankCardUnbinding/bankCardUnbinding",
+    "pages/bankCard/withdrawRecord/withdrawRecord",
+    "pages/bankCard/withdraw/withdraw",
+    "pages/bankCard/bankCardBinding/bankCardBinding",
+    "pages/rewardDetail/rewardDetail",
+    "pages/protocol/protocol",
+    "pages/receive/course/course",
+    "pages/share/share",
+    "pages/invite/invite",
+    "pages/invite/award/award",
+    "pages/receive/login/login"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#F23535",
+    "navigationBarTitleText": "学贝代理",
+    "navigationBarTextStyle": "whiter"
+  }
+}

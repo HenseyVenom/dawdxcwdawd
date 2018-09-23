@@ -1,0 +1,53 @@
+<!--pages/bankCard/bankCardBinding/bankCardBinding.wxml-->
+<!--pages/bankCard/bankCardBinding/bankCardBinding.wxml-->
+<view class='binding_item_wrapper flexR'>
+  <view class='binding_item'>
+    <text class='title' type='number'>姓名</text>
+    <input class='input' placeholder='请输入' value='{{name}}' bindinput='bindInput' data-name='name' placeholder-style='color: #B9B9B9;'></input>
+  </view>
+</view>
+<view class='binding_item_wrapper flexR'>
+  <view class='binding_item'>
+    <text class='title' type='number'>银行名称</text>
+    <input class='input' placeholder='请输入' value='{{idCard}}' bindinput='bindInput' data-name='idCard' placeholder-style='color: #B9B9B9;'></input>
+  </view>
+</view>
+<view class='binding_item_wrapper flexR'>
+  <view class='binding_item' style='border-bottom:0'>
+    <text class='title'>银行卡号</text>
+    <input class='input' placeholder='请输入' type='number' value='{{bankCard}}' bindinput='bindInput' data-name='bankCard' placeholder-style='color: #B9B9B9;'></input>
+  </view>
+</view>
+<view class='flexC'>
+  <view class='type_title'>账户类型</view>
+  <view class='binding_item_wrapper flexR' catchtap='changeType' data-value="1">
+    <view class='type_item flexR' style='border-bottom:1px solid #EDEDED' >
+      <text>对私账户</text>
+      <image src="{{accountType==2?'/images/unselect.png':'/images/selected.png'}}"></image>
+    </view>
+  </view>
+  <view class='binding_item_wrapper flexR' catchtap='changeType' data-value="2">
+    <view class='type_item flexR'>
+      <text>对公账户</text>
+      <image src="{{accountType==1?'/images/unselect.png':'/images/selected.png'}}"></image>
+    </view>
+  </view>
+</view>
+<view class='flexC'>
+  <view class='type_title'>开户行</view>
+  <picker mode="region" bindchange="bindRegionChange" value="{{region}}">
+    <view class='binding_item_wrapper flexR'>
+      <view class='binding_item'>
+        <text>开户地</text>
+        <text class='input' style="text-align:right;color:{{region.length==0?'#ccc':'#121212'}};">{{region.length==0?'请选择':(region[0]+'，'+region[1]+'，'+region[2])}}</text>
+      </view>
+    </view>
+  </picker>
+  <view class='binding_item_wrapper flexR'>
+    <view class='binding_item' style='border-bottom:0'>
+      <text class='title' type='number'>分行或支行信息</text>
+      <input class='input' placeholder='请输入' value='{{branchName}}' bindinput='bindInput' data-name='branchName' placeholder-style='color:#ccc;'></input>
+    </view>
+  </view>
+</view>
+<form-button class='bind_button themeBackgroundColor' catchtap='bindingBankCard' disabled='{{!name||!idCard||!bankCard||region.length==0||!branchName}}' style="background-color:{{(!name||!idCard||!bankCard||region.length==0||!branchName)?'#d8d8d8 !important':''}}">绑定</form-button>

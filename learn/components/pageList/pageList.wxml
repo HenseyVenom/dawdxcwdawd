@@ -1,0 +1,6 @@
+<!--components/pageList/pageList.wxml-->
+<scroll-view scroll-y bindscrolltoupper="refresh" bindscrolltolower="loadMore">
+  <view class='list flexC'>
+  
+  </view>
+</scroll-view>

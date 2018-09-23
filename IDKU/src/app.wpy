@@ -1,0 +1,303 @@
+<style lang="less">
+
+  Page{
+    background-color: white;
+    height:100%;
+  }
+  .container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+  }
+  .containerbg{
+    width:100%;
+    height:100%;
+    background: #F5F5F5;
+    /*background: #F5F5F5;*/
+  }
+
+  .nomore {
+    font-size: 30rpx;
+    color: #999;
+    padding: 10rpx;
+    margin-bottom: 20rpx;
+    display: block;
+    text-align: center;
+    height: 50rpx;
+    line-height: 50rpx;
+
+  }
+  view{
+    box-sizing: border-box;
+  }
+
+  .flexC {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .flexR {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .themeColor {
+    color: #f23535 !important;
+  }
+
+  .themeBackgroundColor {
+    background-color: #f23535 !important;
+  }
+
+  .themeBorder {
+    border-color: #f23535 !important;
+  }
+  .themeBorderLoading{
+    border-left-color: #f23535!important;
+    border-right-color: #f23535!important;
+  }
+  .themeShadow{
+    box-shadow: 0 8rpx 10rpx 0 rgba(242,53,53, 0.74);
+  }
+
+  button::after {
+    border: none !important;
+  }
+</style>
+
+<script>
+
+import {pageList} from "./pageList";
+import wepy from 'wepy'
+import 'wepy-async-function'
+import {client_id,client_secret} from "./appConfig";
+import { setStore } from 'wepy-redux'
+import configStore from './store'
+import util from "./utils/util"
+
+const store = configStore()
+setStore(store)
+
+export default class extends wepy.app {
+  config = {
+    // pages:pages,
+    pages: [
+       'pages/index',
+      'pages/payToShop',
+      'pages/login/login',
+       'pages/mine',
+      'pages/buyCourse',
+      'pages/babyrecord/updatebaby/updatebaby',
+      'pages/setting/bankcard/pinless',
+      'pages/setting/personal/personal',
+      'pages/setting/personal/selectAddress',
+      'pages/setting/personal/address',
+      'pages/setting/personal/personName',
+      'pages/courseRecord/courseRecord',
+      'pages/courseList',
+      "pages/babyrecord/babyrecord",
+      'pages/booking',
+      'pages/courseDetail',
+      'pages/setting/bankcard/bankcard',
+      'pages/setting/setting',
+      'pages/schedule',
+      'pages/shell',
+      'pages/storeList',
+      'pages/coupons',
+      'pages/myCourse',
+      'pages/news',
+      'pages/cardPack',
+      'pages/compact',
+      'pages/courseRecord/comment',
+      'pages/reserveCourse',
+      'pages/wallet/incomeAndExpenditure/incomeAndExpenditure',
+      'pages/awardRecord/awardRecord',
+      'pages/invite/award/award',
+      'pages/share/share',
+      'pages/babyrecord/addbaby/addbaby',
+      'pages/activityDetail',
+      'pages/courseOrder',
+      'pages/orderDetail',
+      'pages/rewardDetail/rewardDetail',
+      'pages/babyrecord/updatebaby/interest',
+      'pages/web'
+    ],
+    window: {
+      backgroundTextStyle: 'light',
+      navigationBarBackgroundColor: '#f23535',
+      navigationBarTitleText: '学贝',
+      navigationBarTextStyle: 'white',
+      backgroundColor: "#f23535"
+    },
+    tabBar: {
+      color: "#999999",
+      selectedColor: "#F23535",
+      backgroundColor: "#ffffff",
+      list:[
+        {
+          text: '首页',
+          pagePath: 'pages/index',
+          iconPath: '/images/index.png',
+          selectedIconPath: '/images/index_ed.png'
+        },
+        {
+          text: '贝壳',
+          pagePath: 'pages/shell',
+          iconPath: '/images/shell.png',
+          selectedIconPath: '/images/shell_ed.png'
+        },
+        {
+          text: '我的',
+          pagePath: 'pages/mine',
+          iconPath: '/images/mine.png',
+          selectedIconPath: '/images/mine_ed.png'
+        }
+      ]
+    }
+  }
+
+  globalData = {
+    userInfo: null,
+    formIds: [],
+    token: "",
+    isUseSaas:false,
+    organizationId:'405020833435286260',
+    appId: 'zxMXxPruU6Zf24hmyX',
+    latitude:'',
+    longitude:'',
+    shopInfo:{},
+    accessToken:'',
+    tokenType:'',
+	  parentId: '',
+    shareQuery: '',
+    phone: ''
+  }
+
+  constructor () {
+    super()
+    this.use('requestfix')
+  }
+
+  onLaunch(){
+    var token = wx.getStorageSync('token')
+    this.globalData.token = token
+    var accessToken =wx.getStorageSync('accessToken')
+    this.globalData.accessToken=accessToken
+    var tokenType=wx.getStorageSync('tokenType')
+    this.globalData.tokenType=tokenType
+    var parentId = wx.getStorageSync('parentId')
+    this.globalData.parentId = parentId
+    var phone = wx.getStorageSync('phone')
+    this.globalData.phone = phone
+    var shareQuery=wx.getStorageSync('shareQuery')
+    this.globalData.shareQuery=shareQuery;
+  }
+  getUserInfo(cb) {
+    const that = this
+    if (this.globalData.userInfo) {
+      return this.globalData.userInfo
+    }
+    wepy.getUserInfo({
+      success (res) {
+        that.globalData.userInfo = res.userInfo
+        cb && cb(res.userInfo)
+      },
+      fail(err){
+        console.log('err in getUserInfo:',err)
+      }
+    })
+  }
+  putExtraDate(api, data) {}
+  isLogin() {
+    let isLogin = this.globalData.token && this.globalData.token != '' && this.globalData.token != null && this.globalData.token != 'null'
+    let isLoginXB=this.globalData.accessToken && this.globalData.accessToken != '' && this.globalData.accessToken != null && this.globalData.accessToken != 'null'
+    return this.globalData.isUseSaas?isLogin:isLoginXB
+  }
+  isLoginXb(){
+    return this.globalData.accessToken && this.globalData.accessToken != '' && this.globalData.accessToken != null && this.globalData.accessToken != 'null'
+  }
+  isLoginZX(){
+    return this.globalData.token && this.globalData.token != '' && this.globalData.token != null && this.globalData.token != 'null'
+  }
+  saveToken(token) {
+    wx.setStorageSync('token', token)
+    this.globalData.token = token
+  }
+  saveParentId(parentId) {
+    // debugger
+    wx.setStorageSync('parentId', parentId)
+    this.globalData.parentId = parentId
+  }
+  getToken() {
+     return wx.getStorageSync('token')
+    //return this.globalData.token
+  }
+  getTokenType(){
+    return this.globalData.tokenType
+  }
+  getParentId() {
+    return this.globalData.parentId
+  }
+  loginWixin(success, cancel) {
+    var that = this;
+    wx.login({
+      success: res => {
+        var code = res.code
+        if (success) {
+          success(code, res)
+        }
+      },
+      fail(error){
+        console.log('error:',error)
+        if (cancel) {
+          cancel(error)
+        }
+      }
+    })
+  }
+  saveShopInfo(shopInfo){
+    this.globalData.shopInfo=shopInfo
+  }
+  getShopInfo(){
+    return this.globalData.shopInfo
+  }
+  getClientParame(isFirst){
+    return (isFirst?'?':'&')+'client_id='+client_id+'&client_secret='+client_secret
+  }
+  saveAccessToken(accessToken,type){
+    wx.setStorageSync('accessToken', accessToken)
+    wx.setStorageSync('tokenType', type)
+    this.globalData.accessToken=accessToken
+    this.globalData.tokenType = type
+  }
+  getAccessToken(){
+    return this.globalData.accessToken
+  }
+  isUseSaas(){
+    return this.globalData.isUseSaas
+  }
+  saveShareQuery(shareQuery) {
+    wx.setStorageSync('shareQuery', shareQuery)
+    this.globalData.shareQuery = shareQuery
+  }
+  getShareQuery() {
+    return this.globalData.shareQuery;
+  }
+  savePhone(phone) {
+    wx.setStorageSync('phone', phone)
+    this.globalData.phone = phone
+  }
+  getPhone() {
+    return this.globalData.phone;
+  }
+	logoOut(){
+    this.saveToken(null)
+    this.saveAccessToken(null,null)
+    this.savePhone(null)
+    this.saveShareQuery(null)
+  }
+}
+</script>

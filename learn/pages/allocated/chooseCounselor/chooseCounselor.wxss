@@ -1,0 +1,36 @@
+/* pages/allocated/chooseCounselor/chooseCounselor.wxss */
+Page{
+  flex-direction: column-reverse;
+  height: 100vh;
+  display: flex;
+
+}
+.button{
+  width: 100%;
+  height: 88rpx;
+  font-size: 36rpx;
+  color: white;
+  line-height: 88rpx;
+  text-align: center;
+  flex-shrink: 0;
+}
+.list{
+  flex-grow: 1;
+  overflow-y: auto;
+}
+.item{
+  height: 90rpx;
+  width: 100%;
+  font-size: 32rpx;
+  color: #333333;
+  border-bottom: 1px solid #ededed;
+  background: white;
+}
+
+.selectImage{
+  width: 35rpx;
+  height: 25rpx;
+  margin-top: 34rpx;
+  margin-right: 29rpx;
+  float: right;
+}

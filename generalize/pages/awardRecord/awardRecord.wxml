@@ -1,0 +1,46 @@
+<view class='awardRecord flexC'>
+  <view class='awardShell'>
+    <view class='shellList'>
+      <text class='shell-title'>本月奖励贝壳数</text>
+      <text class='shell-num'>{{awardCount}}</text>
+    </view>
+    <view class='shellList'>
+      <text class='shell-title'>本月邀请人数</text>
+      <text class='shell-num'>{{inviteCount}}</text>
+    </view>
+    <view class='shellList' style='border-bottom:0;'>
+      <text class='shell-title'>累计获得奖励贝壳数</text>
+      <text class='shell-num'>{{totalCount}}</text>
+    </view>
+  </view>
+  <view class='thisMonth'>
+    <view class='selectdate'>
+      {{showMonthText}}
+      <picker class="selecticon" mode="multiSelector" bindchange="bindMultiPickerChange" value="{{multiIndex}}" range="{{multiArrayDate}}">
+        <view class="picker">
+          <image src='/images/date.png' class='date'></image>
+        </view>
+      </picker>
+    </view>
+    <text class='inviter'>产生奖励{{monthAwardCount}}贝壳   邀请{{monthInviteCount}}人</text>
+    <view class='viewtab'>
+      <text class='{{item.value==sourceType?"checked":"default"}}' wx:for="{{tablist}}" wx:for-index="index" wx:for-item="item" wx:key="index" catchtap='switchTab' data-val="{{item.value}}">{{item.name}}</text>
+    </view>
+  </view>
+  <view class='awardPerson'>
+    <view class='awardPersonLsit' wx:for="{{personList}}" wx:for-index="i" wx:key="{{i}}" data-i='{{i}}' catchtap='showAwardDetail'>
+      <image class='personLeft' src="{{item.avatars||'/images/img_mhead.png'}}"></image>
+      <view class='personRight'>
+        <view class='personIntroduce'>
+          <text class='personName'>{{item.nickName}} ({{item.mobile}})</text>
+          <text class='personNum'>{{item.amountType=='income'?'+':'-'}}{{item.amount}}</text>
+        </view>
+        <view class='personIntroduce'>
+          <text class='personName listbottm'>【{{item.rewardType}}】</text>
+          <text class='personNum persondate'>{{item.createAt}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+  <empty-view class='emptyView' text='还没有邀请记录哦！' wx:if="{{personList.length==0}}"></empty-view>
+</view>

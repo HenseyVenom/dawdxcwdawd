@@ -1,0 +1,7 @@
+{
+  "enablePullDownRefresh": true,
+  "navigationBarTitleText": "我的奖励",
+  "usingComponents": {
+    "empty-view": "../../components/empty/emptyView"
+  }
+}

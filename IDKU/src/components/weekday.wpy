@@ -1,0 +1,116 @@
+<style scoped lang='less'>
+  .weekdays {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    padding: 25rpx 0rpx;
+    background-color: white;
+  }
+
+  .day {
+    text-align: center;
+    font-size: 26rpx;
+    line-height: 26rpx;
+    flex-grow: 1;
+  }
+
+  .item_wrapper{
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10rpx;
+  }
+
+  .daySelect {
+    border-radius: 10rpx;
+    color: white;
+  }
+
+  .numSelect {
+    color: white;
+  }
+</style>
+<template>
+  <view class='weekdays'>
+    <view class='item_wrapper' wx:for="{{currentWeek}}" wx:for-item="day" wx:for-index="i" wx:key="{{i}}" @tap.stop="changeDay({{i}})">
+        <view class="item {{currentDayIndex==i?'daySelect themeBackgroundColor themeShadow':'themeColor'}}">
+          <text class="day">{{day.day}}</text>
+          <text class="{{currentDayIndex==i?'numSelect':''}}"
+                style="font-size: 20rpx;line-height:20rpx;margin-top: 10rpx;">{{day.num}}
+          </text>
+        </view>
+    </view>
+  </view>
+
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import formButton from './formButton'
+    const weekdays = ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+    export default class Weekday extends wepy.component {
+      props = {
+        currentDate: {
+          type: String,
+          value: new Date().toString()
+        }
+      }
+      components={
+        formButton
+      }
+      data = {
+        currentWeek: [],
+        currentDayIndex: 0,
+      }
+      initDate(currentDate){
+        var cD
+        if(typeof currentDate == 'Object'){
+          cD = currentDate
+        }else{
+          cD = new Date(currentDate)
+        }
+        var current = cD.getDay()
+        current = current == 0 ? 6 : (current - 1)
+        cD.setDate(cD.getDate() - current)
+        var today =new Date()
+        var currentWeek = weekdays.map((day) => {
+          var dayText = (cD.getFullYear() == today.getFullYear() && today.getMonth() == cD.getMonth() && today.getDate() == cD.getDate())?'今天':day
+          var dayObject = {
+            day: dayText,
+            date: new Date(cD.getTime()),
+            num: (cD.getMonth()+1)+'/'+cD.getDate()
+          }
+          cD.setDate(cD.getDate() + 1)
+          return dayObject
+        })
+        this.currentWeek=currentWeek;
+        this.currentDayIndex=current;
+        this.$apply()
+      }
+      onLoad(){
+        // console.log("properties:", this.properties)
+        this.initDate(this.props.currentDate.value)
+      }
+      methods={
+        changeDay(i) {
+          this.currentDayIndex=i
+          var detail = { currentDay: i, currentDate: this.currentWeek[i]} // detail对象，提供给事件监听函数
+          var option = {} // 触发事件的选项
+          this.$emit('onDayChanged', detail, option)
+        },
+      }
+      watch={
+        currentDate(newVal, oldVal) {
+          console.log('observer:', newVal)
+          this.initDate(newVal)
+        }
+      }
+    }
+</script>

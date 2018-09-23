@@ -1,0 +1,118 @@
+<style lang="less" scoped>
+  .selectAdd{
+      width:100%;
+      height:100%;
+      background: #F5F5F5;
+      padding-top:20rpx;
+      .selectAddrs{
+          width:100%;
+          height:100rpx;
+          font-size:24rpx;
+          color: #909090;
+          background: #fff;
+          padding:0rpx 30rpx;
+          align-items: center;
+          border-bottom:2rpx solid#F5F5F5;
+          //justify-content: flex-start;
+          .titleAdd{
+            width:72rpx;
+            height:32rpx;
+            font-size:20rpx;
+            color:#fff;
+            background: #F23535;
+            border-radius:10rpx;
+            line-height: 32rpx;
+            text-align:center;
+            margin-right:10rpx;
+          }
+          .detailadd{
+              flex:1;
+              overflow: hidden;
+                text-overflow:ellipsis;//文本溢出显示省略号
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+          }
+          .selectimg{
+              width:28rpx;
+              height:28rpx;
+          }
+
+
+      }
+
+  }
+</style>
+<template>
+    <view class="selectAdd">
+       <view class="flexR selectAddrs" @tap.stop="updatenter(1)">
+           <view class='titleAdd'>住址</view>
+           <view class='detailadd'>{{home}}</view>
+           <image src="{{home==address.receivingAddress?'/images/Add.png':'/images/nuAdd.png'}}"  class="selectimg" @tap.stop="selectdefult({{home}})"></image>
+       </view>
+        <view class="flexR selectAddrs"  @tap.stop="updatenter(2)" wx:if="{{this.address.companyProvince}}">
+           <view class='titleAdd'>公司</view>
+           <view class='detailadd'>{{company}}</view>
+           <image src="{{company==address.receivingAddress?'/images/Add.png':'/images/nuAdd.png'}}" class="selectimg"  @tap.stop="selectdefult({{company}})"></image>
+       </view> 
+    </view> 
+</template>
+
+<script>
+import wepy from "wepy";
+import {pRequest,pGetRequest} from "../../../utils/requestUtils";
+export default class selectAddress extends wepy.page {
+ data={
+   address:{},
+   home:'',
+   company:'',
+ }
+ methods={
+   selectdefult(address){
+    console.log(address)
+    pRequest('/front/auth/ucMemberInfo/updateReciveAdress?receivingAddress='+address,{}).then(res=>{
+        var pages = getCurrentPages()
+        pages.forEach((item) => {
+            if (item.route == 'pages/setting/personal/personal') {
+              item.getinfo()
+            }
+        })
+        wx.navigateBack()
+    })
+   },
+   updatenter(value){
+       if(value==1){
+         let homeArr = [this.address.homeProvince,this.address.homeCity,this.address.homeArea]
+         let homeselect= JSON.stringify(homeArr);
+          wx.navigateTo({
+             url:'/pages/setting/personal/address?type=1&address='+homeselect+'&default='+this.address.receivingAddress+'&DetailAddress='+this.address.homeAddress
+          })
+       }else{
+            let companyArr = [this.address.companyProvince,this.address.companyCity,this.address.companyArea]
+            let companyselect= JSON.stringify(companyArr);
+            wx.navigateTo({
+             url:'/pages/setting/personal/address?type=2&address='+companyselect+'&default='+this.address.receivingAddress+'&DetailAddress='+this.address.companyAddress
+          })
+       }
+      
+   }
+ }
+ onLoad(option){  
+   
+    this.getAddress()
+    
+  }
+  getAddress(){
+       pGetRequest('xb/front/auth/ucMember/info', {})
+        .then((res) => {
+           this.address = res
+            this.home = this.address.homeProvince+this.address.homeCity+this.address.homeArea + this.address.homeAddress
+            this.company = this.address.companyProvince +  this.address.companyCity + this.address.companyArea + this.address.companyAddress
+          this.$apply()
+        }).catch((res)=>{
+      })
+  }
+}
+</script>
+
+

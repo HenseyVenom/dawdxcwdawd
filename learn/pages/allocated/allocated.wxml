@@ -1,0 +1,37 @@
+<!--pages/allocated/allocated.wxml-->
+<scroll-view scroll-y style='height:100vh' bindscrolltoupper="refresh" bindscrolltolower="loadMore">
+  <view class='list flexC'>
+    <view class='item flexC' wx:for="{{list}}" wx:for-item="item" wx:for-index="i" data-i="{{i}}" wx:key="{{i}}">
+      <view class='top'>
+        <view>
+          <text class='username'>{{item.name}}</text>
+          <text class='phone' catchtap='callPhone' data-phone="{{item.phone}}">{{item.phone}}</text>
+          <text class='allocateTime' wx:if="{{item.allocatedTime}}">{{item.allocatedTime}}</text>
+        </view>
+        <view>
+          <text class='source' wx:if="{{item.source && item.source!=''}}">来源：{{item.source}}</text>
+          <text class='time'>时间：{{item.time?item.time:'暂无沟通时间'}}</text>
+        </view>
+        <image class='corner_icon' src="{{item.type==1?'/images/corner_icon_try.png':'/images/corner_icon_order.png'}}"></image>
+      </view>
+      <view class='middle flexR'>
+        <view class='leftCourse flexC'>
+          <text wx:if="{{item.course.courseName}}">课程：{{item.course.courseName}}</text>
+          <text>门店：{{item.course.store}}</text>
+          <text wx:if="{{item.course.counsoler}}">顾问：{{item.course.counsoler}}</text>
+        </view>
+      </view>
+      <view class='bottom flexR'>
+        <block wx:if="{{true}}">
+          <view class='handleButton flexR' catchtap='cancelAllocate' data-id='{{item.id}}'>
+            <text class='buttonText'>取消分配</text>
+          </view>
+          <view class='handleButtonLong flexR' catchtap='allocatedCounselor' data-id='{{item.id}}' data-shopid='{{item.shopId}}'>
+            <text class='buttonText' style='margin-left:75rpx;' >重新分配课程顾问</text>
+          </view>
+        </block>
+      </view>
+    </view>
+    <emptyView class="emptyView" height="60%" text="还没有相关内容" wx:if="{{list.length==0}}"></emptyView>
+  </view>
+</scroll-view>

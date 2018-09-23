@@ -1,0 +1,51 @@
+/* pages/login/login.wxss */
+Page{
+  background-color: white;
+}
+.logo{
+  width: 186rpx;
+  height: 186rpx;
+  margin: 98rpx auto 0;
+  display: block;
+}
+.name{
+  font-size: 32rpx;
+  color:#F23535;
+  margin:13rpx auto 0;
+  display: block;
+  text-align: center;
+}
+.input_frame{
+  width: 628rpx;
+  height: 62rpx;
+  border-bottom: 1px solid #EDEDED;
+  display: flex;
+  flex-direction: row;
+  margin: 0 auto;
+}
+.input_text{
+  background: transparent;
+  font-size: 28rpx;
+  flex-grow: 1;
+}
+.verify_button{
+  width: 200rpx;
+  font-size: 28rpx;
+  color: #f23535;
+  flex-shrink: 0;
+  text-align: center;
+}
+.verify_button_disabled{
+  color: #cccccc;
+}
+
+.login_button{
+  width: 628rpx;
+  height: 88rpx;
+  color: white;
+  font-size: 36rpx;
+  margin: 60rpx auto 0;
+  text-align: center;
+  line-height: 88rpx;
+  border-radius: 4rpx;
+}

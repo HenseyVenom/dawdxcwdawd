@@ -1,0 +1,93 @@
+<view class='staffInfo'>
+  <view class='content'>
+      <view class='infolist'>
+        <text class='name'>姓名</text>
+        <view class='rightinfo' wx:if='{{!showAdd}}' data-update='1' bindtap='showPersonModel'>
+            <text>{{infoDetail.personName}}</text>
+            <image src='../../../images/arrow_right.png' class='arrow_right'></image>
+        </view>
+        <view class='rightinfo' wx:if='{{showAdd}}'>
+          <input type='text' placeholder='请输入' class='import' bindinput='keyperson' value='{{infoDetail.personName}}'></input>
+        </view>
+      </view>
+      <view class='infolist'>
+        <text class='name'>性别</text>
+        <view class='rightinfo' wx:if='{{showAdd}}'>
+           <picker bindchange="bindselectSex" value="{{stauts}}" range="{{sexList}}" range-key='name' style='width:100%;height:50px;'>
+            <view class="picker">
+              <!-- {{sexList[index]}} -->
+              <text>{{infoDetail.sex==2 ? '女':(infoDetail.sex==1 ? '男' : '请选择')}}</text>
+              <image src='../../../images/arrow_right.png' class='arrow_right'></image>
+            </view>
+          </picker>
+        </view>
+        <view class='rightinfo' wx:if='{{!showAdd}}'data-update='3' bindtap='showPersonModel' >
+            <text>{{infoDetail.sex==2 ? '女':(infoDetail.sex==1 ? '男' : '请选择')}}</text>
+            <image src='../../../images/arrow_right.png' class='arrow_right'></image>
+        </view>
+      </view>
+      <view class='infolist top'>
+        <text class='name'>手机号</text>
+        <view class='rightinfo' wx:if='{{!showAdd}}'data-update='2' bindtap='showPersonModel'>
+          <text>{{infoDetail.phone}}</text>
+            <image src='../../../images/arrow_right.png' class='arrow_right'></image>
+         </view>
+         <view class='rightinfo' wx:if='{{showAdd}}'>
+           <input type='number' placeholder='请输入' class='import' bindinput='keytell' value="{{infoDetail.phone}}"></input>
+        </view>
+      </view>
+      <view class='infolist'>
+        <text class='name'>权限类型</text>
+        <view class='rightinfo'  bindtap='selectModel'> 
+          <text>顾问</text>
+
+        </view>
+      </view>
+      <view class='infolist'>
+        <text class='name'>绑定门店</text>
+        <view class='rightinfo' bindtap='selectModel' wx:if='{{showAdd}}'> 
+            <picker bindchange="bindSelectShop" value="{{index}}" range="{{StoreList}}" range-key='name' style='width:100%;height:50px;'>
+              <view class="picker">
+               <text class='shopName'>{{!infoDetail.shopName ? '请选择' : infoDetail.shopName}}</text>
+               <image src='../../../images/arrow_right.png' class='arrow_right'></image>
+              </view>
+            </picker>      
+         </view>
+          <view class='rightinfo' wx:if='{{!showAdd}}' >
+              <text>{{!infoDetail.shopName ? '请选择' : infoDetail.shopName}}</text>
+          </view>
+      </view>
+    
+  </view>
+  <view class='infodelect delect' wx:if='{{!showAdd}}'  bindtap='delectPerson'>删除</view>
+  <view class='infodelect sureinfo' wx:if='{{showAdd}}' bindtap='Addperson'>确定</view>
+
+ 
+  <infoModel PermissionList='PermissionList' id="infoModel"  bind:myevent='assignment' wx:if="{{PermissionModel}}" ></infoModel>
+  
+  <view class='updateNameModel' hidden='{{updatePerson !== "1"}}'>
+    <view class='personName'>
+        <input type='text' placeholder='请输入' bindinput='keyperson' value="{{infoDetail.personName}}"></input>
+    </view>
+    <view class="bttonArea">
+       <button class='sureName' bindtap='editorPerson'>确定</button>
+    </view>  
+  </view>
+
+  <view class='updateNameModel'  hidden='{{updatePerson !== "2"}}'>
+    <view class='personName'>
+        <input type='number' placeholder='请输入' bindinput='keytell' value="{{infoDetail.phone}}"></input>
+    </view>
+    <view class="bttonArea">
+       <button class='sureName' bindtap='editorPerson'>确定</button>
+    </view>  
+  </view>
+
+  <view class='updateNameModel'  hidden='{{updatePerson !== "3"}}'>
+     <view class='sex' wx:for="{{sexList}}" wx:for-index="idx" wx:for-item="item" wx:key="" data-index='{{idx}}' data-obj='{{item}}' bindtap='PermissionTab'>
+          <text>{{item.name}}</text>
+           <image src="../../../images/checked.png" class='checked' wx:if='{{item.stauts == sexCount}}'></image> 
+       </view>
+  </view>
+
+</view>

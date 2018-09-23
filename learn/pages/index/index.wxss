@@ -1,0 +1,265 @@
+/**index.wxss**/
+.container {
+  padding: 0;
+  justify-content: unset;
+  position: relative;
+}
+.userinfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 360rpx;
+  width: 100%;
+  position: relative;
+}
+.bgindex {
+  width: 750rpx;
+  height: 360rpx;
+  position: absolute;
+  z-index: 11;
+}
+.userinfo-avatar {
+  width: 136rpx;
+  height: 136rpx;
+  border-radius: 50%;
+  display: block;
+  margin: 54rpx auto 0;
+}
+.userinfo-nickname {
+  color: white;
+  font-size: 36rpx;
+  margin-top: 36rpx;
+  text-align: center;
+}
+.circle1 {
+  width: 73rpx;
+  height: 73rpx;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.08);
+  position: fixed;
+  top: 97rpx;
+  left: 30rpx;
+  z-index: 1;
+}
+.circle2 {
+  width: 34rpx;
+  height: 34rpx;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.08);
+  position: fixed;
+  bottom: 79rpx;
+  left: 96rpx;
+  z-index: 2;
+}
+.circle3 {
+  width: 136rpx;
+  height: 136rpx;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.08);
+  position: fixed;
+  top: 57rpx;
+  right: 26rpx;
+  z-index: 2;
+}
+.circle4 {
+  width: 63rpx;
+  height: 63rpx;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.08);
+  position: fixed;
+  top: 51rpx;
+  right: -26rpx;
+  z-index: 3;
+}
+.item {
+  width: 100%;
+  height: 110rpx;
+  display: flex;
+  flex-direction: row;
+  background-color: white;
+}
+.item_icon {
+  width: 96rpx;
+  height: 110rpx;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.item_content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.item_bottom_border {
+  border-bottom: 1px solid #EDEDED;
+}
+.item_text {
+  font-size: 32rpx;
+  color: #333333;
+}
+.item_bubble {
+  width: 62rpx;
+  height: 28rpx;
+  line-height: 28rpx;
+  font-size: 24rpx;
+  text-align: center;
+  border-radius: 12rpx;
+  background: #ff9c0f;
+  color: white;
+}
+.item_arrow {
+  width: 16rpx;
+  height: 25rpx;
+  margin-right: 30rpx;
+  margin-left: 16rpx;
+}
+.remind {
+  width: 108rpx;
+  height: 108rpx;
+  position: fixed;
+  right: 32rpx;
+  bottom: 103rpx;
+}
+.remind .remindImg {
+  width: 108rpx;
+  height: 108rpx;
+}
+.remindModel {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 111;
+}
+.remindModel .remindcontent {
+  width: 560rpx;
+  background: #fff;
+  padding: 30rpx 0rpx 50rpx 0rpx;
+  margin: 70rpx auto;
+  box-shadow: 0px 0px 41rpx 5rpx rgba(204, 204, 204, 0.73);
+  border-radius: 10rpx;
+}
+.remindModel .remindcontent .title {
+  text-align: center;
+  color: #333333;
+  font-size: 30rpx;
+  position: relative;
+}
+.remindModel .remindcontent .title .remindclose {
+  position: absolute;
+  right: 14rpx;
+  top: -14rpx;
+  width: 19rpx;
+  height: 19rpx;
+}
+.remindModel .remindcontent .wenben {
+  border-radius: 4rpx;
+  padding: 30rpx 30rpx;
+  box-sizing: border-box;
+  position: relative;
+}
+.remindModel .remindcontent .wenben .matter {
+  width: 475rpx;
+  height: 232rpx;
+  background-color: #f5f5f5;
+  padding: 15rpx;
+  font-size: 24rpx;
+}
+.remindModel .remindcontent .remindDate {
+  width: 100%;
+  height: 88rpx;
+  border-top: solid 1px #ededed;
+  line-height: 88rpx;
+  font-size: 30rpx;
+  display: flex;
+}
+.remindModel .remindcontent .remindDate .dateTime {
+  width: 100rpx;
+  padding-left: 29rpx;
+  box-sizing: border-box;
+}
+.date {
+  flex: 1;
+  text-align: right;
+  padding-right: 0rpx;
+  position: relative;
+}
+.gray {
+  color: #ccc;
+}
+.picker {
+  color: #333;
+}
+.bottomborder {
+  border-bottom: 1px solid #ededed;
+}
+.position {
+  position: absolute;
+  right: 0rpx;
+  top: 30rpx;
+}
+.setstyle {
+  width: 460rpx;
+  padding-right: 65rpx;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.remindModel .sure {
+  width: 450rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+  background-color: #f23535;
+  text-align: center;
+  margin: 0 auto;
+  color: #fff;
+  border-radius: 4rpx;
+  margin-top: 47rpx;
+}
+.remindModel .sure .sureQUe {
+  color: #fff;
+  line-height: 80rpx;
+}
+.qrcodeModal .qrcodecontent {
+  width: 590rpx;
+  height: 640rpx;
+  background: #fff;
+  padding: 30rpx 0rpx 50rpx 0rpx;
+  box-shadow: 0 0 41rpx 5rpx rgba(204, 204, 204, 0.73);
+  border-radius: 10rpx;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -295rpx;
+  margin-top: -320rpx;
+}
+.qrcodeModal .qrcodecontent .content {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.qrcodeModal .qrcodecontent .content .close {
+  position: absolute;
+  right: 14rpx;
+  top: -24rpx;
+  width: 19rpx;
+  height: 19rpx;
+}
+.qrcodeModal .qrcodecontent .content .title {
+  text-align: center;
+  margin-top: 20rpx;
+  font-size: 34rpx;
+}
+.qrcodeModal .qrcodecontent .content .qrcode {
+  width: 430rpx;
+  height: 430rpx;
+  display: block;
+  margin: 50rpx auto;
+  background: #eee;
+}
