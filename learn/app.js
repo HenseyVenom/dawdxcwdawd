@@ -83,6 +83,10 @@ App({
     let isLogin = this.globalData.token && this.globalData.token != '' && this.globalData.token != null && this.globalData.token != 'null'
     return isLogin
   },
+  isLoginXb(){
+    let isLogin = this.globalData.xbToken && this.globalData.xbToken != '' && this.globalData.xbToken != null && this.globalData.xbToken != 'null'
+     return isLogin
+  },
   saveXbName(name) {
     wx.setStorageSync('xbName', name)
     this.globalData.xbName = name
