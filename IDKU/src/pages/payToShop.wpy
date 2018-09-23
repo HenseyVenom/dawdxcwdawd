@@ -214,9 +214,111 @@
           padding: 0 40rpx;
         }
       }
-      .courseList{
-        flex-grow: 1;
-        overflow-y: overlay;
+      .scroll{
+        height: 774rpx;
+        .tutorship_List{
+          box-shadow: 0 0 6px 0 rgba(213,213,213,0.50);
+          background: #FFFFFF;
+          border: 0 solid #979797;
+          border-radius: 30rpx;
+          padding:30rpx;
+          margin-bottom: 40rpx;
+          .flex-start{
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+          }
+          .flex-between{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          }
+          .left image{
+            width: 200rpx;
+            height: 200rpx;
+            border-radius: 10rpx;
+            margin-right: 30rpx;
+            display: block;
+            background: #ccc;
+          }
+          .right{
+            .courseName{
+              font-size: 24rpx;
+              margin-bottom: 14rpx;
+              .grayText{
+                color: #888888;
+                font-size: 24rpx;
+                padding-right: 10rpx;
+                border-right: 1px solid #888888;
+                margin-right: 10rpx;
+                line-height: 24rpx;
+                &:last-of-type{
+                  border-right: 0;
+                }
+              }
+            }
+            .text-gray{
+              color: #888888;
+            }
+            .bg-pink{
+              color: #fff;
+              font-size: 22rpx;
+              background: #F95E9F;
+              border-radius: 15rpx;
+              padding: 2rpx 8rpx;
+              margin-right: 10rpx;
+            }
+
+            .price{
+              margin: 10rpx 0;
+              .font-14{
+                font-size: 28rpx;
+              }
+              .font-20{
+                font-size: 40rpx;
+              }
+              .text-pink{
+                color: #fd83b6;
+              }
+              .delete-line{
+                background: rgba(102,211,248,0.10);
+                border: 2rpx solid #66D3F8;
+                border-radius: 16rpx;
+                font-size: 22rpx;
+                color: #0A88B3;
+                padding:0rpx 9rpx;
+                display:inline-block;
+                margin-left:6rpx;
+                position:relative;
+                top:-2rpx;
+              }
+
+            }
+            .address{
+              font-size: 24rpx;
+              opacity: 0.7;
+              view:first-of-type{
+                width:290rpx;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+                color: #888;
+              }
+              image{
+                width: 18rpx;
+                height: 22rpx;
+                position:relative;
+                top:4rpx;
+                margin-right:4rpx;
+              }
+
+            }
+
+
+          }
+
+
+        }
       }
     }
   }
@@ -230,13 +332,19 @@
       </view>
       <text style="margin: 20rpx 0 52rpx;">付款给 {{shopInfo.ucOrganShopPojo.name}}</text>
     </view>
-    <view class="item flexR gap">
+    <view class="item flexR gap" @tap.stop="chooseCourse">
+      <text>请选择课程</text>
+      <view class="flexR" style="align-items: center">
+        <text>{{courseDetail.name}}</text>
+        <image class="rightArrow" src="/images/arrow_right.png"></image>
+      </view>
+    </view>
+    <view class="item flexR gap" @tap.stop="setFocus">
       <text>付款金额<text class="hint">点击可修改</text></text>
       <view class="flexR" style="align-items: center">
         <view class="flexR" style="align-items: center">
           <text class="themeColor">￥</text>
-          <input class="themeColor" maxlength="8" type="digit" value="{{inputPayPrice}}"
-                 bindinput="changePrice"/>
+          <input class="themeColor" maxlength="8" type="digit" value="{{inputPayPrice}}" focus="{{haveFocus}}" bindinput="changePrice" bindblur="loseFocus"/>
         </view>
         <image class="rightArrow" src="/images/arrow_right.png"></image>
       </view>
@@ -294,35 +402,44 @@
   <view class="selectCourse flexR" wx:if="{{showCourseList}}">
     <view class="content">
       <view class="topButton flexR">
-        <text class="bt">取消</text>
-        <text class="bt themeColor">确定</text>
+        <text class="bt">请选择课程</text>
+        <text class="bt themeColor"  wx:if="{{false}}">确定</text>
       </view>
-      <view class='tutorship_List' catchtap='enterDeatil' wx:for="{{courseList}}" wx:key="index" @tap.stop="clickCourse({{item}})">
-        <view class='flex-start'>
-          <view class='left'>
-            <image src='{{item.logoUrl}}'></image>
-          </view>
-          <view class='right'>
-            <view class='courseName text-gray'>
-              <text class="grayText" wx:if="{{item.courseTagName}}">{{item.courseTagName}}</text>
-              <text class="grayText" wx:if="{{item.ageTime}}">{{item.ageTime}}岁</text>
-              <text class="grayText" wx:if="{{item.isOpenRegistration}}">免费试听</text>
+      <scroll-view class="scroll" scroll-y bindscrolltoupper="refreshCourse" bindscrolltolower="loadMoreCourse">
+        <view class='tutorship_List' catchtap='enterDeatil' wx:for="{{courseList}}" wx:key="index"
+              @tap.stop="clickCourse({{item}})">
+          <view class='flex-start'>
+            <view class='left'>
+              <image src='{{item.logoUrl}}'></image>
             </view>
-            <view class='flex-start'>
-              <text style='font-size: 28rpx;color: #121212;'>{{item.name}}</text>
-            </view>
-            <view class='price'>
-              <text class='font-14 text-pink'>￥</text>
-              <text class='font-20 text-pink'>{{item.price}}</text>
-              <text class='delete-line' wx:if="{{false}}">免息分期</text>
-            </view>
-            <view class='address flex-between'>
-              <view><image src='/images/addressicon.png'></image>{{item.address}}</view>
-              <text wx:if="{{item.distance}}"><text style='color:#cdcdcd'>|</text> {{item.distance}}</text>
+            <view class='right'>
+              <view class='courseName text-gray'>
+                <text class="grayText" wx:if="{{item.courseTagName}}">{{item.courseTagName}}</text>
+                <text class="grayText" wx:if="{{item.ageTime}}">{{item.ageTime}}岁</text>
+                <text class="grayText" wx:if="{{item.isOpenRegistration}}">免费试听</text>
+              </view>
+              <view class='flex-start'>
+                <text style='font-size: 28rpx;color: #121212;'>{{item.name}}</text>
+              </view>
+              <view class='price'>
+                <text class='font-14 text-pink'>￥</text>
+                <text class='font-20 text-pink'>{{item.purchaseMode=='special'?item.activityPrice:item.price}}</text>
+                <text class='delete-line' wx:if="{{false}}">免息分期</text>
+              </view>
+              <view class='address flex-between'>
+                <view>
+                  <image src='/images/addressicon.png'></image>
+                  {{item.address}}
+                </view>
+                <text wx:if="{{item.distance}}">
+                  <text style='color:#cdcdcd'>|</text>
+                  {{item.distance}}
+                </text>
+              </view>
             </view>
           </view>
         </view>
-      </view>
+      </scroll-view>
     </view>
   </view>
 </template>
@@ -390,31 +507,38 @@
         },
       },
       isloading:false,
-      showCourseList:false,
+      showCourseList:true,
       rts:'',
       rtn:'',
+      haveFocus:false
     }
     methods = {
+      setFocus(){
+        this.haveFocus=true
+      },
+      loseFocus(){
+        this.haveFocus=false
+      },
       vercodeFun(e) {
         this.vercode = e.detail.value
       },
       sendphone() {
         pRequest('xb/front/auth/ucMember/sendYstBindPhoneCode', {}).then(res => {
           this.countDown()
-          console.log(res)
-        })
+        console.log(res)
+      })
       },
       surebingphone() {
         pRequest('xb/front/auth/ucMember/ystBindPhone?smsCode=' + this.vercode, {}).then(res => {
           console.log(res)
-          wx.showToast({
-            title:'验证成功',
-            icon:'none'
-          })
-          this.showBindPhone=false
-          this.isBindPhone=true
-          this.$apply()
+        wx.showToast({
+          title:'验证成功',
+          icon:'none'
         })
+        this.showBindPhone=false
+        this.isBindPhone=true
+        this.$apply()
+      })
       },
       closeModal(){
         this.showBindPhone=false
@@ -423,9 +547,16 @@
         this.useShell = e.detail.value
         this.checkCouponAmount()
       },
+      chooseCourse(){
+        this.showCourseList=true
+      },
       clickCourse(item){
         this.showCourseList=false
         this.courseDetail=item
+        this.inputPayPrice=item.purchaseMode=='special'?item.activityPrice:item.price
+        this.coupon={}
+        this.couponText=''
+        this.useShell=false
         this.loadOrder()
       },
       cancelCourse(){
@@ -447,7 +578,7 @@
           wx.showToast({title:'请输入金额在选择优惠券'})
         }
         wx.navigateTo({
-          url: '/pages/coupons?from=2&courseId=' + this.shopId + '&useConditionAmount=' + this.inputPayPrice
+          url: '/pages/coupons?from=2&courseId=' + this.courseDetail.id+ '&useConditionAmount=' + this.inputPayPrice
         })
       },
       couponChanged(item) {
@@ -511,31 +642,38 @@
           mask:true
         })
         // app.loginWixin((code) => {
-          pRequest('xb/front/auth/sign/order/pay', {
-            "couponAmountId": this.coupon.id,
-            "couponRateId": this.couponRateId,
-            "installmentNum": this.installmentNum,
-            "orderAmount": this.inputPayPrice,
-            "orderType": "online",
-            "payType": this.payWay == 0 ? 'YSTWECHATPAYMIN' : 'YSTQUICKPAY',
-            "shopId": this.shopId,
-            "useIntegral": this.useShell ? this.shellInfo.maxUserIntegral : 0,
-            "usedPayAmount": this.usedPayAmount,
-            "marketId":this.rtn,
-            // "wxCode": code
-          }).then((res) => {
-            this.wxPay(res)
-          }).catch((err) => {
-            if (err) {
-              wx.hideLoading()
-            }
-          })
+        pRequest('xb/front/auth/sign/order/pay', {
+          "couponAmountId": this.coupon.id,
+          "couponRateId": this.couponRateId,
+          "courseId": this.courseDetail.courseId,
+          "installmentNum": this.installmentNum,
+          "orderAmount": this.inputPayPrice,
+          "orderType": "online",
+          "payType": this.payWay == 0 ? 'YSTWECHATPAYMIN' : 'YSTQUICKPAY',
+          "shopId": this.shopId,
+          "useIntegral": this.useShell ? this.shellInfo.maxUserIntegral : 0,
+          "usedPayAmount": this.usedPayAmount,
+          "marketId":this.rtn,
+          // "wxCode": code
+        }).then((res) => {
+          this.wxPay(res)
+      }).catch((err) => {
+          if (err) {
+            wx.hideLoading()
+          }
+        })
         // }, (err) => {
         //   wx.hideLoading()
         // })
       },
       selectPayWay(payWay){
         this.payWay=payWay
+      },
+      refreshCourse(){
+        this.refresh()
+      },
+      loadMoreCourse(){
+        this.loadmore()
       }
     }
 
@@ -543,8 +681,9 @@
       this.rts=options.rts
       this.rtn=options.rtn
       this.shopInfo = app.getShopInfo()
-      this.requestShell()
+      // this.requestShell()
       this.getUserInfo()
+      this.refresh()
     }
     requestShell() {
       if(!this.inputPayPrice){
@@ -553,9 +692,9 @@
       // var price = this.courseDetail.purchaseMode == 'special' ? this.courseDetail.activityPrice : this.courseDetail.packagePrice
       pRequest('xb/front/auth/sign/order/findUsableIntegral?amount=' + this.inputPayPrice).then((res) => {
         this.shellInfo = res
-        this.$apply()
-        this.checkCouponAmount()
-      }).catch((err) => {
+      this.$apply()
+      this.checkCouponAmount()
+    }).catch((err) => {
       })
     }
 
@@ -570,14 +709,14 @@
       }
       pGetRequest(url).then((res) => {
         wx.hideLoading()
-        if(!this.inputPayPrice){
-          this.usedPayAmount=''
-          this.$apply()
-          return
-        }
-        this.usedPayAmount = res.payAmount
+      if(!this.inputPayPrice){
+        this.usedPayAmount=''
         this.$apply()
-      }).catch((err) => {
+        return
+      }
+      this.usedPayAmount = res.payAmount
+      this.$apply()
+    }).catch((err) => {
         if (err) {
           wx.hideLoading()
         }
@@ -588,25 +727,25 @@
       pGetRequest('xb/front/auth/mine/index').then((res) => {
         var ystReqStatus = res.ucMemberPojo.ystReqStatus
         this.isBindPhone = !ystReqStatus ? false : (ystReqStatus != 'ystBindBankCard' ? (ystReqStatus == 'createYstMember' ? false : true) : true)
-        this.userPhone=res.ucMemberPojo.mobile
-        this.$apply()
-      })
+      this.userPhone=res.ucMemberPojo.mobile
+      this.$apply()
+    })
     }
     countDown() {
       this.timeCount = TIME_COUNT
       if (this.timer) return
       this.timer = setInterval(() => {
         console.log('timeCount:', this.timeCount)
-        if (this.timeCount > 0 && this.timeCount <= TIME_COUNT) {
-          this.timeCount--
-          this.$apply()
-        } else {
-          clearInterval(this.timer)
-          this.timeCount=0;
-          this.timer=null;
-          this.$apply()
-        }
-      }, 1000)
+      if (this.timeCount > 0 && this.timeCount <= TIME_COUNT) {
+        this.timeCount--
+        this.$apply()
+      } else {
+        clearInterval(this.timer)
+        this.timeCount=0;
+        this.timer=null;
+        this.$apply()
+      }
+    }, 1000)
     }
 
     wxPay(res) {
@@ -673,18 +812,18 @@
         var url='xb/front/unAuth/organShop/shopCourse/list?page='+this.page.page+"&size="+this.page.size+"&shop_id="+this.shopId
         pRequest(url).then((res)=>{
           this.isLoading=false
-          console.log("res:",res)
-          this.page.pageTotal=res.totalPages
-          this.page.page=res.number
-          if(res.number==0){
-            this.courseList=convertCourseListFromXB(res.content)
-          }else{
-            this.courseList=this.courseList.concat(convertCourseListFromXB(res.content))
-          }
-          this.$apply()
-        }).catch((err)=>{
+        console.log("res:",res)
+        this.page.pageTotal=res.totalPages
+        this.page.page=res.number
+        if(res.number==0){
+          this.courseList=convertCourseListFromXB(res.content)
+        }else{
+          this.courseList=this.courseList.concat(convertCourseListFromXB(res.content))
+        }
+        this.$apply()
+      }).catch((err)=>{
           this.isLoading=false
-        })
+      })
       }else{
       }
     }
@@ -696,7 +835,7 @@
   function convertCourseListFromXB(list) {
     return list.map((item)=>{
       item.ageTime=item.ageStart+'-'+item.ageEnd
-      return item
-    })
+    return item
+  })
   }
 </script>
